@@ -1,22 +1,191 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-03T10:51:54-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blog of blah, blah... a place for ideas, maths, stats...
-</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2018/01/27/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2018-01-27T16:44:04-07:00</published><updated>2018-01-27T16:44:04-07:00</updated><id>http://localhost:4000/jekyll/update/2018/01/27/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/01/27/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-04T11:59:29-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blog of blah, blah... a place for ideas, maths, stats...
+</subtitle><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/minimax.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/minimax</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/minimax.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
+with its origins in the 1950s. Decision theory is cool because it gives us a way to
+compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;This post sets us on the path towards minimax rules and estimators. 
+&lt;em&gt;Caveat:&lt;/em&gt; In no way is this an attempt to fully cover this topic—it’s huge and 
+philosophically deep.&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;h4 id=&quot;a-bit-of-background&quot;&gt;A bit of background.&lt;/h4&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Tom'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints 'Hi, Tom' to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;Let’s say we have a parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; that lives in some parameter space 
+&lt;script type=&quot;math/tex&quot;&gt;\Theta&lt;/script&gt;. We’re going to estimate our parameter of interest &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; with 
+&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. Since we’re in the business of comparing estimators, we need a way
+to assess their quality. We’ll do this using &lt;strong&gt;loss functions&lt;/strong&gt;.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A loss function measures the discrepancy between &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. 
+Formally,&lt;/p&gt;
 
-&lt;p&gt;Does this work?&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L: \Theta \times \Theta \to \reals.&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\LaTeX&lt;/script&gt;
+&lt;p&gt;Some common loss functions are:&lt;/p&gt;
 
-&lt;p&gt;What about this?&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;squared-error loss: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \|\theta - \hat{\theta}\|^2_2&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;absolute-error: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \| \theta - \hat{\theta} \|_1&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;Kullback–Leibler: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \int \log 
+                     \frac{f(x;\theta)}{f(x;\hat{\theta})} f(x;\theta) \, dx&lt;/script&gt;.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\int_\mathcal{D} f(x) \, dx&lt;/script&gt;</content><author><name></name></author><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry></feed>
+&lt;p&gt;Now we have some tools to assess the quality of our estimators, but we still have some 
+work to do because our estimators (most likely) depend on random variables. 
+To remove the randomness, we’ll take an average which will give us the &lt;strong&gt;risk&lt;/strong&gt;
+of our estimator. The risk of &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt; is given&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(\theta, \hat{\theta}) = \E_\theta \big( L(\theta, \hat{\theta}) \big) 
+	= \int L(\theta, \hat{\theta}) f(x; \theta) \, dx&lt;/script&gt;
+
+&lt;p&gt;where the expectation is over the data. (The &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; subscript on the 
+expectation is just a way for us to index our distribution—in other words, we can read
+it as “the expectation when the parameter is &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.”)
+The risk quantifies how good or bad our estimator is, where “low risk”
+is good and “high risk” is bad.&lt;/p&gt;
+
+&lt;p&gt;If we took an additional expectation across the parameter (&lt;em&gt;your Bayesian neurons should
+be lighting up&lt;/em&gt;), then we have the &lt;strong&gt;Bayes risk&lt;/strong&gt; of the estimator:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_\mathrm{Bayes}(g,\hat{\theta}) = \int R(\theta, \hat{\theta}) g(\theta) \, d\theta
+	= \int \left( \int L(\theta, \hat{\theta}) f(x; \theta) \, dx \right) g(\theta) \, d\theta&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;g(\theta)&lt;/script&gt; is a prior distribution for &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;. But don’t get too attached to
+the name because this is an expectation over the data (frequentist) and over the 
+parameter (Bayesian).&lt;/p&gt;
+
+&lt;p&gt;A true Bayesian statistician would be more interested in the &lt;strong&gt;posterior risk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_\mathrm{post}(\hat{\theta} \mid x) = \int L(\theta, \hat{\theta}) g(\theta \mid x) \, dx&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;g(\theta \mid x)&lt;/script&gt; is the posterior density of &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;So, now we have three notions of risk at our disposal:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the (regular) &lt;strong&gt;risk&lt;/strong&gt;, which has a frequentist feel;&lt;/li&gt;
+  &lt;li&gt;the &lt;strong&gt;posterior risk&lt;/strong&gt;, which has a Bayesian feel; and&lt;/li&gt;
+  &lt;li&gt;the &lt;strong&gt;Bayes risk&lt;/strong&gt;, which has an independent-of-statistical-philosophy feel.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Neural connection!&lt;/strong&gt;
+When we use the squared-error loss (also known as the &lt;em&gt;&lt;script type=&quot;math/tex&quot;&gt;\ell_2&lt;/script&gt;-loss&lt;/em&gt; or
+the &lt;em&gt;mean squared error&lt;/em&gt;), we can write the risk using bias and variance of our estimator
+&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. We’ll use the “add-and-subtract” trick to show this relationship.
+Let &lt;script type=&quot;math/tex&quot;&gt;\mu = \E_\theta (\hat{\theta})&lt;/script&gt;, then&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E_\theta (\theta - \hat{\theta})^2 
+	&amp;= \E_\theta (\theta - \mu + \mu - \hat{\theta})^2 \\
+	&amp;= \E_\theta(\mu - \hat{\theta})^2 + (\theta - \mu)^2 +
+		2 \E_\theta(\mu - \hat{\theta})(\theta - \mu) \\
+	&amp;= \Var_\theta (\hat{\theta}) + \big( \E_\theta (\hat{\theta} - \mu) \big)^2.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;h4 id=&quot;a-warm-up-calculation&quot;&gt;A warm-up calculation.&lt;/h4&gt;
+
+&lt;p&gt;Let’s assume we have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; data points, &lt;script type=&quot;math/tex&quot;&gt;X_1&lt;/script&gt;,…,&lt;script type=&quot;math/tex&quot;&gt;X_n&lt;/script&gt; sampled from Bernoulli 
+distribution with an unknown probability of success &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;. We’ll estimate &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; with 
+two different estimators&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{p}_1 = \bar{X}&lt;/script&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and compare their risk functions, using the squared-error loss function.&lt;/p&gt;
+
+&lt;p&gt;The estimator &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1 = \bar{X}&lt;/script&gt; is an unbiased estimator of the true parameter 
+&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;. So, the risk of &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1&lt;/script&gt; is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(p, \hat{p}_1) = \E_p (p - \bar{X})^2 
+	= \Var_p (\bar{X}) 
+	= \frac{p(1-p)}{n}.&lt;/script&gt;
+
+&lt;p&gt;The estimator &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt; has a bias but no variance term. Its risk is given by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(p, \hat{p}_2) = \E_p (p - 0.5)^2 
+	= (E(0.5) - p)^2 
+	= (0.5 - p)^2.&lt;/script&gt;
+
+&lt;p&gt;The risk of the first estimator is a concave quadratic and the risk of the second 
+estimator is a convex quadratic.
+So, neither one of these risk functions is strictly better (&lt;em&gt;i.e.&lt;/em&gt;, uniformly dominates)
+the other one as &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; ranges from 0 to 1.&lt;/p&gt;
+
+&lt;h4 id=&quot;maximum-risk&quot;&gt;Maximum risk.&lt;/h4&gt;
+
+&lt;p&gt;In the spirit of (working towards) minimax, we could ask: what value of &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; maximizes
+the risk of our estimator?&lt;/p&gt;
+
+&lt;p&gt;For &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1&lt;/script&gt;, we can expand the quadratic &lt;script type=&quot;math/tex&quot;&gt;(p - p^2)/n&lt;/script&gt;, take derivatives
+&lt;script type=&quot;math/tex&quot;&gt;(1 - 2p)/n&lt;/script&gt;, set it equal to 0, and find that &lt;script type=&quot;math/tex&quot;&gt;p = 1/2&lt;/script&gt; maximizes the risk. (Note
+that this results holds independent of &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt;; however, the value of the risk function
+decreases at a rate of &lt;script type=&quot;math/tex&quot;&gt;1/n&lt;/script&gt;.)&lt;/p&gt;
+
+&lt;p&gt;For &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2&lt;/script&gt;, the story is a bit different because we’re dealing with a convex 
+quadratic—so, think endpoints. Because we chose &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt;, both 0 and 1
+maximize the risk of this expression.&lt;/p&gt;
+
+&lt;h4 id=&quot;setting-up-the-minimax-game&quot;&gt;Setting up the minimax game.&lt;/h4&gt;
+
+&lt;p&gt;The central object of this post is the minimax risk, which is a (hopefully) minimized, 
+worst-case risk, defined as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta}).&lt;/script&gt;
+
+&lt;p&gt;We can interpret the minimax risk as a type of game: it’s us (&lt;em&gt;the statisticians&lt;/em&gt;) 
+against nature.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Nature gets to choose &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We get to choose &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;Nature chooses &lt;script type=&quot;math/tex&quot;&gt;\sup_{\theta} R(\theta, \hat{\theta})&lt;/script&gt; 
+adversarially to maximize our risk.&lt;/li&gt;
+  &lt;li&gt;We do our best to minimize our risk given nature’s choice of &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.
+    &lt;ul&gt;
+      &lt;li&gt;That is, we pick &lt;script type=&quot;math/tex&quot;&gt;\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta})&lt;/script&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;references&quot;&gt;References&lt;/h4&gt;
+
+&lt;p&gt;This post draws on material from&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Theoretical Statistics&lt;/em&gt; by Robert Keener;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;All of Statistics&lt;/em&gt; by Larry Wasserman;&lt;/li&gt;
+  &lt;li&gt;lectures by Michael Jordan.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about statistical decision theory, which is a topic with its origins in the 1950s. Decision theory is cool because it gives us a way to compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.</summary></entry><entry><title type="html">Game on.</title><link href="http://localhost:4000/jekyll/update/2018/02/03/game-on.html" rel="alternate" type="text/html" title="Game on." /><published>2018-02-03T12:30:00-07:00</published><updated>2018-02-03T12:30:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/game-on</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/game-on.html">&lt;p&gt;Hey blogosphere!&lt;/p&gt;
+
+&lt;p&gt;My name’s Jake Knigge and this blog’s name is Eggink Blog. It’s a place to ink-up (or markdown) some (quasi) egghead-ed topics from statistics, machine learning, mathematics, 
+computer science and physics.&lt;/p&gt;
+
+&lt;p&gt;Anyways, here’s a little bit about me…&lt;/p&gt;
+
+&lt;p&gt;I am a Nebraska-native turned Colorado-convert since 2001. 
+I graduated from the University of Colorado in 2013 after studying quantitative finance.
+I worked at Deloitte for a couple of years following college as a consultant.
+In 2014, Angela and I got married. It was a heckuva a party.
+I changed jobs in 2015 and started working for CoBank, an agricultural lender, in Denver, Colorado. This my current working home.&lt;/p&gt;
+
+&lt;p&gt;Some of my hobbies are…&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;snowboarding with Angela,&lt;/li&gt;
+  &lt;li&gt;using quantitative tools to tell stories and solve problems,&lt;/li&gt;
+  &lt;li&gt;trying to understand the world through the “languages” of math and science,&lt;/li&gt;
+  &lt;li&gt;trying to understand languages (Italian, German, and French),&lt;/li&gt;
+  &lt;li&gt;trail running with Maya (and Angela and Raven, when they’ll partake),&lt;/li&gt;
+  &lt;li&gt;reading,&lt;/li&gt;
+  &lt;li&gt;learning and understanding the learning process,&lt;/li&gt;
+  &lt;li&gt;meditating and stretching (&lt;em&gt;i.e.&lt;/em&gt;, “yoga-ing”),&lt;/li&gt;
+  &lt;li&gt;listening to music,&lt;/li&gt;
+  &lt;li&gt;playing guitar, banjo, and mandolin.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I have a traditional website that lives &lt;a href=&quot;http://knigge.us&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Hey blogosphere!</summary></entry></feed>

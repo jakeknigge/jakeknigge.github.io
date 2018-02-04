@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	A taste of decision theory
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>A taste of decision theory | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="A taste of decision theory" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this post, we’re going to talk about statistical decision theory, which is a topic with its origins in the 1950s. Decision theory is cool because it gives us a way to compare statistical procedures. Moreover, it connects frequentist and Bayesian inference." />
+<meta property="og:description" content="In this post, we’re going to talk about statistical decision theory, which is a topic with its origins in the 1950s. Decision theory is cool because it gives us a way to compare statistical procedures. Moreover, it connects frequentist and Bayesian inference." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/02/03/minimax.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/02/03/minimax.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-03T13:00:00-07:00" />
+<script type="application/ld+json">
+{"description":"In this post, we’re going to talk about statistical decision theory, which is a topic with its origins in the 1950s. Decision theory is cool because it gives us a way to compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/02/03/minimax.html","headline":"A taste of decision theory","dateModified":"2018-02-03T13:00:00-07:00","datePublished":"2018-02-03T13:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/02/03/minimax.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">A taste of decision theory</h1>
+    <p class="post-meta">Feb 3, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>In this post, we’re going to talk about statistical decision theory, which is a topic
+with its origins in the 1950s. Decision theory is cool because it gives us a way to
+compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.</p>
+
+<p>This post sets us on the path towards minimax rules and estimators. 
+<em>Caveat:</em> In no way is this an attempt to fully cover this topic—it’s huge and 
+philosophically deep.</p>
+
+<h4 id="a-bit-of-background">A bit of background.</h4>
+
+<p>Let’s say we have a parameter <script type="math/tex">\theta</script> that lives in some parameter space 
+<script type="math/tex">\Theta</script>. We’re going to estimate our parameter of interest <script type="math/tex">\theta</script> with 
+<script type="math/tex">\hat{\theta}</script>. Since we’re in the business of comparing estimators, we need a way
+to assess their quality. We’ll do this using <strong>loss functions</strong>.</p>
+
+<p>A loss function measures the discrepancy between <script type="math/tex">\theta</script> and <script type="math/tex">\hat{\theta}</script>. 
+Formally,</p>
+
+<script type="math/tex; mode=display">L: \Theta \times \Theta \to \reals.</script>
+
+<p>Some common loss functions are:</p>
+
+<ul>
+  <li>squared-error loss: <script type="math/tex">L(\theta, \hat{\theta}) = \|\theta - \hat{\theta}\|^2_2</script>.</li>
+  <li>absolute-error: <script type="math/tex">L(\theta, \hat{\theta}) = \| \theta - \hat{\theta} \|_1</script>.</li>
+  <li>Kullback–Leibler: <script type="math/tex">L(\theta, \hat{\theta}) = \int \log 
+                     \frac{f(x;\theta)}{f(x;\hat{\theta})} f(x;\theta) \, dx</script>.</li>
+</ul>
+
+<p>Now we have some tools to assess the quality of our estimators, but we still have some 
+work to do because our estimators (most likely) depend on random variables. 
+To remove the randomness, we’ll take an average which will give us the <strong>risk</strong>
+of our estimator. The risk of <script type="math/tex">\hat{\theta}</script> is given</p>
+
+<script type="math/tex; mode=display">R(\theta, \hat{\theta}) = \E_\theta \big( L(\theta, \hat{\theta}) \big) 
+	= \int L(\theta, \hat{\theta}) f(x; \theta) \, dx</script>
+
+<p>where the expectation is over the data. (The <script type="math/tex">\theta</script> subscript on the 
+expectation is just a way for us to index our distribution—in other words, we can read
+it as “the expectation when the parameter is <script type="math/tex">\theta</script>.”)
+The risk quantifies how good or bad our estimator is, where “low risk”
+is good and “high risk” is bad.</p>
+
+<p>If we took an additional expectation across the parameter (<em>your Bayesian neurons should
+be lighting up</em>), then we have the <strong>Bayes risk</strong> of the estimator:</p>
+
+<script type="math/tex; mode=display">R_\mathrm{Bayes}(g,\hat{\theta}) = \int R(\theta, \hat{\theta}) g(\theta) \, d\theta
+	= \int \left( \int L(\theta, \hat{\theta}) f(x; \theta) \, dx \right) g(\theta) \, d\theta</script>
+
+<p>where <script type="math/tex">g(\theta)</script> is a prior distribution for <script type="math/tex">\theta</script>. But don’t get too attached to
+the name because this is an expectation over the data (frequentist) and over the 
+parameter (Bayesian).</p>
+
+<p>A true Bayesian statistician would be more interested in the <strong>posterior risk</strong></p>
+
+<script type="math/tex; mode=display">R_\mathrm{post}(\hat{\theta} \mid x) = \int L(\theta, \hat{\theta}) g(\theta \mid x) \, dx</script>
+
+<p>where <script type="math/tex">g(\theta \mid x)</script> is the posterior density of <script type="math/tex">\theta</script>.</p>
+
+<p>So, now we have three notions of risk at our disposal:</p>
+
+<ul>
+  <li>the (regular) <strong>risk</strong>, which has a frequentist feel;</li>
+  <li>the <strong>posterior risk</strong>, which has a Bayesian feel; and</li>
+  <li>the <strong>Bayes risk</strong>, which has an independent-of-statistical-philosophy feel.</li>
+</ul>
+
+<p><strong>Neural connection!</strong>
+When we use the squared-error loss (also known as the <em><script type="math/tex">\ell_2</script>-loss</em> or
+the <em>mean squared error</em>), we can write the risk using bias and variance of our estimator
+<script type="math/tex">\hat{\theta}</script>. We’ll use the “add-and-subtract” trick to show this relationship.
+Let <script type="math/tex">\mu = \E_\theta (\hat{\theta})</script>, then</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\E_\theta (\theta - \hat{\theta})^2 
+	&= \E_\theta (\theta - \mu + \mu - \hat{\theta})^2 \\
+	&= \E_\theta(\mu - \hat{\theta})^2 + (\theta - \mu)^2 +
+		2 \E_\theta(\mu - \hat{\theta})(\theta - \mu) \\
+	&= \Var_\theta (\hat{\theta}) + \big( \E_\theta (\hat{\theta} - \mu) \big)^2.
+\end{align*} %]]></script>
+
+<h4 id="a-warm-up-calculation">A warm-up calculation.</h4>
+
+<p>Let’s assume we have <script type="math/tex">n</script> data points, <script type="math/tex">X_1</script>,…,<script type="math/tex">X_n</script> sampled from Bernoulli 
+distribution with an unknown probability of success <script type="math/tex">p</script>. We’ll estimate <script type="math/tex">p</script> with 
+two different estimators</p>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">\hat{p}_1 = \bar{X}</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">\hat{p}_2 = 0.5</script>
+  </li>
+</ul>
+
+<p>and compare their risk functions, using the squared-error loss function.</p>
+
+<p>The estimator <script type="math/tex">\hat{p}_1 = \bar{X}</script> is an unbiased estimator of the true parameter 
+<script type="math/tex">p</script>. So, the risk of <script type="math/tex">\hat{p}_1</script> is</p>
+
+<script type="math/tex; mode=display">R(p, \hat{p}_1) = \E_p (p - \bar{X})^2 
+	= \Var_p (\bar{X}) 
+	= \frac{p(1-p)}{n}.</script>
+
+<p>The estimator <script type="math/tex">\hat{p}_2 = 0.5</script> has a bias but no variance term. Its risk is given by</p>
+
+<script type="math/tex; mode=display">R(p, \hat{p}_2) = \E_p (p - 0.5)^2 
+	= (E(0.5) - p)^2 
+	= (0.5 - p)^2.</script>
+
+<p>The risk of the first estimator is a concave quadratic and the risk of the second 
+estimator is a convex quadratic.
+So, neither one of these risk functions is strictly better (<em>i.e.</em>, uniformly dominates)
+the other one as <script type="math/tex">p</script> ranges from 0 to 1.</p>
+
+<h4 id="maximum-risk">Maximum risk.</h4>
+
+<p>In the spirit of (working towards) minimax, we could ask: what value of <script type="math/tex">p</script> maximizes
+the risk of our estimator?</p>
+
+<p>For <script type="math/tex">\hat{p}_1</script>, we can expand the quadratic <script type="math/tex">(p - p^2)/n</script>, take derivatives
+<script type="math/tex">(1 - 2p)/n</script>, set it equal to 0, and find that <script type="math/tex">p = 1/2</script> maximizes the risk. (Note
+that this results holds independent of <script type="math/tex">n</script>; however, the value of the risk function
+decreases at a rate of <script type="math/tex">1/n</script>.)</p>
+
+<p>For <script type="math/tex">\hat{p}_2</script>, the story is a bit different because we’re dealing with a convex 
+quadratic—so, think endpoints. Because we chose <script type="math/tex">\hat{p}_2 = 0.5</script>, both 0 and 1
+maximize the risk of this expression.</p>
+
+<h4 id="setting-up-the-minimax-game">Setting up the minimax game.</h4>
+
+<p>The central object of this post is the minimax risk, which is a (hopefully) minimized, 
+worst-case risk, defined as</p>
+
+<script type="math/tex; mode=display">\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta}).</script>
+
+<p>We can interpret the minimax risk as a type of game: it’s us (<em>the statisticians</em>) 
+against nature.</p>
+
+<ul>
+  <li>Nature gets to choose <script type="math/tex">\theta</script>.</li>
+  <li>We get to choose <script type="math/tex">\hat{\theta}</script>.</li>
+  <li>Nature chooses <script type="math/tex">\sup_{\theta} R(\theta, \hat{\theta})</script> 
+adversarially to maximize our risk.</li>
+  <li>We do our best to minimize our risk given nature’s choice of <script type="math/tex">\theta</script>.
+    <ul>
+      <li>That is, we pick <script type="math/tex">\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta})</script>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="references">References</h4>
+
+<p>This post draws on material from</p>
+
+<ul>
+  <li><em>Theoretical Statistics</em> by Robert Keener;</li>
+  <li><em>All of Statistics</em> by Larry Wasserman;</li>
+  <li>lectures by Michael Jordan.</li>
+</ul>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blog of blah, blah... a place for ideas, maths, stats...
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

@@ -3,24 +3,10 @@ layout: page
 title: About
 permalink: /about/
 ---
+My name's Jake Knigge and this blog's name is Eggink Blog. It's a place to ink-up 
+(or markdown) various topics from statistics, machine learning, mathematics, 
+computer science, finance/economics, and physics.
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll 
-theme, as well as basic Jekyll usage documentation 
-at [jekyllrb.com](https://jekyllrb.com/).
+I have a traditional website that lives [here][knigge-us].
 
-Here's some more math:
-
-$$ 
-\mathrm{argmin}_x \, f(x). 
-$$
-
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll
+[knigge-us]:   http://knigge.us

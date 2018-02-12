@@ -4,8 +4,8 @@ title:  "Idea chaining"
 date:   2018-02-11 20:40:00 -0700
 categories: jekyll update
 ---
-In this post, we're going to talk about a concept that useful in many areas...
-statistics, optimization, life-in-general... I call **idea chaining**. My guess is that
+In this post, we're going to talk about a concept that is useful in many areas...
+statistics, optimization, life-in-general... I call it **idea chaining**. My guess is that
 most people are already aware of this notion on intuitive level. Systems thinkers would
 probably call it something like "problem decomposition", mathematicians would think of
 lemmas... basically we take a problem, split it into smaller, easier-to-solve 

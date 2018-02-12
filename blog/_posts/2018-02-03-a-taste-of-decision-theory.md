@@ -12,7 +12,7 @@ This post sets us on the path towards minimax rules and estimators.
 *Caveat:* In no way is this an attempt to fully cover this topic---it's huge and 
 philosophically deep.
 
-#### A bit of background.
+### A bit of background.
 
 Let's say we have a parameter $$\theta$$ that lives in some parameter space 
 $$\Theta$$. We're going to estimate our parameter of interest $$\theta$$ with 
@@ -91,7 +91,7 @@ $$
 \end{align*}
 $$
 
-#### A warm-up calculation.
+### A warm-up calculation.
 
 Let's assume we have $$n$$ data points, $$X_1$$,...,$$X_n$$ sampled from Bernoulli 
 distribution with an unknown probability of success $$p$$. We'll estimate $$p$$ with 
@@ -124,7 +124,7 @@ estimator is a convex quadratic.
 So, neither one of these risk functions is strictly better (*i.e.*, uniformly dominates)
 the other one as $$p$$ ranges from 0 to 1.
 
-#### Maximum risk.
+### Maximum risk.
 
 In the spirit of (working towards) minimax, we could ask: what value of $$p$$ maximizes
 the risk of our estimator?
@@ -138,7 +138,7 @@ For $$\hat{p}_2$$, the story is a bit different because we're dealing with a con
 quadratic---so, think endpoints. Because we chose $$\hat{p}_2 = 0.5$$, both 0 and 1
 maximize the risk of this expression.
 
-#### Setting up the minimax game.
+### Setting up the minimax game.
 
 The central object of this post is the minimax risk, which is a (hopefully) minimized, 
 worst-case risk, defined as
@@ -157,7 +157,7 @@ against nature.
 * We do our best to minimize our risk given nature's choice of $$\theta$$. 
 	+ That is, we pick $$\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta})$$.
 	
-#### References
+### References
 
 This post draws on material from 
 

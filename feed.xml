@@ -1,5 +1,191 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-04T12:17:11-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place for stats, math, ideas.
-</subtitle><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/minimax.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/minimax</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/minimax.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-11T20:42:30-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Idea chaining</title><link href="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html" rel="alternate" type="text/html" title="Idea chaining" /><published>2018-02-11T20:40:00-07:00</published><updated>2018-02-11T20:40:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/11/idea-chaining</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html">&lt;p&gt;In this post, we’re going to talk about a concept that useful in many areas…
+statistics, optimization, life-in-general… I call &lt;strong&gt;idea chaining&lt;/strong&gt;. My guess is that
+most people are already aware of this notion on intuitive level. Systems thinkers would
+probably call it something like “problem decomposition”, mathematicians would think of
+lemmas… basically we take a problem, split it into smaller, easier-to-solve 
+sub-problems, and then chain our results together to solve the original problem.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-convex-calculus-for-convexity-verification&quot;&gt;A (convex) calculus for convexity verification.&lt;/h3&gt;
+
+&lt;p&gt;In convex analysis and optimization, we’re often interested in whether or not a given
+function is convex. There are a few ways to go about showing the “vexity” of a 
+particular function, such as using:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;the definition of convexity;&lt;/li&gt;
+  &lt;li&gt;the restriction-to-a-line technique;&lt;/li&gt;
+  &lt;li&gt;first-order (&lt;em&gt;i.e.&lt;/em&gt;, derivative) conditions;&lt;/li&gt;
+  &lt;li&gt;second-order conditions; or&lt;/li&gt;
+  &lt;li&gt;a convex calculus.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The &lt;strong&gt;convex calculus&lt;/strong&gt; approach is appealing because it gives us a toolbox to 
+(mindlessly) construct or decompose a function, using a set of basic functions and a few 
+rules that preserve convexity. The DCP ideas arose from the work of Michael Grant and 
+Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
+convex calculus in their books from the 1990s.&lt;/p&gt;
+
+&lt;p&gt;Let’s put the ideas to work on an example that came up on the quiz page of the 
+&lt;a href=&quot;http://dcp.stanford.edu/&quot;&gt;Disciplined Convex Programming&lt;/a&gt;
+website, which teaches the principles of disciplined convex programming.&lt;/p&gt;
+
+&lt;p&gt;Our function of interest is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(u,w,y,z) = \log \left( \exp \left\{ e^{\max(u, z)} \right\} + 
+						 \exp \left\{ g_{\mathrm{hub}}(w) \right\} +
+						 \exp \left\{ y - 42 \right\}  \right),&lt;/script&gt;
+
+&lt;p&gt;where&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+g_{\mathrm{hub}}(w) = 
+\begin{cases}
+2|x| - 1, &amp; |x| \ge 1 \\
+|x|^2, 	 &amp; |x| &lt; 1.
+\end{cases} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;At first sight, this looks ugly because we have a concave function with &lt;script type=&quot;math/tex&quot;&gt;\log&lt;/script&gt;, a couple
+convex functions with &lt;script type=&quot;math/tex&quot;&gt;\max&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\exp&lt;/script&gt;, an affine function &lt;script type=&quot;math/tex&quot;&gt;y - 42&lt;/script&gt;, and that Huber
+function &lt;script type=&quot;math/tex&quot;&gt;g_{\mathrm{hub}}&lt;/script&gt; (which is actually convex, but may not recognized as such).
+Moreover, we have four variables!&lt;/p&gt;
+
+&lt;p&gt;The DCP / convex calculus approach turns this problem into an easy verification process.
+The non-obvious and key ingredient is the “log-sum-exp” function, also called the soft-max
+function. For &lt;script type=&quot;math/tex&quot;&gt;x \in \reals^n&lt;/script&gt;, the log-sum-exp function is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).&lt;/script&gt;
+
+&lt;p&gt;This function is convex—if you’re suspicious, calculate its Hessian. 
+With this fact, we’re nearly done. The functions appearing
+within the exponentials are convex and affine. Then we use that log-sum-exp is convex and
+we’re done.&lt;/p&gt;
+
+&lt;p&gt;Here are the DCP rules we used:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;an increasing convex function of a convex function is convex; and&lt;/li&gt;
+  &lt;li&gt;a sum of convex functions is convex.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So, with two rules and a few basic functions we’ve show a rather complicated function to 
+be convex—no gradients, subgradients, or Hessians required. We reduced the problem
+to a few simple subproblems (&lt;em&gt;e.g.&lt;/em&gt;, verifying the convexity of 
+&lt;script type=&quot;math/tex&quot;&gt;e^{g_{\mathrm{hub}}(w)}&lt;/script&gt; and the like) and then strung everything together using a
+couple rules. Bam.&lt;/p&gt;
+
+&lt;p&gt;If you’re interested in seeing the “vexity” parse tree for this function, check out the 
+DCP site’s “&lt;a href=&quot;http://dcp.stanford.edu/analyzer&quot;&gt;Analyzer&lt;/a&gt;” and type in 
+&lt;em&gt;log_sum_exp(exp(max(u, z)), huber(w) + y - 42)&lt;/em&gt;. Do it!&lt;/p&gt;
+
+&lt;h3 id=&quot;le-cams-inequality&quot;&gt;Le Cam’s inequality.&lt;/h3&gt;
+
+&lt;p&gt;Our next example of idea chaining stems from a problem from Tom Ferguson’s (excellent) 
+mathematical statistics book called &lt;em&gt;A Course in Large Sample Theory&lt;/em&gt;. Problem 5 of 
+chapter 3 (“Convergence in Law”) walks us through Le Cam’s inequality.&lt;/p&gt;
+
+&lt;p&gt;Here’s the set up.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; independent Bernoulli random variables each with its own probability of
+success, &lt;script type=&quot;math/tex&quot;&gt;p_i = \prob(X_i = 1)&lt;/script&gt;. We’ll call these &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We define &lt;script type=&quot;math/tex&quot;&gt;S_n = \sum_{i=1}^n X_i&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We define &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; as a Poisson random variable with parameter 
+&lt;script type=&quot;math/tex&quot;&gt;\lambda = \sum_{i=1}^n p_i&lt;/script&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We want to show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;| \prob(S_n \in A) - \prob(Z \in A)| \le \sum_{i=1}^n p_i^2&lt;/script&gt;
+
+&lt;p&gt;for all sets &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;. In other words, we’re computing a bound on the error of using a 
+Poisson approximation.&lt;/p&gt;
+
+&lt;p&gt;We’ll solve this problem by solving three simpler sub-problems.&lt;/p&gt;
+
+&lt;p&gt;(1) First, we’ll show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;| \prob(S_n \in A) - \prob(Z \in A)| \le \prob(S_n \neq Z).&lt;/script&gt;
+
+&lt;p&gt;(2) Then, we’ll show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(S_n \neq Z) \le \sum_{i=1}^n \prob(X_i \neq Y_i).&lt;/script&gt;
+
+&lt;p&gt;(3) Finally, we’ll show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(X_i \neq Y_i) \le \sum_{i=1}^n p_i^2.&lt;/script&gt;
+
+&lt;p&gt;To show (1), (2), and (3), we’re going to couple &lt;script type=&quot;math/tex&quot;&gt;S_n&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; to the same underlying 
+probability space.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The variables &lt;script type=&quot;math/tex&quot;&gt;U_1,\dots,U_n&lt;/script&gt; are uniformly distributed on &lt;script type=&quot;math/tex&quot;&gt;[0,1]&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We can define &lt;script type=&quot;math/tex&quot;&gt;X_i = \ind{}(U_i &gt; 1 - p_i)&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;\E X_i = p_i&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We introduce &lt;script type=&quot;math/tex&quot;&gt;Y \sim \mathrm{Poisson}(p_i)&lt;/script&gt; as&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+Y_i =
+\begin{cases}
+0, &amp; U_i &lt; e^{-p_i} \\ 
+k, &amp; F(k-1) &lt; U_i &lt; F(k),
+\end{cases} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j&lt;/script&gt; is the cumulative distribution function
+for a Poisson random variable with parameter &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Proof of (1).&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Without loss of generality we can assume that &lt;script type=&quot;math/tex&quot;&gt;\prob(S_n \in A) \ge \prob(Z \in A)&lt;/script&gt;. 
+This allows us to conclude that &lt;script type=&quot;math/tex&quot;&gt;\{S_n \in A\} \supseteq \{Z \in A\}&lt;/script&gt;. Now, we isolate
+the set where &lt;script type=&quot;math/tex&quot;&gt;\{S_n \neq Z\}&lt;/script&gt; by noting that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(S_n \in A) - \prob(Z \in A) \le \prob(S_n \in A) - \prob(S_n \cap Z \in A) 
+	= \prob(S_n \neq Z).&lt;/script&gt;
+
+&lt;p&gt;One down, two to go.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Proof of (2).&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First, let’s rewrite &lt;script type=&quot;math/tex&quot;&gt;\prob(S_n \neq Z)&lt;/script&gt; as &lt;script type=&quot;math/tex&quot;&gt;\prob \left( \sum_i X_i \neq Z \right)&lt;/script&gt;.
+This implies that there’s at least one &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; not equal to &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;. (The &lt;em&gt;at least&lt;/em&gt; 
+phrase should be triggering the part of your brain associated with &lt;em&gt;unions&lt;/em&gt;.) 
+So, we have that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left( \bigcup_{i=1}^n \{X_i \neq Y_i\} \right) \le \sum_{i=1}^n \prob(X_i \neq Y_i)&lt;/script&gt;
+
+&lt;p&gt;by the subadditivity of probability.&lt;/p&gt;
+
+&lt;p&gt;Two down, one to go.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Proof of (3).&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Using our definitions of &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;, we can write&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\prob(X_i \neq Y_i) &amp;= 1 - \prob(X_i = 0) - \prob(Y_i = 1) \\
+	&amp;= 1 - (1 - p_i) - p_i e^{-p_i} \\
+	&amp;= p_i - p_i e^{-p_i} \qquad \qquad \text{(because $(1-e^{-p_i}) \le p_i$)}\\
+	&amp;\le p_i^2.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Now, we sum both sides of the equation and we’ve got it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Bringing it all back home.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Finally, chain the inequalities in (1), (2), and (3) together and we’ve proved Le Cam’s
+inequality. Heck yeah!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post draws on material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Stephen Boyd’s “&lt;a href=&quot;https://web.stanford.edu/~boyd/papers/cvx_short_course.html&quot;&gt;Convex Optimization Short Course&lt;/a&gt;” notes;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Fundamentals of Convex Analysis&lt;/em&gt; by Hiriart-Urruty and Lemaréchal; and&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;A Course in Large Sample Theory&lt;/em&gt; by Thomas Ferguson.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that useful in many areas… statistics, optimization, life-in-general… I call idea chaining. My guess is that most people are already aware of this notion on intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
 with its origins in the 1950s. Decision theory is cool because it gives us a way to
 compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.&lt;/p&gt;
 
@@ -7,7 +193,7 @@ compare statistical procedures. Moreover, it connects frequentist and Bayesian i
 &lt;em&gt;Caveat:&lt;/em&gt; In no way is this an attempt to fully cover this topic—it’s huge and 
 philosophically deep.&lt;/p&gt;
 
-&lt;h4 id=&quot;a-bit-of-background&quot;&gt;A bit of background.&lt;/h4&gt;
+&lt;h3 id=&quot;a-bit-of-background&quot;&gt;A bit of background.&lt;/h3&gt;
 
 &lt;p&gt;Let’s say we have a parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; that lives in some parameter space 
 &lt;script type=&quot;math/tex&quot;&gt;\Theta&lt;/script&gt;. We’re going to estimate our parameter of interest &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; with 
@@ -81,7 +267,7 @@ Let &lt;script type=&quot;math/tex&quot;&gt;\mu = \E_\theta (\hat{\theta})&lt;/s
 	&amp;= \Var_\theta (\hat{\theta}) + \big( \E_\theta (\hat{\theta} - \mu) \big)^2.
 \end{align*} %]]&gt;&lt;/script&gt;
 
-&lt;h4 id=&quot;a-warm-up-calculation&quot;&gt;A warm-up calculation.&lt;/h4&gt;
+&lt;h3 id=&quot;a-warm-up-calculation&quot;&gt;A warm-up calculation.&lt;/h3&gt;
 
 &lt;p&gt;Let’s assume we have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; data points, &lt;script type=&quot;math/tex&quot;&gt;X_1&lt;/script&gt;,…,&lt;script type=&quot;math/tex&quot;&gt;X_n&lt;/script&gt; sampled from Bernoulli 
 distribution with an unknown probability of success &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;. We’ll estimate &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; with 
@@ -116,7 +302,7 @@ estimator is a convex quadratic.
 So, neither one of these risk functions is strictly better (&lt;em&gt;i.e.&lt;/em&gt;, uniformly dominates)
 the other one as &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; ranges from 0 to 1.&lt;/p&gt;
 
-&lt;h4 id=&quot;maximum-risk&quot;&gt;Maximum risk.&lt;/h4&gt;
+&lt;h3 id=&quot;maximum-risk&quot;&gt;Maximum risk.&lt;/h3&gt;
 
 &lt;p&gt;In the spirit of (working towards) minimax, we could ask: what value of &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; maximizes
 the risk of our estimator?&lt;/p&gt;
@@ -130,7 +316,7 @@ decreases at a rate of &lt;script type=&quot;math/tex&quot;&gt;1/n&lt;/script&gt
 quadratic—so, think endpoints. Because we chose &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt;, both 0 and 1
 maximize the risk of this expression.&lt;/p&gt;
 
-&lt;h4 id=&quot;setting-up-the-minimax-game&quot;&gt;Setting up the minimax game.&lt;/h4&gt;
+&lt;h3 id=&quot;setting-up-the-minimax-game&quot;&gt;Setting up the minimax game.&lt;/h3&gt;
 
 &lt;p&gt;The central object of this post is the minimax risk, which is a (hopefully) minimized, 
 worst-case risk, defined as&lt;/p&gt;
@@ -152,7 +338,7 @@ adversarially to maximize our risk.&lt;/li&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h4 id=&quot;references&quot;&gt;References&lt;/h4&gt;
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
 
 &lt;p&gt;This post draws on material from&lt;/p&gt;
 

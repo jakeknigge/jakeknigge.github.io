@@ -16,7 +16,8 @@
 title:              Eggink Blog
 email:              jake@knigge.us
 description: > # this means to ignore newlines until "baseurl:"
-    Jake W. Knigge's blah, blah, blog... a place for stats, math, ideas.
+    Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and 
+    whatever else comes to mind.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://jakeknigge.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username:   JakeKnigge

@@ -6,7 +6,7 @@ categories: jekyll update
 ---
 In this post, we're going to talk about a concept that is useful in many areas...
 statistics, optimization, life-in-general... I call it **idea chaining**. My guess is that
-most people are already aware of this notion on intuitive level. Systems thinkers would
+most people are already aware of this notion on an intuitive level. Systems thinkers would
 probably call it something like "problem decomposition", mathematicians would think of
 lemmas... basically we take a problem, split it into smaller, easier-to-solve 
 sub-problems, and then chain our results together to solve the original problem.
@@ -25,13 +25,14 @@ particular function, such as using:
 
 The **convex calculus** approach is appealing because it gives us a toolbox to 
 (mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. The DCP ideas arose from the work of Michael Grant and 
+rules that preserve convexity. In the context of convex optimization, this is constructive
+convex verification process is part of an approach known as disciplined convex 
+programming (DCP). The DCP ideas arose from the work of Michael Grant and 
 Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
 convex calculus in their books from the 1990s.
 
 Let's put the ideas to work on an example that came up on the quiz page of the 
-[Disciplined Convex Programming][dcp-site]
-website, which teaches the principles of disciplined convex programming.
+[DCP][dcp-site] website, which teaches the principles of disciplined convex programming.
 
 Our function of interest is
 
@@ -48,8 +49,8 @@ where
 $$
 g_{\mathrm{hub}}(w) = 
 \begin{cases}
-2|x| - 1, & |x| \ge 1 \\
-|x|^2, 	 & |x| < 1.
+	2|x| - 1, & |x| \ge 1 \\
+	|x|^2, 	  & |x| < 1.
 \end{cases}
 $$
 
@@ -144,7 +145,7 @@ k, & F(k-1) < U_i < F(k),
 \end{cases}
 $$
 
-where $$F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j$$ is the cumulative distribution function
+where $$F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j!$$ is the cumulative distribution function
 for a Poisson random variable with parameter $$p_i$$.
 
 **Proof of (1).**

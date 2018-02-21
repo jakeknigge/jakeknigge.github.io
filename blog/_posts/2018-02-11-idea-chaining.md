@@ -56,8 +56,8 @@ $$
 
 At first sight, this looks ugly because we have a concave function with $$\log$$, a couple
 convex functions with $$\max$$ and $$\exp$$, an affine function $$y - 42$$, and that Huber
-function $$g_{\mathrm{hub}}$$ (which is actually convex, but may not recognized as such).
-Moreover, we have four variables!
+function $$g_{\mathrm{hub}}$$ (which is actually convex, but may not be recognized as 
+such). Moreover, we have four variables!
 
 The DCP / convex calculus approach turns this problem into an easy verification process.
 The non-obvious and key ingredient is the "log-sum-exp" function, also called the soft-max

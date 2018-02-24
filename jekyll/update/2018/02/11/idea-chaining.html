@@ -113,14 +113,15 @@ particular function, such as using:</p>
 
 <p>The <strong>convex calculus</strong> approach is appealing because it gives us a toolbox to 
 (mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. In the context of convex optimization, this is constructive
-convex verification process is part of an approach known as disciplined convex 
-programming (DCP). The DCP ideas arose from the work of Michael Grant and 
+rules that preserve convexity. In the context of convex optimization, this 
+<strong>constructive convex verification process</strong> 
+is part of an approach known as <strong>disciplined convex 
+programming</strong> (DCP). The DCP ideas arose from the work of Michael Grant and 
 Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
 convex calculus in their books from the 1990s.</p>
 
 <p>Let’s put the ideas to work on an example that came up on the quiz page of the 
-<a href="http://dcp.stanford.edu/">DCP</a> website, which teaches the principles of disciplined convex programming.</p>
+<a href="http://dcp.stanford.edu/">DCP</a> website (which teaches the principles of disciplined convex programming).</p>
 
 <p>Our function of interest is</p>
 
@@ -148,12 +149,12 @@ function. For <script type="math/tex">x \in \reals^n</script>, the log-sum-exp f
 
 <script type="math/tex; mode=display">h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).</script>
 
-<p>This function is convex—if you’re suspicious, calculate its Hessian. 
-With this fact, we’re nearly done. The functions appearing
-within the exponentials are convex and affine. Then we use that log-sum-exp is convex and
-we’re done.</p>
+<p>This function is convex—if you’re suspicious, calculate its Hessian and 
+convince yourself. With this single fact, we’re nearly done because the functions 
+appearing within the exponentials are convex and affine. Then we use that log-sum-exp is 
+convex and we’re done.</p>
 
-<p>Here are the DCP rules we used:</p>
+<p><strong>Tips and tricks.</strong> Here are the DCP rules we used:</p>
 
 <ul>
   <li>an increasing convex function of a convex function is convex; and</li>

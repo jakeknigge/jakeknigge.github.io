@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	A Poincaré inequality for the Laplace distribution
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>A Poincaré inequality for the Laplace distribution | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="A Poincaré inequality for the Laplace distribution" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises." />
+<meta property="og:description" content="Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-24T13:30:00-07:00" />
+<script type="application/ld+json">
+{"description":"Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html","headline":"A Poincaré inequality for the Laplace distribution","dateModified":"2018-02-24T13:30:00-07:00","datePublished":"2018-02-24T13:30:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">A Poincaré inequality for the Laplace distribution</h1>
+    <p class="post-meta">Feb 24, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s
+<em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em>. The book is (very)
+well written, self-contained, and full of lots of useful tools (<em>i.e.</em>, theorems, lemmas,
+corollaries, and the like), as well as many thought provoking examples and exercises.</p>
+
+<p>In this post, we’re going to work through a problem from Chapter 3, which is titled
+<em>Bounding the Variance</em>, that proves a Poincaré-type inequality.</p>
+
+<h3 id="the-problem">The problem</h3>
+
+<p>Suppose we have a random variable <script type="math/tex">X \sim \mathrm{Laplace}(\lambda = 1)</script>, with a density 
+given by</p>
+
+<script type="math/tex; mode=display">g(x) = \frac{1}{2}\exp(-|x|), \qquad x \in \reals.</script>
+
+<p>Assume that we have a differentiable function <script type="math/tex">f</script> that has finite variance, <em>i.e.</em>,
+<script type="math/tex">% <![CDATA[
+\Var(f(X)) < \infty %]]></script>. We’re going to prove that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\Var(f(X)) < 4 \E \left[ (f'(X))^2 \right], %]]></script>
+
+<p>where <script type="math/tex">f'</script> is the derivative of <script type="math/tex">f</script>.</p>
+
+<h3 id="the-proof">The proof</h3>
+
+<p>First, take a moment to appreciate what this result says: the variance of the function
+of a relatively heavy-tailed distribution is controlled by its expected value; in other
+words, the tails of <script type="math/tex">X</script> <strong>don’t</strong> lead to wild behavior of <script type="math/tex">f</script>. That’s cool!</p>
+
+<p>We’ll use the following (<em>integration by parts</em>) fact in the proof:</p>
+
+<script type="math/tex; mode=display">\E \big( h(X) \big) = h(0) + E \big( \mathrm{sgn}(X) h'(X) \big),</script>
+
+<p>where <script type="math/tex">\mathrm{sgn}</script> is the function that returns -1 when its argument is negative and
++1 when its argument is positive.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\Var(f(X)) &\stackrel{\text{(a)}}{=} \Var(f(X) - f(0)) \\
+	&\stackrel{\text{def}}{=} \Var(h(X)) \\
+	&\stackrel{\text{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
+	&\stackrel{\text{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
+	&\stackrel{\text{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+								  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2}. \\	
+\end{align*} %]]></script>
+
+<p>Now we compare the third and fifth lines and note that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\E \left[ \big( h(X) \big)^2 \right] &\le 
+	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+	  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2} \\
+\left(\E \left[ \big( h(X) \big)^2 \right]\right)^{1/2} &\le 
+	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2} \\
+\E \left[ \big( h(X) \big)^2 \right] &\le 
+	4 \E \left[\big(h'(X)\big)^2\right].
+\end{align*} %]]></script>
+
+<p>Finally, we chain everything together and we complete the proof:</p>
+
+<script type="math/tex; mode=display">\Var(f(X)) \le 4 \E \left[\big(h'(X)\big)^2\right].</script>
+
+<p><strong>Tips and tricks.</strong></p>
+
+<ul>
+  <li>In <strong>(a)</strong> we used that the variance of a random variable is not changed when a constant
+is added to the random variable, <em>i.e.</em>, when we translate it.</li>
+  <li>In <strong>(b)</strong> we used that <script type="math/tex">\Var(Y) + (\E Y)^2 = \E(Y^2)</script>.</li>
+  <li>In <strong>(c)</strong> we used the <em>integration by parts</em> fact.</li>
+  <li>In <strong>(d)</strong> we used the Cauchy-Schwarz inequality.</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>This post is based on material from:</p>
+
+<ul>
+  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
+S. Boucheron, G. Lugosi, and P. Masart.</li>
+</ul>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

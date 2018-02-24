@@ -25,14 +25,15 @@ particular function, such as using:
 
 The **convex calculus** approach is appealing because it gives us a toolbox to 
 (mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. In the context of convex optimization, this is constructive
-convex verification process is part of an approach known as disciplined convex 
-programming (DCP). The DCP ideas arose from the work of Michael Grant and 
+rules that preserve convexity. In the context of convex optimization, this 
+**constructive convex verification process** 
+is part of an approach known as **disciplined convex 
+programming** (DCP). The DCP ideas arose from the work of Michael Grant and 
 Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
 convex calculus in their books from the 1990s.
 
 Let's put the ideas to work on an example that came up on the quiz page of the 
-[DCP][dcp-site] website, which teaches the principles of disciplined convex programming.
+[DCP][dcp-site] website (which teaches the principles of disciplined convex programming).
 
 Our function of interest is
 
@@ -67,12 +68,12 @@ $$
 h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).
 $$
 
-This function is convex---if you're suspicious, calculate its Hessian. 
-With this fact, we're nearly done. The functions appearing
-within the exponentials are convex and affine. Then we use that log-sum-exp is convex and
-we're done.
- 
-Here are the DCP rules we used:
+This function is convex---if you're suspicious, calculate its Hessian and 
+convince yourself. With this single fact, we're nearly done because the functions 
+appearing within the exponentials are convex and affine. Then we use that log-sum-exp is 
+convex and we're done.
+
+**Tips and tricks.** Here are the DCP rules we used:
 
 * an increasing convex function of a convex function is convex; and
 * a sum of convex functions is convex.

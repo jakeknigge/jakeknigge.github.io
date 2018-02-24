@@ -1,7 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-11T20:42:30-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Idea chaining</title><link href="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html" rel="alternate" type="text/html" title="Idea chaining" /><published>2018-02-11T20:40:00-07:00</published><updated>2018-02-11T20:40:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/11/idea-chaining</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html">&lt;p&gt;In this post, we’re going to talk about a concept that useful in many areas…
-statistics, optimization, life-in-general… I call &lt;strong&gt;idea chaining&lt;/strong&gt;. My guess is that
-most people are already aware of this notion on intuitive level. Systems thinkers would
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-02-24T13:45:16-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">A Poincaré inequality for the Laplace distribution</title><link href="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html" rel="alternate" type="text/html" title="A Poincaré inequality for the Laplace distribution" /><published>2018-02-24T13:30:00-07:00</published><updated>2018-02-24T13:30:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html">&lt;p&gt;Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s
+&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt;. The book is (very)
+well written, self-contained, and full of lots of useful tools (&lt;em&gt;i.e.&lt;/em&gt;, theorems, lemmas,
+corollaries, and the like), as well as many thought provoking examples and exercises.&lt;/p&gt;
+
+&lt;p&gt;In this post, we’re going to work through a problem from Chapter 3, which is titled
+&lt;em&gt;Bounding the Variance&lt;/em&gt;, that proves a Poincaré-type inequality.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
+
+&lt;p&gt;Suppose we have a random variable &lt;script type=&quot;math/tex&quot;&gt;X \sim \mathrm{Laplace}(\lambda = 1)&lt;/script&gt;, with a density 
+given by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;g(x) = \frac{1}{2}\exp(-|x|), \qquad x \in \reals.&lt;/script&gt;
+
+&lt;p&gt;Assume that we have a differentiable function &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; that has finite variance, &lt;em&gt;i.e.&lt;/em&gt;,
+&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
+\Var(f(X)) &lt; \infty %]]&gt;&lt;/script&gt;. We’re going to prove that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\Var(f(X)) &lt; 4 \E \left[ (f'(X))^2 \right], %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;f'&lt;/script&gt; is the derivative of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-proof&quot;&gt;The proof&lt;/h3&gt;
+
+&lt;p&gt;First, take a moment to appreciate what this result says: the variance of the function
+of a relatively heavy-tailed distribution is controlled by its expected value; in other
+words, the tails of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; &lt;strong&gt;don’t&lt;/strong&gt; lead to wild behavior of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;. That’s cool!&lt;/p&gt;
+
+&lt;p&gt;We’ll use the following (&lt;em&gt;integration by parts&lt;/em&gt;) fact in the proof:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \big( h(X) \big) = h(0) + E \big( \mathrm{sgn}(X) h'(X) \big),&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\mathrm{sgn}&lt;/script&gt; is the function that returns -1 when its argument is negative and
++1 when its argument is positive.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\Var(f(X)) &amp;\stackrel{\text{(a)}}{=} \Var(f(X) - f(0)) \\
+	&amp;\stackrel{\text{def}}{=} \Var(h(X)) \\
+	&amp;\stackrel{\text{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
+	&amp;\stackrel{\text{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
+	&amp;\stackrel{\text{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+								  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2}. \\	
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Now we compare the third and fifth lines and note that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E \left[ \big( h(X) \big)^2 \right] &amp;\le 
+	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+	  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2} \\
+\left(\E \left[ \big( h(X) \big)^2 \right]\right)^{1/2} &amp;\le 
+	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2} \\
+\E \left[ \big( h(X) \big)^2 \right] &amp;\le 
+	4 \E \left[\big(h'(X)\big)^2\right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Finally, we chain everything together and we complete the proof:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(f(X)) \le 4 \E \left[\big(h'(X)\big)^2\right].&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;Tips and tricks.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;In &lt;strong&gt;(a)&lt;/strong&gt; we used that the variance of a random variable is not changed when a constant
+is added to the random variable, &lt;em&gt;i.e.&lt;/em&gt;, when we translate it.&lt;/li&gt;
+  &lt;li&gt;In &lt;strong&gt;(b)&lt;/strong&gt; we used that &lt;script type=&quot;math/tex&quot;&gt;\Var(Y) + (\E Y)^2 = \E(Y^2)&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;In &lt;strong&gt;(c)&lt;/strong&gt; we used the &lt;em&gt;integration by parts&lt;/em&gt; fact.&lt;/li&gt;
+  &lt;li&gt;In &lt;strong&gt;(d)&lt;/strong&gt; we used the Cauchy-Schwarz inequality.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises.</summary></entry><entry><title type="html">Idea chaining</title><link href="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html" rel="alternate" type="text/html" title="Idea chaining" /><published>2018-02-11T20:40:00-07:00</published><updated>2018-02-11T20:40:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/11/idea-chaining</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html">&lt;p&gt;In this post, we’re going to talk about a concept that is useful in many areas…
+statistics, optimization, life-in-general… I call it &lt;strong&gt;idea chaining&lt;/strong&gt;. My guess is that
+most people are already aware of this notion on an intuitive level. Systems thinkers would
 probably call it something like “problem decomposition”, mathematicians would think of
 lemmas… basically we take a problem, split it into smaller, easier-to-solve 
 sub-problems, and then chain our results together to solve the original problem.&lt;/p&gt;
@@ -22,13 +103,15 @@ particular function, such as using:&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;convex calculus&lt;/strong&gt; approach is appealing because it gives us a toolbox to 
 (mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. The DCP ideas arose from the work of Michael Grant and 
+rules that preserve convexity. In the context of convex optimization, this 
+&lt;strong&gt;constructive convex verification process&lt;/strong&gt; 
+is part of an approach known as &lt;strong&gt;disciplined convex 
+programming&lt;/strong&gt; (DCP). The DCP ideas arose from the work of Michael Grant and 
 Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
 convex calculus in their books from the 1990s.&lt;/p&gt;
 
 &lt;p&gt;Let’s put the ideas to work on an example that came up on the quiz page of the 
-&lt;a href=&quot;http://dcp.stanford.edu/&quot;&gt;Disciplined Convex Programming&lt;/a&gt;
-website, which teaches the principles of disciplined convex programming.&lt;/p&gt;
+&lt;a href=&quot;http://dcp.stanford.edu/&quot;&gt;DCP&lt;/a&gt; website (which teaches the principles of disciplined convex programming).&lt;/p&gt;
 
 &lt;p&gt;Our function of interest is&lt;/p&gt;
 
@@ -41,14 +124,14 @@ website, which teaches the principles of disciplined convex programming.&lt;/p&g
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 g_{\mathrm{hub}}(w) = 
 \begin{cases}
-2|x| - 1, &amp; |x| \ge 1 \\
-|x|^2, 	 &amp; |x| &lt; 1.
+	2|x| - 1, &amp; |x| \ge 1 \\
+	|x|^2, 	  &amp; |x| &lt; 1.
 \end{cases} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;At first sight, this looks ugly because we have a concave function with &lt;script type=&quot;math/tex&quot;&gt;\log&lt;/script&gt;, a couple
 convex functions with &lt;script type=&quot;math/tex&quot;&gt;\max&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\exp&lt;/script&gt;, an affine function &lt;script type=&quot;math/tex&quot;&gt;y - 42&lt;/script&gt;, and that Huber
-function &lt;script type=&quot;math/tex&quot;&gt;g_{\mathrm{hub}}&lt;/script&gt; (which is actually convex, but may not recognized as such).
-Moreover, we have four variables!&lt;/p&gt;
+function &lt;script type=&quot;math/tex&quot;&gt;g_{\mathrm{hub}}&lt;/script&gt; (which is actually convex, but may not be recognized as 
+such). Moreover, we have four variables!&lt;/p&gt;
 
 &lt;p&gt;The DCP / convex calculus approach turns this problem into an easy verification process.
 The non-obvious and key ingredient is the “log-sum-exp” function, also called the soft-max
@@ -56,12 +139,12 @@ function. For &lt;script type=&quot;math/tex&quot;&gt;x \in \reals^n&lt;/script&
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).&lt;/script&gt;
 
-&lt;p&gt;This function is convex—if you’re suspicious, calculate its Hessian. 
-With this fact, we’re nearly done. The functions appearing
-within the exponentials are convex and affine. Then we use that log-sum-exp is convex and
-we’re done.&lt;/p&gt;
+&lt;p&gt;This function is convex—if you’re suspicious, calculate its Hessian and 
+convince yourself. With this single fact, we’re nearly done because the functions 
+appearing within the exponentials are convex and affine. Then we use that log-sum-exp is 
+convex and we’re done.&lt;/p&gt;
 
-&lt;p&gt;Here are the DCP rules we used:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tips and tricks.&lt;/strong&gt; Here are the DCP rules we used:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;an increasing convex function of a convex function is convex; and&lt;/li&gt;
@@ -131,7 +214,7 @@ Y_i =
 k, &amp; F(k-1) &lt; U_i &lt; F(k),
 \end{cases} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j&lt;/script&gt; is the cumulative distribution function
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j!&lt;/script&gt; is the cumulative distribution function
 for a Poisson random variable with parameter &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Proof of (1).&lt;/strong&gt;&lt;/p&gt;
@@ -185,7 +268,7 @@ inequality. Heck yeah!&lt;/p&gt;
   &lt;li&gt;Stephen Boyd’s “&lt;a href=&quot;https://web.stanford.edu/~boyd/papers/cvx_short_course.html&quot;&gt;Convex Optimization Short Course&lt;/a&gt;” notes;&lt;/li&gt;
   &lt;li&gt;&lt;em&gt;Fundamentals of Convex Analysis&lt;/em&gt; by Hiriart-Urruty and Lemaréchal; and&lt;/li&gt;
   &lt;li&gt;&lt;em&gt;A Course in Large Sample Theory&lt;/em&gt; by Thomas Ferguson.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that useful in many areas… statistics, optimization, life-in-general… I call idea chaining. My guess is that most people are already aware of this notion on intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that is useful in many areas… statistics, optimization, life-in-general… I call it idea chaining. My guess is that most people are already aware of this notion on an intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
 with its origins in the 1950s. Decision theory is cool because it gives us a way to
 compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.&lt;/p&gt;
 

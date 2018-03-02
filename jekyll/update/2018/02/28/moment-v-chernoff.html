@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Better bounds: moment vs. Chernoff
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Better bounds: moment vs. Chernoff | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Better bounds: moment vs. Chernoff" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds." />
+<meta property="og:description" content="In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-28T20:00:00-07:00" />
+<script type="application/ld+json">
+{"description":"In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html","headline":"Better bounds: moment vs. Chernoff","dateModified":"2018-02-28T20:00:00-07:00","datePublished":"2018-02-28T20:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Better bounds: moment vs. Chernoff</h1>
+    <p class="post-meta">Feb 28, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>In this post, we’re going to work through a problem from Chapter 2 of
+<em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em>. The exercise 
+shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.</p>
+
+<h3 id="the-problem">The problem</h3>
+
+<p>Our task to show that moment bounds are <strong>always</strong> better than Cramér–Chernoff bounds.
+Assume we have a nonnegative random variable <script type="math/tex">Y</script> and a positive number <script type="math/tex">t</script>. The best
+moment bound is <script type="math/tex">\prob(Y \ge t) = \min_{q \in \integers} \E(Y^q)t^{-q}</script>. On the other
+hand, the best Cramér–Chernoff bound is <script type="math/tex">\inf_{\lambda > 0} \E e^{\lambda(Y-t)}</script>. So,
+our job is to show that</p>
+
+<script type="math/tex; mode=display">\min_{q \in \integers} \E(Y^q)t^{-q} \le \inf_{\lambda > 0} \E e^{\lambda(Y-t)}.</script>
+
+<h3 id="the-proof">The proof</h3>
+
+<p>We’re going to write the <script type="math/tex">q</script>-th moment of <script type="math/tex">Y</script> as <script type="math/tex">m^q</script>. Now, we’ll write the 
+moment generating function of <script type="math/tex">Y</script> as a series</p>
+
+<script type="math/tex; mode=display">\E e^{\lambda Y} = \sum_{k=1}^\infty \frac{\lambda^k m^k}{k!},</script>
+
+<p>which allows us to write the shifted moment generating function as</p>
+
+<script type="math/tex; mode=display">\E e^{\lambda(Y-t)} = \left. \sum_{k=1}^\infty \frac{\lambda^k m^k}{k!} 
+						 \middle/
+						\sum_{k=1}^\infty \frac{\lambda^k t^k}{k!}  \right.</script>
+
+<p>By assumption, <script type="math/tex">q</script> is the integer that minimizes <script type="math/tex">\E(Y^q)t^{-q}</script>, which means
+that</p>
+
+<script type="math/tex; mode=display">\E(Y^q)t^{-q} = \frac{m^q}{t^q}
+	\le \left. \frac{\lambda^k m^k}{k!} \middle/ \frac{\lambda^k t^k}{k!} \right.
+	= \frac{m^k}{t^k!} \qquad \text{for } t \in \reals_{++} \text{ and } k \in \integers_+.</script>
+
+<p>At this point, we’ve got the result because this holds for all <script type="math/tex">k</script>, in particular, 
+when <script type="math/tex">k = 0</script>. So, when we sum up the right-hand-side of the inequality 
+(from <script type="math/tex">k=0</script> to <script type="math/tex">\infty</script>) and then take the infimum over <script type="math/tex">\lambda</script>, we’re still 
+larger than the (optimal) moment bound.</p>
+
+<p><strong>Tips and tricks.</strong></p>
+
+<p>For the analysts out there, there’s a nice result on ratios of series that provides
+(precise) justification for the result. Assume that <script type="math/tex">\sum_{k=0}^\infty x_k</script> and 
+<script type="math/tex">\sum_{k=0}^\infty z_k</script> are finite and that <script type="math/tex">c \le x_k / z_k</script> for all <script type="math/tex">k</script>. Then
+it can be shown that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+c \le \frac{\sum_{k=0}^\infty x_k}{\sum_{k=0}^\infty z_k}
+	\quad \text{and} \quad
+c < \frac{\sum_{k=0}^\infty x_k}{\sum_{k=0}^\infty z_k} %]]></script>
+
+<p>when <script type="math/tex">x_i / z_i \neq x_j / z_j</script> for at least one <script type="math/tex">i</script> and <script type="math/tex">j</script> pair.</p>
+
+<p>We can use this result by setting</p>
+
+<script type="math/tex; mode=display">c = \min_{q \in \integers} \E(Y^q)t^{-q}, \qquad
+	x_k = \frac{\lambda^k m^k}{k!}, \qquad 
+	z_k = \frac{\lambda^k t^k}{k!},</script>
+
+<p>and noting that the ratio <script type="math/tex">x_k/z_k</script> changes for different values of <script type="math/tex">k</script>.</p>
+
+<h3 id="final-thoughts">Final thoughts</h3>
+
+<p>Although moment bounds can be much tighter than Cramér–Chernoff bounds, working with 
+the latter is often (much, much) easier. For example, Cramér–Chernoff bounds play 
+nicely with sums of random variables.</p>
+
+<p>Interestingly, Markov’s inequality and Chebyshev’s inequality, <em>i.e.</em>,</p>
+
+<script type="math/tex; mode=display">\prob(Y \ge t) \le \frac{\E Y}{t} \quad \text{and} \quad
+\prob(|Y - \E Y| \ge t) \le \frac{\Var(Y)}{t^2}</script>
+
+<p>are often not as sharp as Cramér–Chernoff bounds.</p>
+
+<p>For example, let <script type="math/tex">Y \sim \text{Poisson}(\beta)</script>. The mean of <script type="math/tex">Y</script> is 
+<script type="math/tex">\beta</script> and the variance is <script type="math/tex">\beta</script>. The moment generating function of the centered
+version of <script type="math/tex">Y</script>, <em>i.e.</em>, <script type="math/tex">Z = Y - \beta</script> is</p>
+
+<script type="math/tex; mode=display">\E e^{\lambda Y} = e^{-\lambda \beta - \beta} e^{\beta e^\lambda}.</script>
+
+<p>The optimal value of <script type="math/tex">\lambda</script> which minimizes this expression is 
+<script type="math/tex">\lambda = \log(1 + t/\beta)</script>. So, we have that</p>
+
+<script type="math/tex; mode=display">\inf_{\lambda > 0} \E e^{\lambda(Y-t)} = e^t(1+t/\beta)^{-(\beta+t)}.</script>
+
+<p>Say <script type="math/tex">\beta = 100</script> and we set <script type="math/tex">t = 20</script>.</p>
+
+<ul>
+  <li>Markov: 100/20 = 5, which is useless;</li>
+  <li>Chebyshev: 100/400 = 0.25;</li>
+  <li>Cramér–Chernoff: see formula above = 0.153;</li>
+  <li>actual: 0.023.</li>
+</ul>
+
+<p>Now turn up <script type="math/tex">t</script> to 50.</p>
+
+<ul>
+  <li>Markov: 100/50 = 2, which is still useless;</li>
+  <li>Chebyshev: 100/2500 = 0.004;</li>
+  <li>Cramér–Chernoff: <script type="math/tex">2\times10^{-5}</script>;</li>
+  <li>actual: <script type="math/tex">1.23\times10^{-6}</script>.</li>
+</ul>
+
+<h3 id="references">References</h3>
+
+<p>This post is based on material from:</p>
+
+<ul>
+  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
+S. Boucheron, G. Lugosi, and P. Masart.</li>
+</ul>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

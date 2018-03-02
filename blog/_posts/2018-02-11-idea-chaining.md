@@ -11,7 +11,7 @@ probably call it something like "problem decomposition", mathematicians would th
 lemmas... basically we take a problem, split it into smaller, easier-to-solve 
 sub-problems, and then chain our results together to solve the original problem.
 
-### A (convex) calculus for convexity verification.
+### A (convex) calculus for convexity verification
 
 In convex analysis and optimization, we're often interested in whether or not a given
 function is convex. There are a few ways to go about showing the "vexity" of a 
@@ -88,7 +88,7 @@ If you're interested in seeing the "vexity" parse tree for this function, check 
 DCP site's "[Analyzer][dcp-analyzer]" and type in 
 *log_sum_exp(exp(max(u, z)), huber(w) + y - 42)*. Do it!
 
-### Le Cam's inequality.
+### Le Cam's inequality
 
 Our next example of idea chaining stems from a problem from Tom Ferguson's (excellent) 
 mathematical statistics book called *A Course in Large Sample Theory*. Problem 5 of 

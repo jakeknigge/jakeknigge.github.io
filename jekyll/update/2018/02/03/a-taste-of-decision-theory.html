@@ -98,7 +98,7 @@ compare statistical procedures. Moreover, it connects frequentist and Bayesian i
 <em>Caveat:</em> In no way is this an attempt to fully cover this topic—it’s huge and 
 philosophically deep.</p>
 
-<h3 id="a-bit-of-background">A bit of background.</h3>
+<h3 id="a-bit-of-background">A bit of background</h3>
 
 <p>Let’s say we have a parameter <script type="math/tex">\theta</script> that lives in some parameter space 
 <script type="math/tex">\Theta</script>. We’re going to estimate our parameter of interest <script type="math/tex">\theta</script> with 
@@ -172,7 +172,7 @@ Let <script type="math/tex">\mu = \E_\theta (\hat{\theta})</script>, then</p>
 	&= \Var_\theta (\hat{\theta}) + \big( \E_\theta (\hat{\theta} - \mu) \big)^2.
 \end{align*} %]]></script>
 
-<h3 id="a-warm-up-calculation">A warm-up calculation.</h3>
+<h3 id="a-warm-up-calculation">A warm-up calculation</h3>
 
 <p>Let’s assume we have <script type="math/tex">n</script> data points, <script type="math/tex">X_1</script>,…,<script type="math/tex">X_n</script> sampled from Bernoulli 
 distribution with an unknown probability of success <script type="math/tex">p</script>. We’ll estimate <script type="math/tex">p</script> with 
@@ -207,7 +207,7 @@ estimator is a convex quadratic.
 So, neither one of these risk functions is strictly better (<em>i.e.</em>, uniformly dominates)
 the other one as <script type="math/tex">p</script> ranges from 0 to 1.</p>
 
-<h3 id="maximum-risk">Maximum risk.</h3>
+<h3 id="maximum-risk">Maximum risk</h3>
 
 <p>In the spirit of (working towards) minimax, we could ask: what value of <script type="math/tex">p</script> maximizes
 the risk of our estimator?</p>
@@ -221,7 +221,7 @@ decreases at a rate of <script type="math/tex">1/n</script>.)</p>
 quadratic—so, think endpoints. Because we chose <script type="math/tex">\hat{p}_2 = 0.5</script>, both 0 and 1
 maximize the risk of this expression.</p>
 
-<h3 id="setting-up-the-minimax-game">Setting up the minimax game.</h3>
+<h3 id="setting-up-the-minimax-game">Setting up the minimax game</h3>
 
 <p>The central object of this post is the minimax risk, which is a (hopefully) minimized, 
 worst-case risk, defined as</p>

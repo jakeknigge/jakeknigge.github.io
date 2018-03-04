@@ -47,11 +47,11 @@ where $$\mathrm{sgn}$$ is the function that returns -1 when its argument is nega
 
 $$
 \begin{align*}
-\Var(f(X)) &\stackrel{\text{(a)}}{=} \Var(f(X) - f(0)) \\
-	&\stackrel{\text{def}}{=} \Var(h(X)) \\
-	&\stackrel{\text{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
-	&\stackrel{\text{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
-	&\stackrel{\text{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+\Var(f(X)) &\stackrel{\textsf{(a)}}{=} \Var(f(X) - f(0)) \\
+	&\stackrel{\textsf{def}}{=} \Var(h(X)) \\
+	&\stackrel{\textsf{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
+	&\stackrel{\textsf{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
+	&\stackrel{\textsf{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
 								  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2}. \\	
 \end{align*}
 $$

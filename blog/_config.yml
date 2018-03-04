@@ -42,3 +42,6 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# cd "/Users/jakeknigge/Documents/markdown_websites/jakeknigge.github.io/blog"
+# bundle exec jekyll serve

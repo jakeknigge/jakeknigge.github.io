@@ -43,7 +43,7 @@ that
 $$
 \E(Y^q)t^{-q} = \frac{m^q}{t^q}
 	\le \left. \frac{\lambda^k m^k}{k!} \middle/ \frac{\lambda^k t^k}{k!} \right.
-	= \frac{m^k}{t^k!} \qquad \text{for } t \in \reals_{++} \text{ and } k \in \integers_+.
+	= \frac{m^k}{t^k!} \qquad \textsf{for } t \in \reals_{++} \text{ and } k \in \integers_+.
 $$
 
 At this point, we've got the result because this holds for all $$k$$, in particular, 

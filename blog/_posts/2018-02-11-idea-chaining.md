@@ -185,7 +185,7 @@ $$
 \begin{align*}
 \prob(X_i \neq Y_i) &= 1 - \prob(X_i = 0) - \prob(Y_i = 1) \\
 	&= 1 - (1 - p_i) - p_i e^{-p_i} \\
-	&= p_i - p_i e^{-p_i} \qquad \qquad \text{(because $(1-e^{-p_i}) \le p_i$)}\\
+	&= p_i - p_i e^{-p_i} \qquad \qquad \textsf{(because $(1-e^{-p_i}) \le p_i$)}\\
 	&\le p_i^2.
 \end{align*}
 $$

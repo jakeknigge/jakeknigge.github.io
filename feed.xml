@@ -1,5 +1,115 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-01T20:36:48-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Better bounds: moment vs. Chernoff</title><link href="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html" rel="alternate" type="text/html" title="Better bounds: moment vs. Chernoff" /><published>2018-02-28T20:00:00-07:00</published><updated>2018-02-28T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html">&lt;p&gt;In this post, we’re going to work through a problem from Chapter 2 of
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-04T10:05:33-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Rademachers are rad - part I</title><link href="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html" rel="alternate" type="text/html" title="Rademachers are rad - part I" /><published>2018-03-04T20:00:00-07:00</published><updated>2018-03-04T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/04/rademacher</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html">&lt;p&gt;In this post, we’re going to play with Rademacher random variables, which are
+quite useful in many problems that arise in “modern” statistics and machine 
+learning problems. They also pop up in empirical process theory and geometry.
+So, it’s safe to say that we should at least be acquainted with them.&lt;/p&gt;
+
+&lt;p&gt;In case Rademacher random variables are new to you, please meet the Rademacher 
+random variable &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;, which takes the values &lt;script type=&quot;math/tex&quot;&gt;+1&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;-1&lt;/script&gt; with probability
+&lt;script type=&quot;math/tex&quot;&gt;1/2&lt;/script&gt;. For those of you who prefer a more formal introduction, please meet the
+probability mass function of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+f_Y(y) = 
+\begin{cases}
++1, &amp; \textsf{with probability } 0.5 \\
+-1, &amp; \textsf{with probability } 0.5.
+\end{cases} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Sometimes Rademacher random variables introduce themselves as &lt;em&gt;random sign 
+variables&lt;/em&gt;. Now, that we’ve been properly introduced, let’s move on to the fun 
+stuff.&lt;/p&gt;
+
+&lt;h3 id=&quot;rademacher-averages&quot;&gt;Rademacher averages&lt;/h3&gt;
+
+&lt;p&gt;To build a Rademacher average, we’ll need a collection of real numbers that
+are indexed by the number of variables we have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; and an index set 
+&lt;script type=&quot;math/tex&quot;&gt;\mathcal{T}&lt;/script&gt;. We’ll also need some Rademacher variables &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt;.
+The &lt;strong&gt;Rademacher average&lt;/strong&gt; is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t} Y_i.&lt;/script&gt;
+
+&lt;p&gt;The random variable &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; depends on the &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; in a somewhat complicated way
+but we can see that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; cannot change by much if we changed the value of a
+single &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;. In particular, when we flip the value of &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; can 
+only change by &lt;script type=&quot;math/tex&quot;&gt;2\sup_{t \in \mathcal{T}} |a_{i,t}|&lt;/script&gt;. (The 2 comes from the
+Rademacher variable and the supremum-absolute value combo reflects the 
+“maximum” change.)&lt;/p&gt;
+
+&lt;p&gt;We can use this &lt;strong&gt;bounded differences property&lt;/strong&gt; and the Efron–Stein inequality
+to bound the &lt;script type=&quot;math/tex&quot;&gt;\Var(Z)&lt;/script&gt; even though we can’t say much about the behavior of 
+&lt;script type=&quot;math/tex&quot;&gt;\E Z&lt;/script&gt;, which is pretty rad.&lt;/p&gt;
+
+&lt;p&gt;In particular, we can say that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le \sum_{i=1}^n \frac{1}{4} \left( 
+		 	2\sup_{t \in \mathcal{T}} |a_{i,t}| \right)^2 =
+		 	\sum_{i=1}^n \sup_{t \in \mathcal{T}} a_{i,t}^2.&lt;/script&gt;
+
+&lt;p&gt;The inequality results from the bounded differences inequality (which we can
+prove using the Efron–Stein inequality).&lt;/p&gt;
+
+&lt;p&gt;But… we can do better.&lt;/p&gt;
+
+&lt;h4 id=&quot;sneaking-the-supremum-past-the-sum&quot;&gt;Sneaking the supremum past the sum&lt;/h4&gt;
+
+&lt;p&gt;Now, we define &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt; as an independent copy of &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt;.
+We’ll also set &lt;script type=&quot;math/tex&quot;&gt;t^\star&lt;/script&gt; to be the (possibly random) index that achieves
+the supremum, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t} Y_i 
+	= \sum_{i=1}^n a_{i,t^\star} Y_i.&lt;/script&gt;
+
+&lt;p&gt;So, we can bound the difference between &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; with the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th
+coordinate changed from &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt;. That is,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z - Z_i \le (Y_i - X_i) a_{i,t^\star}
+\implies
+(Z - Z_i)_+^2 \le (Y_i - X_i)^2 a_{i,t^\star}^2.&lt;/script&gt;
+
+&lt;p&gt;where in the implied inequality we square only the positive portion of
+&lt;script type=&quot;math/tex&quot;&gt;Z - Z_i&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now, we’ll use an expectation trick and the independence of &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;
+to say&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \left[ (Z - Z_i)_+^2 \right] \le 
+	\E \left[ \E \left( 
+		(Y_i - X_i)^2 a_{i,t^\star}^2 \mid Y_1,\dots,Y_n)
+	\right) \right] =
+	2 \E \left[ a_{i,t^\star}^2 \right].&lt;/script&gt;
+
+&lt;p&gt;We do the expectation-conditioning combo on &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt; to get rid of all
+randomness expect for that of &lt;script type=&quot;math/tex&quot;&gt;t^\star&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;Finally, we use the Efron–Stein inequality to say&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le 2 \E \left( \sum_{i=1}^n a_{i,t^\star}^2 \right) \le 
+	2 \sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t}^2.&lt;/script&gt;
+
+&lt;p&gt;So, through some Efron–Stein inspired analysis, we moved the supremum outside
+the sum at the expense of a factor of 2.&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from Chapter 3 of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;bounded-differences-property&quot;&gt;Bounded differences property&lt;/h4&gt;
+
+&lt;p&gt;The bounded differences property states that the value of the function changes
+by a bounded amount if the value of the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th variable is changed. A function
+&lt;script type=&quot;math/tex&quot;&gt;f: \mathcal{S}^n \to \reals&lt;/script&gt; satisfies the bounded differences property if&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{\substack{x_1,\dots,x_n \\ x_i' \in \mathcal{S}}}
+	| f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_i',x_{i+1},\dots,x_n) |
+	\le c_i,&lt;/script&gt;
+
+&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and constants &lt;script type=&quot;math/tex&quot;&gt;c_1,\dots,c_n&lt;/script&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to play with Rademacher random variables, which are quite useful in many problems that arise in “modern” statistics and machine learning problems. They also pop up in empirical process theory and geometry. So, it’s safe to say that we should at least be acquainted with them.</summary></entry><entry><title type="html">Better bounds: moment vs. Chernoff</title><link href="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html" rel="alternate" type="text/html" title="Better bounds: moment vs. Chernoff" /><published>2018-02-28T20:00:00-07:00</published><updated>2018-02-28T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html">&lt;p&gt;In this post, we’re going to work through a problem from Chapter 2 of
 &lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt;. The exercise 
 shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.&lt;/p&gt;
 
@@ -31,7 +141,7 @@ that&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\E(Y^q)t^{-q} = \frac{m^q}{t^q}
 	\le \left. \frac{\lambda^k m^k}{k!} \middle/ \frac{\lambda^k t^k}{k!} \right.
-	= \frac{m^k}{t^k!} \qquad \text{for } t \in \reals_{++} \text{ and } k \in \integers_+.&lt;/script&gt;
+	= \frac{m^k}{t^k!} \qquad \textsf{for } t \in \reals_{++} \text{ and } k \in \integers_+.&lt;/script&gt;
 
 &lt;p&gt;At this point, we’ve got the result because this holds for all &lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;, in particular, 
 when &lt;script type=&quot;math/tex&quot;&gt;k = 0&lt;/script&gt;. So, when we sum up the right-hand-side of the inequality 
@@ -148,11 +258,11 @@ words, the tails of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; &lt
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align*}
-\Var(f(X)) &amp;\stackrel{\text{(a)}}{=} \Var(f(X) - f(0)) \\
-	&amp;\stackrel{\text{def}}{=} \Var(h(X)) \\
-	&amp;\stackrel{\text{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
-	&amp;\stackrel{\text{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
-	&amp;\stackrel{\text{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
+\Var(f(X)) &amp;\stackrel{\textsf{(a)}}{=} \Var(f(X) - f(0)) \\
+	&amp;\stackrel{\textsf{def}}{=} \Var(h(X)) \\
+	&amp;\stackrel{\textsf{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
+	&amp;\stackrel{\textsf{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
+	&amp;\stackrel{\textsf{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
 								  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2}. \\	
 \end{align*} %]]&gt;&lt;/script&gt;
 
@@ -359,7 +469,7 @@ So, we have that&lt;/p&gt;
 \begin{align*}
 \prob(X_i \neq Y_i) &amp;= 1 - \prob(X_i = 0) - \prob(Y_i = 1) \\
 	&amp;= 1 - (1 - p_i) - p_i e^{-p_i} \\
-	&amp;= p_i - p_i e^{-p_i} \qquad \qquad \text{(because $(1-e^{-p_i}) \le p_i$)}\\
+	&amp;= p_i - p_i e^{-p_i} \qquad \qquad \textsf{(because $(1-e^{-p_i}) \le p_i$)}\\
 	&amp;\le p_i^2.
 \end{align*} %]]&gt;&lt;/script&gt;
 

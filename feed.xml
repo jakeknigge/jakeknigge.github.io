@@ -1,5 +1,161 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-04T10:05:33-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Rademachers are rad - part I</title><link href="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html" rel="alternate" type="text/html" title="Rademachers are rad - part I" /><published>2018-03-04T20:00:00-07:00</published><updated>2018-03-04T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/04/rademacher</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html">&lt;p&gt;In this post, we’re going to play with Rademacher random variables, which are
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-04T10:30:27-07:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Rademachers are rad - part II</title><link href="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html" rel="alternate" type="text/html" title="Rademachers are rad - part II" /><published>2018-03-06T20:00:00-07:00</published><updated>2018-03-06T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/06/rademacher_2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html">&lt;p&gt;In this post, we’re going to work through another Rademacher-related problem.
+Like the previous post, the problem highlights the usefulness of the 
+Efron–Stein inequality.&lt;/p&gt;
+
+&lt;h3 id=&quot;conditional-rademacher-averages&quot;&gt;Conditional Rademacher averages&lt;/h3&gt;
+
+&lt;p&gt;In this section, we’re going to continue with a close cousin of the Rademacher
+average called the &lt;strong&gt;conditional Rademacher average&lt;/strong&gt;, which are used in high 
+dimensional statistics to measure the complexity of model classes. Its defined
+as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} \mid
+	X_1,\dots,X_n \right]&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; are Rademacher random variables and the &lt;script type=&quot;math/tex&quot;&gt;X_{i,j}&lt;/script&gt; are 
+independent random variables that live in &lt;script type=&quot;math/tex&quot;&gt;[-1,1]&lt;/script&gt;. The random variable &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt;
+is a function of the &lt;script type=&quot;math/tex&quot;&gt;X_{i} \in [-1,1]^d&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;Without lifting a finger, we can call our bound differences inequality friend
+and bound the variance of &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le n/4,&lt;/script&gt;
+
+&lt;p&gt;but that’s less-than-satisfying at this point in time. Instead, we can improve
+on this bound by showing that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; satisfies the &lt;strong&gt;self-bounding property&lt;/strong&gt;
+via the Efron–Stein inequality.&lt;/p&gt;
+
+&lt;p&gt;First, let’s define&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z_k = \E \left[ \max_{j=1,\dots,d} 
+	\sum_{\substack{i=1 \\ i \neq k}}^n Y_i X_{i,j} \mid X^{(k)}\right]&lt;/script&gt;
+
+&lt;p&gt;and observe that &lt;script type=&quot;math/tex&quot;&gt;0 \le Z - Z_k \le 1&lt;/script&gt; because the maximum value contributed
+by &lt;script type=&quot;math/tex&quot;&gt;X_k&lt;/script&gt; to the sum is 1. By summing the inequality and using a convexity
+argument (see below), we get that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k=1}^n Z - Z_k \le Z.&lt;/script&gt;
+
+&lt;p&gt;Now, we can use the Efron–Stein inequality to say&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\Var(Z) &amp;\le \E \left[ \sum_{k=1}^n (Z - Z_k)^2 \right] \\
+	&amp;\le \E \left[ \sum_{k=1}^n (Z - Z_k) \right] 
+	\qquad \textsf{(because $(Z - Z_k)^2 \in [0,1]$)}\\
+	&amp;\le \E Z,
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;which shows that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; is a self-bounding function.&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from Chapter 3 of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;self-bounding-property&quot;&gt;Self-bounding property&lt;/h4&gt;
+
+&lt;p&gt;Loosely speaking, the self-bounding property states that the difference 
+between a function and a &lt;em&gt;similar&lt;/em&gt; function that omits one variable is bounded
+between 0 and 1.&lt;/p&gt;
+
+&lt;p&gt;Formally, a nonnegative function &lt;script type=&quot;math/tex&quot;&gt;f: \mathcal{S}^n \to [0,\infty)&lt;/script&gt; satisfies
+the self-bounding property when functions &lt;script type=&quot;math/tex&quot;&gt;f_i: \mathcal{S}^{n-1} \to \reals&lt;/script&gt;
+exist and the following two conditions hold:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \le 1&lt;/script&gt;
+
+&lt;p&gt;and&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) 
+	\le f(x_1,\dots,x_n)&lt;/script&gt;
+
+&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;x_1,\dots,x_n&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;If we combine the first and second conditions, we can say that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n
+\big( f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \big)^2 
+	\le f(x_1,\dots,x_n),&lt;/script&gt;
+
+&lt;p&gt;which means we can use the Efron–Stein inequality to bound the variance
+by the expected value.&lt;/p&gt;
+
+&lt;h4 id=&quot;convexity-argument&quot;&gt;Convexity argument&lt;/h4&gt;
+
+&lt;p&gt;The convexity argument used in the conditional Rademacher averages example
+goes as follows:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\sum_{k=1}^n Z - Z_k &amp;= \sum_{k=1}^n 
+\E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] - \E \left[ \max_{j=1,\dots,d} 
+	\sum_{i \neq k}^n Y_i X_{i,j} 
+	\middle| 
+	X^{(k)}\right] \\
+
+&amp;= \sum_{k=1}^n \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
+	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&amp;\le \sum_{k=1}^n \E \left[ 
+	 Y_i X_{i,j^\star}
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&amp;\le \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&amp;= Z,
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;where&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;k^\star = \argmax_{k=1,\dots,d} \sum_{i = 1}^n Y_i X_{i,k}&lt;/script&gt;
+
+&lt;p&gt;and&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
+	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j}
+	= Y_i X_{i,j^\star} - Y_k X_{k,j^\star} \le 1.&lt;/script&gt;
+
+&lt;h4 id=&quot;r-simulation&quot;&gt;R simulation&lt;/h4&gt;
+
+&lt;p&gt;If you want to play around with conditional Rademacher averages, here’s some
+R code to do it.&lt;/p&gt;
+
+&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# simulate X variables&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;runif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rbinom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yX&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%*%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;colSums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality.</summary></entry><entry><title type="html">Rademachers are rad - part I</title><link href="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html" rel="alternate" type="text/html" title="Rademachers are rad - part I" /><published>2018-03-04T20:00:00-07:00</published><updated>2018-03-04T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/04/rademacher</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html">&lt;p&gt;In this post, we’re going to play with Rademacher random variables, which are
 quite useful in many problems that arise in “modern” statistics and machine 
 learning problems. They also pop up in empirical process theory and geometry.
 So, it’s safe to say that we should at least be acquainted with them.&lt;/p&gt;

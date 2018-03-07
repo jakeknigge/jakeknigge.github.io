@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Rademachers are rad - part II
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Rademachers are rad - part II | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Rademachers are rad - part II" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality." />
+<meta property="og:description" content="In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-06T20:00:00-07:00" />
+<script type="application/ld+json">
+{"description":"In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html","headline":"Rademachers are rad - part II","dateModified":"2018-03-06T20:00:00-07:00","datePublished":"2018-03-06T20:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Rademachers are rad - part II</h1>
+    <p class="post-meta">Mar 6, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>In this post, we’re going to work through another Rademacher-related problem.
+Like the previous post, the problem highlights the usefulness of the 
+Efron–Stein inequality.</p>
+
+<h3 id="conditional-rademacher-averages">Conditional Rademacher averages</h3>
+
+<p>In this section, we’re going to continue with a close cousin of the Rademacher
+average called the <strong>conditional Rademacher average</strong>, which are used in high 
+dimensional statistics to measure the complexity of model classes. Its defined
+as</p>
+
+<script type="math/tex; mode=display">Z = \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} \mid
+	X_1,\dots,X_n \right]</script>
+
+<p>where <script type="math/tex">Y_i</script> are Rademacher random variables and the <script type="math/tex">X_{i,j}</script> are 
+independent random variables that live in <script type="math/tex">[-1,1]</script>. The random variable <script type="math/tex">Z</script>
+is a function of the <script type="math/tex">X_{i} \in [-1,1]^d</script>.</p>
+
+<p>Without lifting a finger, we can call our bound differences inequality friend
+and bound the variance of <script type="math/tex">Z</script> as</p>
+
+<script type="math/tex; mode=display">\Var(Z) \le n/4,</script>
+
+<p>but that’s less-than-satisfying at this point in time. Instead, we can improve
+on this bound by showing that <script type="math/tex">Z</script> satisfies the <strong>self-bounding property</strong>
+via the Efron–Stein inequality.</p>
+
+<p>First, let’s define</p>
+
+<script type="math/tex; mode=display">Z_k = \E \left[ \max_{j=1,\dots,d} 
+	\sum_{\substack{i=1 \\ i \neq k}}^n Y_i X_{i,j} \mid X^{(k)}\right]</script>
+
+<p>and observe that <script type="math/tex">0 \le Z - Z_k \le 1</script> because the maximum value contributed
+by <script type="math/tex">X_k</script> to the sum is 1. By summing the inequality and using a convexity
+argument (see below), we get that</p>
+
+<script type="math/tex; mode=display">\sum_{k=1}^n Z - Z_k \le Z.</script>
+
+<p>Now, we can use the Efron–Stein inequality to say</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\Var(Z) &\le \E \left[ \sum_{k=1}^n (Z - Z_k)^2 \right] \\
+	&\le \E \left[ \sum_{k=1}^n (Z - Z_k) \right] 
+	\qquad \textsf{(because $(Z - Z_k)^2 \in [0,1]$)}\\
+	&\le \E Z,
+\end{align*} %]]></script>
+
+<p>which shows that <script type="math/tex">Z</script> is a self-bounding function.</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is based on material from Chapter 3 of:</p>
+
+<ul>
+  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
+S. Boucheron, G. Lugosi, and P. Masart.</li>
+</ul>
+
+<h4 id="self-bounding-property">Self-bounding property</h4>
+
+<p>Loosely speaking, the self-bounding property states that the difference 
+between a function and a <em>similar</em> function that omits one variable is bounded
+between 0 and 1.</p>
+
+<p>Formally, a nonnegative function <script type="math/tex">f: \mathcal{S}^n \to [0,\infty)</script> satisfies
+the self-bounding property when functions <script type="math/tex">f_i: \mathcal{S}^{n-1} \to \reals</script>
+exist and the following two conditions hold:</p>
+
+<script type="math/tex; mode=display">0 \le f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \le 1</script>
+
+<p>and</p>
+
+<script type="math/tex; mode=display">\sum_{i=1}^n f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) 
+	\le f(x_1,\dots,x_n)</script>
+
+<p>for <script type="math/tex">i = 1,\dots,n</script> and <script type="math/tex">x_1,\dots,x_n</script>.</p>
+
+<p>If we combine the first and second conditions, we can say that</p>
+
+<script type="math/tex; mode=display">\sum_{i=1}^n
+\big( f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \big)^2 
+	\le f(x_1,\dots,x_n),</script>
+
+<p>which means we can use the Efron–Stein inequality to bound the variance
+by the expected value.</p>
+
+<h4 id="convexity-argument">Convexity argument</h4>
+
+<p>The convexity argument used in the conditional Rademacher averages example
+goes as follows:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sum_{k=1}^n Z - Z_k &= \sum_{k=1}^n 
+\E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] - \E \left[ \max_{j=1,\dots,d} 
+	\sum_{i \neq k}^n Y_i X_{i,j} 
+	\middle| 
+	X^{(k)}\right] \\
+
+&= \sum_{k=1}^n \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
+	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&\le \sum_{k=1}^n \E \left[ 
+	 Y_i X_{i,j^\star}
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&\le \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
+	\, \middle| \,
+	X_1,\dots,X_n \right] \\
+
+&= Z,
+\end{align*} %]]></script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">k^\star = \argmax_{k=1,\dots,d} \sum_{i = 1}^n Y_i X_{i,k}</script>
+
+<p>and</p>
+
+<script type="math/tex; mode=display">0 \le \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
+	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j}
+	= Y_i X_{i,j^\star} - Y_k X_{k,j^\star} \le 1.</script>
+
+<h4 id="r-simulation">R simulation</h4>
+
+<p>If you want to play around with conditional Rademacher averages, here’s some
+R code to do it.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">n_trials</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">5</span><span class="w">
+</span><span class="n">d</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">20</span><span class="w">
+</span><span class="n">Z</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">n_trials</span><span class="o">/</span><span class="m">10</span><span class="p">)</span><span class="w">
+</span><span class="n">EZ</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">n_trials</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># simulate X variables</span><span class="w">
+</span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="n">runif</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="m">-1</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w">
+
+</span><span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n_trials</span><span class="p">){</span><span class="w">
+      </span><span class="k">for</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">n_trials</span><span class="o">/</span><span class="m">10</span><span class="p">){</span><span class="w">
+            </span><span class="n">y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbinom</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0.5</span><span class="p">)</span><span class="w">
+            </span><span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">-1</span><span class="w">
+            </span><span class="n">yX</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">%*%</span><span class="w"> </span><span class="n">X</span><span class="w">
+            </span><span class="n">Z</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">colSums</span><span class="p">(</span><span class="n">yX</span><span class="p">))</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+      </span><span class="n">EZ</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="n">hist</span><span class="p">(</span><span class="n">EZ</span><span class="p">)</span><span class="w">
+</span><span class="n">mean</span><span class="p">(</span><span class="n">EZ</span><span class="p">)</span><span class="w">
+</span><span class="n">var</span><span class="p">(</span><span class="n">EZ</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "Neo-Euler",
+      webFont: "Neo-Euler",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

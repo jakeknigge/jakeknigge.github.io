@@ -1,5 +1,150 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-11T21:27:53-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Han’s inequality</title><link href="http://localhost:4000/jekyll/update/2018/03/11/han.html" rel="alternate" type="text/html" title="Han's inequality" /><published>2018-03-11T23:00:00-06:00</published><updated>2018-03-11T23:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/03/11/han</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/11/han.html">&lt;p&gt;In this post, we’re putting on our information theory hats and digging into
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-03-17T18:42:39-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Entropy and its subadditivity</title><link href="http://localhost:4000/jekyll/update/2018/03/17/sub-entropy.html" rel="alternate" type="text/html" title="Entropy and its subadditivity" /><published>2018-03-17T20:00:00-06:00</published><updated>2018-03-17T20:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/03/17/sub-entropy</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/17/sub-entropy.html">&lt;p&gt;(Happy St. Patrick’s Day!)&lt;/p&gt;
+
+&lt;p&gt;In this post, we’re picking up from the previous post and continuing with
+some information-theoretic ideas as they arise in concentration inequalities.
+We’ll quickly revisit the Efron–Stein inequality and then proceed towards
+the subadditivity of entropy.&lt;/p&gt;
+
+&lt;h3 id=&quot;efronstein&quot;&gt;Efron–Stein&lt;/h3&gt;
+
+&lt;p&gt;To encourage the formation of new (or reinforce existing) neuronal 
+connections, let’s remind ourselves of the Efron–Stein inequality. 
+If we have independent random variables &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt; and a 
+square-integrable function &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;Z = f(X)&lt;/script&gt;, then&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le \sum_{i=1}^n \E \left[ \E^{(i)}[Z^2] - 
+	\big( \E^{(i)}Z \big)^2 \right],&lt;/script&gt;
+
+&lt;p&gt;where the operator &lt;script type=&quot;math/tex&quot;&gt;\E^{(i)}&lt;/script&gt; is the conditional expectation with respect
+to the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th variable. The square-integrable condition on &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; ensures 
+that its variance is finite.&lt;/p&gt;
+
+&lt;h3 id=&quot;entropy&quot;&gt;Entropy&lt;/h3&gt;
+
+&lt;p&gt;Now, let’s generalize the Efron–Stein inequality by observing that we
+&lt;em&gt;could&lt;/em&gt; write it as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E [Z^2] - \big( \E Z \big)^2 \le 
+	\sum_{i=1}^n \E \left[ \E^{(i)}[Z^2] - \big( \E^{(i)}Z \big)^2 \right],&lt;/script&gt;
+
+&lt;p&gt;where we used the fact that &lt;script type=&quot;math/tex&quot;&gt;\Var(Y) = \E [Y^2] - \big( \E Y \big)^2&lt;/script&gt;.
+If we stare at this representation of the various for a moment, 
+we see that it has the form&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E [g(Z)] - g( \E Z),&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;g(x) = x^2&lt;/script&gt;. When &lt;script type=&quot;math/tex&quot;&gt;g(x) = x \log x&lt;/script&gt;, then quantity 
+&lt;script type=&quot;math/tex&quot;&gt;\E [g(Z)] - g( \E Z)&lt;/script&gt; is often called the &lt;strong&gt;entropy&lt;/strong&gt; and is
+denoted by &lt;script type=&quot;math/tex&quot;&gt;\mathrm{Ent}(Z)&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;subadditivity-of-entropy&quot;&gt;Subadditivity of entropy&lt;/h3&gt;
+
+&lt;p&gt;Using the Efron–Stein inequality as our source of inspiration, we
+might guess (or hope) that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E [g(Z)] - g( \E Z) \le 
+	\sum_{i=1}^n \E \left[ \E^{(i)}g(Z) - g\big( \E^{(i)}Z \big) \right].&lt;/script&gt;
+
+&lt;p&gt;If we did guess this, then we’d be correct! So, let’s prove it.&lt;/p&gt;
+
+&lt;p&gt;We’ll assume that &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt; are independent random variables 
+taking values in a finite set &lt;script type=&quot;math/tex&quot;&gt;\mathcal{S}&lt;/script&gt; and that 
+&lt;script type=&quot;math/tex&quot;&gt;f: \mathcal{S^n} \to \reals_+&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;Z = f(X_1,\dots,X_n)&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Proof.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The proof relies on an application of Han’s inequality for relative
+entropies (which is an extension of what we showed in the 
+&lt;a href=&quot;https://jakeknigge.github.io/jekyll/update/2018/03/11/han.html&quot;&gt;previous post&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Note that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; is always positive, so the result holds for any
+&lt;script type=&quot;math/tex&quot;&gt;cZ&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;c&gt;0&lt;/script&gt;. Let’s use this to simplify our lives and assume that
+&lt;script type=&quot;math/tex&quot;&gt;\E Z = 1&lt;/script&gt;. So, now we can write&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E g(Z) - g( \E Z) = \E[Z \log Z] - 0.&lt;/script&gt;
+
+&lt;p&gt;Now, we’re going to introduce the relative entropy component by
+defining&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;q(x) = f(x)p(x) \iff \frac{q(x)}{p(x)} = f(x).&lt;/script&gt;
+
+&lt;p&gt;The relative entropy neurons in your brain are probably going wild 
+because we can now write&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = f(X) = \frac{q(X)}{p(X)}.&lt;/script&gt;
+
+&lt;p&gt;So, let’s take an expectation of &lt;script type=&quot;math/tex&quot;&gt;g(Z)&lt;/script&gt;:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E g(Z) &amp;= \E g\big( f(X) \big) \\
+	&amp;= \E_P \left[ \frac{q(X)}{p(X)} \log \frac{q(X)}{p(X)} \right] \\
+	&amp;= D_{\mathrm{kl}}(q(X), p(X)).
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Here’s where &lt;strong&gt;Han’s inequality&lt;/strong&gt; comes to the scene, because the
+relative entropy form of Han’s inequality says that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;D_{\mathrm{kl}}(q(X), p(X)) \le \sum_{i=1}^n
+	\left( D_{\mathrm{kl}}(q(X), p(X)) - 
+	D_{\mathrm{kl}}\left(q^{(i)}(X), p^{(i)}(X)\right) \right).&lt;/script&gt;
+
+&lt;p&gt;In other words, we have a bound on the (joint) relative entropy based on 
+the sum of marginal relative entropies. Lastly, we’ll show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n 
+	\left( D_{\mathrm{kl}}(q(X), p(X)) - 
+	D_{\mathrm{kl}}\left(q^{(i)}(X), p^{(i)}(X)\right) \right) =
+\sum_{i=1}^n 
+	\E \left[ \E^{(i)} g(Z) - 
+	g \left( \E^{(i)} Z \right) \right],&lt;/script&gt;
+
+&lt;p&gt;which will conclude the proof. The tower property of expectation let’s us
+write&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;D_{\mathrm{kl}}\left(q(X), p(X)\right) = \E \left[ \E^{(i)} g(Z) \right]&lt;/script&gt;
+
+&lt;p&gt;and (with a bit more work)&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+D_{\mathrm{kl}}\left(q^{(i)}(X), p^{(i)}(X)\right) &amp;=
+\sum_{x^{(i)} \in \mathcal{S}^{n-1}} p^{(i)} \left( x^{(i)} \right)
+	\left( \sum_{y \in \mathcal{S}} q^{(i)} \left( x^{(i)} \right) \right) 
+	\log \frac{p^{(i)}\left( x^{(i)} \right) 
+			\sum_{y \in \mathcal{S}} q^{(i)} \left( x^{(i)} \right)}
+		{p^{(i)} \left( x^{(i)} \right)} \\
+	&amp;= \sum_{x^{(i)} \in \mathcal{S}^{n-1}} p^{(i)} \left( x^{(i)} \right) 
+	 	\left( \E^{(i)} Z \log \E^{(i)} Z \right) \\
+	&amp;= \E \left[ g(\E^{(i)}Z) \right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;So, chaining everything together we have that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E [g(Z)] - g( \E Z) &amp;= D_{\mathrm{kl}}(Q, P) \\
+	&amp;\le \sum_{i=1}^n 
+	\left( D_{\mathrm{kl}}(Q, P) - 
+			D_{\mathrm{kl}} \left( Q^{(i)}, P^{(i)} \right) \right) \\
+	&amp;= \sum_{i=1}^n \E \left[ \E^{(i)}g(Z) - g\big( \E^{(i)}Z \big) \right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;That’s it, that’s all folks.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… logarithmic Sobolev inequalities! Stay tuned—it’s gonna be good.&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from Chapter 4 of (my new favorite book):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">(Happy St. Patrick’s Day!)</summary></entry><entry><title type="html">Han’s inequality</title><link href="http://localhost:4000/jekyll/update/2018/03/11/han.html" rel="alternate" type="text/html" title="Han's inequality" /><published>2018-03-11T23:00:00-06:00</published><updated>2018-03-11T23:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/03/11/han</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/11/han.html">&lt;p&gt;In this post, we’re putting on our information theory hats and digging into
 to a simple but useful inequality gifted to us by Te Sun Han in 1978. Han’s
 inequality is a generalization of the Efron–Stein inequality with roots in
 information theory rather than the statistical analysis of the jackknife.&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;

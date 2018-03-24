@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Some (convex) relaxation
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Some (convex) relaxation | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Some (convex) relaxation" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Okay, last time I said that the next post would be about logarithmic Sobolev inequalities… well, it’s not. I lied. Instead, we’re taking a momentary break from concentration inequalities. It’s time for some relaxation of the convex variety." />
+<meta property="og:description" content="Okay, last time I said that the next post would be about logarithmic Sobolev inequalities… well, it’s not. I lied. Instead, we’re taking a momentary break from concentration inequalities. It’s time for some relaxation of the convex variety." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/03/24/convex-relaxation.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/03/24/convex-relaxation.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-03-24T17:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Okay, last time I said that the next post would be about logarithmic Sobolev inequalities… well, it’s not. I lied. Instead, we’re taking a momentary break from concentration inequalities. It’s time for some relaxation of the convex variety.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/03/24/convex-relaxation.html","headline":"Some (convex) relaxation","dateModified":"2018-03-24T17:00:00-06:00","datePublished":"2018-03-24T17:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/03/24/convex-relaxation.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Some (convex) relaxation</h1>
+    <p class="post-meta">Mar 24, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>Okay, last time I said that the next post would be about logarithmic 
+Sobolev inequalities… well, it’s not. I lied. Instead, we’re taking a 
+momentary break from concentration inequalities. It’s time for some
+relaxation of the convex variety.</p>
+
+<p>Actually, that’s a bit of lie too because the post isn’t about convex 
+relaxation, but it <strong>is</strong> about convex optimization. Andiamo!</p>
+
+<h3 id="maximum-likelihood-of-poisson-distributions">Maximum likelihood of Poisson distributions</h3>
+
+<p>We’re going to work through a problem from <em>Convex Optimization</em> by Boyd
+and Vandenberghe. (If you’re curious it’s problem 7.7.) Here’s the set up.</p>
+
+<ul>
+  <li>We have <script type="math/tex">X_1,\dots,X_n</script> independent Poisson random variables. That is
+each <script type="math/tex">X_i</script> has a probability mass function parameterized by 
+<script type="math/tex">\lambda_i > 0</script> that is given by</li>
+</ul>
+
+<script type="math/tex; mode=display">\prob (X_i = k) = \frac{e^{-\lambda_i}\lambda_i^k}{k!}.</script>
+
+<ul>
+  <li>The data <script type="math/tex">x_1,\dots,x_n</script> represent the number of times that one of <script type="math/tex">n</script>
+possible events occurred (independently of one another).</li>
+  <li>We have <script type="math/tex">m</script> detectors and event <script type="math/tex">i</script> is recorded by detector <script type="math/tex">j</script> with
+probability <script type="math/tex">p_{ji}</script>. We assume that <script type="math/tex">p_{ji} \ge 0</script>, 
+<script type="math/tex">\sum_{j=1}^m p_{ji} \le 1</script>, <strong>and</strong> that the <script type="math/tex">p_{ji}</script> are given.</li>
+  <li>The total number of events recorded by detector <script type="math/tex">j</script> is</li>
+</ul>
+
+<script type="math/tex; mode=display">y_j = \sum_{i=1}^n y_{ji}, \quad j = 1,\dots,m.</script>
+
+<ul>
+  <li>Our goal is to estimate the <script type="math/tex">\lambda_i</script> based on observations <script type="math/tex">y_j</script>
+and the given probabilities <script type="math/tex">p_{ji}</script> by solving a convex optimization
+problem.</li>
+</ul>
+
+<p>To pose this estimation problem as a convex optimization problem, we’ll
+use the fact that the <script type="math/tex">y_{ji}</script> were generated from a Poisson distribution
+with mean <script type="math/tex">p_{ji}\lambda_i</script>. Intuitively, this means we only capture
+a fraction, in particular <script type="math/tex">p_{ji}</script>, of the Poisson-distributed events 
+associated with <script type="math/tex">\lambda_i</script>. For those who have had a course on Markov 
+chains this should cause your <strong>thinned Poisson process</strong> neurons to fire.</p>
+
+<p>Now, we use the fact that the sum of Poisson random variables is itself 
+a Poisson random variable. In particular, we have that the <script type="math/tex">y_j</script> were
+generated by a Poisson distribution with parameter</p>
+
+<script type="math/tex; mode=display">p_j^T \lambda = \sum_{i=1}^n p_{ji}\lambda_i,</script>
+
+<p>where <script type="math/tex">p_j \in \reals^n</script> and <script type="math/tex">\lambda \in \reals_+^n</script> is the vector of
+<script type="math/tex">\lambda_i</script>.</p>
+
+<p>The <strong>likelihood</strong> of the data has the form</p>
+
+<script type="math/tex; mode=display">\prod_{j=1}^m \frac{(p_j^T \lambda)^{y_j}e^{-(p_j^T \lambda)}}{y_j!}</script>
+
+<p>which gives a <strong>log-likelihood</strong> of</p>
+
+<script type="math/tex; mode=display">\sum_{j=1}^m \left( y_j\log(p_j^T \lambda)-p_j^T \lambda-\log(y_j!) \right).</script>
+
+<p>We’ll throw away the <script type="math/tex">-\log(y_j!)</script> term because it is a constant. So, the 
+estimation problem is the convex optimization problem</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}[ll]
+\mbox{\text{maximize}} & \sum_{j=1}^m \big( y_j \log(p_j^T \lambda) -
+	 p_j^T \lambda \big)
+\end{array} %]]></script>
+
+<p>with optimization variable <script type="math/tex">\lambda \in \reals_+^n</script> and problem data
+<script type="math/tex">y_1,\dots,y_m</script> and <script type="math/tex">p_{ji}</script> for <script type="math/tex">i = 1,\dots,n</script>, <script type="math/tex">j = 1,d\dots,m</script>.
+More explicitly, we have</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{array}[ll]
+\mbox{\text{maximize}} & \sum_{j=1}^m \big( y_j \log(p_j^T \lambda) -
+	 p_j^T \lambda \big) \\
+\mbox{subject to} & \lambda \succeq 0.
+\end{array} %]]></script>
+
+<p><strong>Put it to use.</strong> Now, go out and find yourself a particle accelerator, 
+equip it with some detectors, start colliding particles and count your 
+Higgs-Bosons and make some inferences.</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… logarithmic Sobolev inequalities—for real this time (well, next time)!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is based on material from…</p>
+
+<ul>
+  <li><em>Convex Optimization</em> by Stephen Boyd and Lieven Vandenberghe. Check it
+out here: <em><a href="https://web.stanford.edu/~boyd/cvxbook/">Convex Optimization</a></em>.</li>
+</ul>
+
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Logarithmic Sobolev inequalities
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Logarithmic Sobolev inequalities | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Logarithmic Sobolev inequalities" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="As promised, this post will be about logarithmic Sobolev inequalities, which are (exponential) concentration inequalities for functions defined on the binary hypercube. In particular, we’ll review a specific case where we get speedy concentration thanks to a variance-like bound on our function of interest. Let’s concentrate some measure!" />
+<meta property="og:description" content="As promised, this post will be about logarithmic Sobolev inequalities, which are (exponential) concentration inequalities for functions defined on the binary hypercube. In particular, we’ll review a specific case where we get speedy concentration thanks to a variance-like bound on our function of interest. Let’s concentrate some measure!" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-07T17:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"As promised, this post will be about logarithmic Sobolev inequalities, which are (exponential) concentration inequalities for functions defined on the binary hypercube. In particular, we’ll review a specific case where we get speedy concentration thanks to a variance-like bound on our function of interest. Let’s concentrate some measure!","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/04/07/lsi.html","headline":"Logarithmic Sobolev inequalities","dateModified":"2018-04-07T17:00:00-06:00","datePublished":"2018-04-07T17:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/04/07/lsi.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Logarithmic Sobolev inequalities</h1>
+    <p class="post-meta">Apr 7, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>As promised, this post will be about logarithmic Sobolev inequalities, which
+are (exponential) concentration inequalities for functions defined on the
+binary hypercube. In particular, we’ll review a specific case where we
+get speedy concentration thanks to a variance-like bound on our function of
+interest. Let’s concentrate some measure!</p>
+
+<h3 id="starting-simple">Starting simple</h3>
+
+<p>To get things going, we’ll look at a logarithmic Sobolev inequality for a 
+function defined on the <script type="math/tex">n</script> dimensional binary hypercube</p>
+
+<script type="math/tex; mode=display">f: \{-1,1\}^n \to \reals.</script>
+
+<p>Our random variables <script type="math/tex">X \in \{-1,1\}^n</script> are Rademacher random variables, 
+<em>i.e.</em>,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+g_X(x) = 
+\begin{cases}
++1, & \textsf{with probability } 0.5 \\
+-1, & \textsf{with probability } 0.5.
+\end{cases} %]]></script>
+
+<p>We define <script type="math/tex">Z = f(X)</script> as our real-valued random variable of interest. 
+Logarithmic Sobolev inequalities compare to quantities related to <script type="math/tex">f</script>:</p>
+
+<ul>
+  <li>entropy functional</li>
+</ul>
+
+<script type="math/tex; mode=display">\mathrm{ent}(f) = \E \big[ f(X) \log f(X) \big] - 
+				  \E f(X) \log \big( \E f(X) \big)</script>
+
+<ul>
+  <li>Efron-Stein-like functional</li>
+</ul>
+
+<script type="math/tex; mode=display">\mathcal{E}(f) = \frac{1}{2} \E \left[ \sum_{i=1}^n \left( f(X) - 
+	f \left( \tilde{X}^{(i)} \right) \right)^2 \right].</script>
+
+<p>The quantity <script type="math/tex">\tilde{X}^{(i)}</script> is the vector <script type="math/tex">X</script> with its <script type="math/tex">i</script>th
+component drawn from an independent copy—this is the same idea as in the
+Efron–Stein inequality. For our purposes, this implies that <script type="math/tex">X_i</script> changes
+sign.</p>
+
+<p>The <strong>logarithmic Sobolev inequality</strong>for this set up is</p>
+
+<script type="math/tex; mode=display">\mathrm{ent}(f^2) \le 2 \mathcal{E}(f).</script>
+
+<h3 id="concentration-inequality">Concentration inequality</h3>
+
+<p>With our logarithmic Sobolev inequality pinned down, we’ll now prove
+a concentration inequality for a function satisfying</p>
+
+<script type="math/tex; mode=display">\sum_{i=1}^n \left( f(x) - f \left( \tilde{x}^{(i)} \right) \right)^2 \le v</script>
+
+<p>for some <script type="math/tex">v > 0</script> and <script type="math/tex">x \in \{-1,1\}^n</script>. In particular, we’ll show that
+for all <script type="math/tex">t > 0</script></p>
+
+<script type="math/tex; mode=display">\prob(Z > \E Z + t) \le e^{-2t^2/v}.</script>
+
+<p><strong>Technical detail—hint.</strong>
+The proof hinges on the following fact (which we’ll show in a later post
+because it uses some nice ideas)</p>
+
+<script type="math/tex; mode=display">\left( e^{z/2} - e^{y/2} \right)^2 \le \frac{(z-y)^2}{8}(e^{z} + e^{y})</script>
+
+<p>for <script type="math/tex">z \ge y</script>.</p>
+
+<h3 id="proof">Proof</h3>
+
+<p>We’re going to follow the so-called <strong>Herbst argument</strong> to prove the
+concentration inequality. The key ingredient of Herbst’s argument is the use
+of a <strong>differential inequality</strong> on a function <script type="math/tex">g(x) = e^{\lambda f(x)/2}</script>
+with parameter <script type="math/tex">\lambda</script>.</p>
+
+<p><strong>Part 1: defining a differential inequality.</strong></p>
+
+<p>The entropy of <script type="math/tex">g^2</script> is</p>
+
+<script type="math/tex; mode=display">\mathrm{ent}(g^2) = \mathrm{ent}(e^{\lambda f}) 
+	= \lambda \E \big[ e^{\lambda f(X)} f(X) \big] -  
+	  \E e^{\lambda f(X)} \log \big( \E e^{\lambda f(X)} \big).</script>
+
+<p>Now, if we stare at this for a moment and let our <em>cumulant generating 
+function</em> neurons fire, then we see that if we let 
+<script type="math/tex">F(\lambda) = \E e^{\lambda f(X)}</script>, then we get a <strong>differential inequality</strong></p>
+
+<script type="math/tex; mode=display">\mathrm{ent}(g^2) = \lambda F'(\lambda) - F(\lambda) \log F(\lambda).</script>
+
+<p><strong>Part 2: putting the logarithmic Sobolev inequality to work.</strong></p>
+
+<p>The logarithmic Sobolev inequality states</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathrm{ent}(g^2) &\le 2 \mathcal{E}(g) \\
+&\stackrel{\textsf{def}}{=} 
+	\E \left[ \sum_{i=1}^n \left( e^{\lambda f(X) / 2} - 
+		e^{\lambda f \left( \tilde{X}^{(i)} \right) / 2} \right)^2 \right] \\
+&\stackrel{\textsf{hint}}{\le} 
+	\frac{1}{8} \sum_{i=1}^n \E \left[ 
+	\lambda^2 \left( f(X) - f \left( \tilde{X}^{(i)} \right) \right)^2 
+	\left( e^{\lambda f(X)} - e^{\lambda f \left( \tilde{X}^{(i)} \right)} \right)
+	\right] \\
+&\le \frac{\lambda^2 v}{8} \E \left[ e^{\lambda f(X)} \right].
+\end{align*} %]]></script>
+
+<p><strong>Part 3: connecting the dots with some calculus.</strong></p>
+
+<p>Okay, cool; we’ve shown that</p>
+
+<script type="math/tex; mode=display">\mathrm{ent}(e^{\lambda f}) \le \frac{\lambda^2 v}{8} 
+	\E \left[ e^{\lambda f(X)} \right]</script>
+
+<p>which we can rewrite as</p>
+
+<script type="math/tex; mode=display">\lambda F'(\lambda) - F(\lambda) \log F(\lambda) \le 
+	\frac{\lambda^2 v}{8} F(\lambda).</script>
+
+<p>Now, let’s write this guy in a slightly different form in the spirit of
+the Herbst argument:</p>
+
+<script type="math/tex; mode=display">\frac{\lambda F'(\lambda) - F(\lambda) \log F(\lambda)}{\lambda^2 F(\lambda)} 
+	= \frac{\lambda F'(\lambda) - \log F(\lambda)}{\lambda^2 F(\lambda)}
+	\le \frac{v}{8}.</script>
+
+<p>The calculus part of brain might be screaming something like</p>
+
+<script type="math/tex; mode=display">\frac{d}{dz} \left( \frac{\log z}{z} \right) = \frac{1 - \log z}{z^2},</script>
+
+<p>which we translate to</p>
+
+<script type="math/tex; mode=display">\frac{d}{dz} \left( \frac{\log F(\lambda)}{\lambda} \right) \le \frac{v}{8}.</script>
+
+<p>Invoking more calculus ideas, l’Hospital’s rule says</p>
+
+<script type="math/tex; mode=display">\lim_{\lambda \to 0} \frac{\log F(\lambda)}{\lambda} 
+	= \frac{F'(0)}{F(0)} = \E Z.</script>
+
+<p><strong>Part 4: bounding via Cramér–Chernoff and Markov.</strong></p>
+
+<p>We’re almost there! Let’s assume that <script type="math/tex">\lambda > 0</script> and then integrate
+the inequality between <script type="math/tex">0</script> and <script type="math/tex">\lambda</script>. From l’Hospital’s rule, we get
+that <script type="math/tex">\log F(\lambda) / \lambda \le \E Z + \lambda v / 8</script>. Now, let’s undo
+our <script type="math/tex">\lambda</script>-in-the-denominator and our logarithmic term and write</p>
+
+<script type="math/tex; mode=display">F(\lambda) \le e^{\lambda \E Z + \lambda^2 v / 8}.</script>
+
+<p>Finally, we can use the Cramér–Chernoff technique and Markov’s inequality to 
+say that</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\prob(Z > \E Z + t) 
+	&\le \inf_{\lambda > 0} F(\lambda)e^{-\lambda \E Z - \lambda t} \\
+	&\le \inf_{\lambda > 0}  e^{\lambda^2 v / 8 - \lambda t} \\
+	&\le e^{-2t^2/v}.
+\end{align*} %]]></script>
+
+<p>(Note that <script type="math/tex">\lambda = 4t/v</script> minimizes the upper bound.) Pat yourself on the 
+back and give Mr. Herbst a (pretend) pat on the back too.</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>…bandits!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is based on material from Chapter 5 of (my new favorite book):</p>
+
+<ul>
+  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
+S. Boucheron, G. Lugosi, and P. Masart.</li>
+</ul>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-07T18:31:20-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-07T18:32:56-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
 </subtitle><entry><title type="html">Logarithmic Sobolev inequalities</title><link href="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" rel="alternate" type="text/html" title="Logarithmic Sobolev inequalities" /><published>2018-04-07T17:00:00-06:00</published><updated>2018-04-07T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/07/lsi</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/07/lsi.html">&lt;p&gt;As promised, this post will be about logarithmic Sobolev inequalities, which
 are (exponential) concentration inequalities for functions defined on the
 binary hypercube. In particular, we’ll review a specific case where we
@@ -33,7 +33,7 @@ Logarithmic Sobolev inequalities compare to quantities related to &lt;script typ
 				  \E f(X) \log \big( \E f(X) \big)&lt;/script&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Efron-Stein-like functional&lt;/li&gt;
+  &lt;li&gt;Efron–Stein-like functional&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{E}(f) = \frac{1}{2} \E \left[ \sum_{i=1}^n \left( f(X) - 

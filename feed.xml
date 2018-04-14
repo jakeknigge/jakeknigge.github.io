@@ -1,5 +1,181 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-07T18:32:56-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Logarithmic Sobolev inequalities</title><link href="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" rel="alternate" type="text/html" title="Logarithmic Sobolev inequalities" /><published>2018-04-07T17:00:00-06:00</published><updated>2018-04-07T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/07/lsi</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/07/lsi.html">&lt;p&gt;As promised, this post will be about logarithmic Sobolev inequalities, which
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-14T14:42:06-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Bandits!</title><link href="http://localhost:4000/jekyll/update/2018/04/14/bandits.html" rel="alternate" type="text/html" title="Bandits!" /><published>2018-04-14T17:00:00-06:00</published><updated>2018-04-14T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/14/bandits</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/14/bandits.html">&lt;p&gt;Today we’re talking about bandits. Bandit problems, not dissimilar Markov 
+chains, are one those simple models that capture a wide variety of applied
+problems. Indeed, many results of “sequential decision making” stem from
+the study of bandit problems. Plus the name is cool, so that should provide
+some motivation for wanting to study them. The name &lt;strong&gt;bandit&lt;/strong&gt; originates 
+from the term &lt;strong&gt;one-armed bandit&lt;/strong&gt;, which was used to describe slot machines.&lt;/p&gt;
+
+&lt;p&gt;In their &lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;survey on bandits&lt;/a&gt;, Bubeck and Cesa-Bianchi define 
+a multi-armed bandit problem as “a sequential allocation problem defined by a 
+set of actions.” The allocation problem is similar to a (repeated) game: at 
+each point in time, the player chooses an action &lt;em&gt;i.e.&lt;/em&gt;, an arm, and receives 
+a reward.&lt;/p&gt;
+
+&lt;p&gt;The player’s goal is to maximize her cumulative reward, which naturally leads to
+an &lt;strong&gt;exploitation vs. exploration&lt;/strong&gt; problem. The player needs to simultaneously 
+exploit arms known to yield high rewards and explore other arms in the hopes 
+of finding other high-yield rewards.&lt;/p&gt;
+
+&lt;p&gt;In bandit problems, we assess a player’s performance by her &lt;strong&gt;regret&lt;/strong&gt;, which
+compares her performance to (something like) the best-possible performance. 
+After the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds of the game, the player’s regret is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_n = \max_{i=1,\dots,K} \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t},&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;K&lt;/script&gt; is the number of bandit arms, &lt;script type=&quot;math/tex&quot;&gt;X_{i,t}&lt;/script&gt; is the reward of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; at
+time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; is the player’s (possibly randomly) chosen arm.&lt;/p&gt;
+
+&lt;h3 id=&quot;stochastic-bandit-problems&quot;&gt;Stochastic bandit problems&lt;/h3&gt;
+
+&lt;p&gt;In this post, we’re going to focus on &lt;strong&gt;stochastic bandit problems&lt;/strong&gt; as opposed
+to &lt;strong&gt;adversarially bandit problems&lt;/strong&gt;. Here’s the set-up.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There are &lt;script type=&quot;math/tex&quot;&gt;\{1,\dots,K\}&lt;/script&gt; arms.&lt;/li&gt;
+  &lt;li&gt;Each arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; corresponds to an unknown probability distribution &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;At each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, the player selects an arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; (independently of 
+previous choices) and receives a reward &lt;script type=&quot;math/tex&quot;&gt;X_{I_t,t} \sim p_{I_t}&lt;/script&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We’ll denote the mean of distribution &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;\mu_i&lt;/script&gt; and define&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu^\star = \max_{i=1,\dots,K} \mu_i \quad \textsf{and} \quad
+	i^\star = \argmax_{i=1,\dots,K} \mu_i&lt;/script&gt;
+
+&lt;p&gt;as optimal parameters. Instead of using the regret to assess our player’s performance,
+we’ll use the &lt;strong&gt;pseudo-regret&lt;/strong&gt;, which is defined as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\bar{R}_n &amp;= \max_{i=1,\dots,K} \E 
+	\left[ \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t} \right] \\
+	&amp;= n \mu^\star - \E \sum_{t=1}^n \mu_{I_t}.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;We know that &lt;script type=&quot;math/tex&quot;&gt;\bar{R}_n \le \E R_n&lt;/script&gt; because of Jensen’s inequality for convex 
+functions. For our purposes, a more informative form of the pseudo-regret is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n = \sum_{i=1}^K \Delta_i \E T_i(n),&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\Delta_i = \mu^\star - \mu_i&lt;/script&gt; is the suboptimality of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; and the
+random variable &lt;script type=&quot;math/tex&quot;&gt;T_i(n) = \sum_{i=1}^n \ind{}\{I_t = i\}&lt;/script&gt; is the number of times 
+arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is selected in the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds.&lt;/p&gt;
+
+&lt;p&gt;This alternative expression for the pseudo-regret sums over arms rather than rounds.
+To see how we switched from arms to rounds, play around with random variables 
+&lt;script type=&quot;math/tex&quot;&gt;T_i(n)&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;upper-confidence-bounds&quot;&gt;Upper confidence bounds&lt;/h3&gt;
+
+&lt;p&gt;One approach for simultaneously performing &lt;strong&gt;exploration&lt;/strong&gt; and &lt;strong&gt;exploitation&lt;/strong&gt; is 
+to use &lt;strong&gt;upper confidence bound&lt;/strong&gt; (UCB) strategies. UCB strategies produce upper
+bounds (based on a confidence level) on the current estimate for each arm’s mean 
+reward. The player selects the arm that is the best using the UCB-modified estimate.&lt;/p&gt;
+
+&lt;p&gt;In the spirit of brevity, we’re going to gloss over a few important details 
+(&lt;em&gt;e.g.&lt;/em&gt;, Legendre–Fenchel duals and Hoeffding’s lemma) but here’s the gist of 
+the UCB set-up.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Define &lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,n} = \frac{1}{n} \sum_{j=1}^n X_{i,j}&lt;/script&gt; as the sample
+mean of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; after being played &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; times.&lt;/li&gt;
+  &lt;li&gt;For a convex function &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt; with convex conjugate &lt;script type=&quot;math/tex&quot;&gt;\psi^*&lt;/script&gt; and parameter 
+&lt;script type=&quot;math/tex&quot;&gt;\lambda &gt; 0&lt;/script&gt;, the cumulant generating function of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; is bounded by &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\ln \E e^{\lambda(X - \E X)} \le \psi(\lambda) \quad \textsf{and} \quad
+\ln \E e^{\lambda(\E X - X)} \le \psi(\lambda).&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;By Markov’s inequality and the Cramér–Chernoff technique&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left( \mu_i - \widehat{\mu}_{i,n} \ge \varepsilon \right) \le
+	e^{-n \psi^*(\varepsilon)}.&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Markov’s inequality means that, with probability &lt;script type=&quot;math/tex&quot;&gt;1 - \delta&lt;/script&gt;, we have an 
+upper bound on the estimate of the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th arm:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\mu_i &lt; \widehat{\mu}_{i,n} + (\psi^*)^{-1} 
+	\left(\frac{1}{n} \ln \frac{1}{\delta} \right). %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The UCB strategy is (very) simple; at each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, select the arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_t \in \argmax_{i=1,\dots,K} \left\{ \widehat{\mu}_{i,T_i(t-1)} + 
+	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) \right\}.&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;The tradeoff.&lt;/strong&gt;
+Let’s pick apart this term and see how it encourages exploration and exploitation.
+We’re going to use &lt;script type=&quot;math/tex&quot;&gt;\psi(x) = x^2/8&lt;/script&gt; with convex conjugate 
+&lt;script type=&quot;math/tex&quot;&gt;\psi^*(z) = 2z^2&lt;/script&gt;, so that &lt;script type=&quot;math/tex&quot;&gt;(\psi^*)^{-1}(z) = (x/2)^{1/2}&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;When arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; has not been played many times before time $t$, &lt;em&gt;i.e.&lt;/em&gt;, when 
+&lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; is small numerator of &lt;script type=&quot;math/tex&quot;&gt;\frac{\alpha \ln t}{T_i(t-1)}&lt;/script&gt; dominates 
+and the UCB-adjusted estimate of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is likely to relatively high, which
+encourages arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; to be chosen. In other words, it encourages exploration.&lt;/p&gt;
+
+&lt;p&gt;As arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is chosen more, &lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; increases and the estimate
+&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; improves. If arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is the optimal arm, then the 
+&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; term dominates the estimates for other arms and the
+UCB-adjustment further encourages selection of this arm. This means that the 
+algorithm exploits high-yielding arms.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Upper bound on pseudo-regret.&lt;/strong&gt;
+If our player follows the UCB scheme specified above, then for &lt;script type=&quot;math/tex&quot;&gt;\alpha &gt; 2&lt;/script&gt;
+her pseudo-regret is upperbounded as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n \le \sum_{i: \Delta_i &gt; 0} \left( 
+\frac{\alpha \Delta_i}{\psi^*(\Delta_i / 2)} \ln n + \frac{\alpha}{\alpha - 2} 
+\right).&lt;/script&gt;
+
+&lt;p&gt;We’re going to prove the bound in the next post.&lt;/p&gt;
+
+&lt;h3 id=&quot;bandit-simulations&quot;&gt;Bandit simulations&lt;/h3&gt;
+
+&lt;p&gt;Here’s an &lt;a href=&quot;https://github.com/jakeknigge/ucb-bandits/blob/master/bandits.R&quot;&gt;R script&lt;/a&gt; which uses the upper confidence bound algorithm.
+For the plots below, there are &lt;script type=&quot;math/tex&quot;&gt;K = 3&lt;/script&gt; arms and &lt;script type=&quot;math/tex&quot;&gt;n = 1000&lt;/script&gt; rounds. The reward 
+distributions are Bernoulli’s and the mean parameters the three arms are 0.46, 0.72, 
+and 0.55.&lt;/p&gt;
+
+&lt;p&gt;The first plot shows the evolution of each mean estimate as different rounds are
+played.
+&lt;img src=&quot;/assets/2018-04-14_bandit_arm_est.png&quot; alt=&quot;Bandit arm estimates&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The next plot illustrates the exploration vs. exploitation trade-off. Even
+though arm 2 yields the highest rewards, the algorithm occasionally plays 
+arms 1 and 3 in later rounds.
+&lt;img src=&quot;/assets/2018-04-14_bandit_arms_played.png&quot; alt=&quot;Bandit regret&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The final plot shows the player’s cumulative regret compared to the UCB-implied
+upper bound on the regret; the lower bound is distribution-dependent and
+asymptotic, which is why it exceeds the pseudo-regret until round 400ish.
+&lt;img src=&quot;/assets/2018-04-14_bandit_regret.png&quot; alt=&quot;Bandit regret&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… a proof of the upper confidence bound regret rate!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems&lt;/em&gt;
+by S. Bubeck and N. Cesa-Bianchi. A digital copy can be found 
+&lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; (a.k.a. “Perdition, Burning, and Flames”) 
+by N. Cesa-Bianchi and G. Lugosi. Find a description of the book and its 
+table of contents &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/predbook/&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I would also recommend checking out Sébastien Bubeck’s blog 
+&lt;a href=&quot;https://blogs.princeton.edu/imabandit&quot;&gt;“I’m a bandit”&lt;/a&gt; and, in particular, his bandit tutorials:
+&lt;a href=&quot;https://blogs.princeton.edu/imabandit/2016/05/11/bandit-theory-part-i/&quot;&gt;part 1&lt;/a&gt; and &lt;a href=&quot;https://blogs.princeton.edu/imabandit/2016/05/13/bandit-theory-part-ii/&quot;&gt;part 2&lt;/a&gt;. Also check out his new YouTube
+channel: https://www.youtube.com/user/sebastienbubeck/videos.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today we’re talking about bandits. Bandit problems, not dissimilar Markov chains, are one those simple models that capture a wide variety of applied problems. Indeed, many results of “sequential decision making” stem from the study of bandit problems. Plus the name is cool, so that should provide some motivation for wanting to study them. The name bandit originates from the term one-armed bandit, which was used to describe slot machines.</summary></entry><entry><title type="html">Logarithmic Sobolev inequalities</title><link href="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" rel="alternate" type="text/html" title="Logarithmic Sobolev inequalities" /><published>2018-04-07T17:00:00-06:00</published><updated>2018-04-07T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/07/lsi</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/07/lsi.html">&lt;p&gt;As promised, this post will be about logarithmic Sobolev inequalities, which
 are (exponential) concentration inequalities for functions defined on the
 binary hypercube. In particular, we’ll review a specific case where we
 get speedy concentration thanks to a variance-like bound on our function of
@@ -1192,165 +1368,4 @@ inequality. Heck yeah!&lt;/p&gt;
   &lt;li&gt;Stephen Boyd’s “&lt;a href=&quot;https://web.stanford.edu/~boyd/papers/cvx_short_course.html&quot;&gt;Convex Optimization Short Course&lt;/a&gt;” notes;&lt;/li&gt;
   &lt;li&gt;&lt;em&gt;Fundamentals of Convex Analysis&lt;/em&gt; by Hiriart-Urruty and Lemaréchal; and&lt;/li&gt;
   &lt;li&gt;&lt;em&gt;A Course in Large Sample Theory&lt;/em&gt; by Thomas Ferguson.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that is useful in many areas… statistics, optimization, life-in-general… I call it idea chaining. My guess is that most people are already aware of this notion on an intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry><entry><title type="html">A taste of decision theory</title><link href="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html" rel="alternate" type="text/html" title="A taste of decision theory" /><published>2018-02-03T13:00:00-07:00</published><updated>2018-02-03T13:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/03/a-taste-of-decision-theory.html">&lt;p&gt;In this post, we’re going to talk about statistical decision theory, which is a topic
-with its origins in the 1950s. Decision theory is cool because it gives us a way to
-compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.&lt;/p&gt;
-
-&lt;p&gt;This post sets us on the path towards minimax rules and estimators. 
-&lt;em&gt;Caveat:&lt;/em&gt; In no way is this an attempt to fully cover this topic—it’s huge and 
-philosophically deep.&lt;/p&gt;
-
-&lt;h3 id=&quot;a-bit-of-background&quot;&gt;A bit of background&lt;/h3&gt;
-
-&lt;p&gt;Let’s say we have a parameter &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; that lives in some parameter space 
-&lt;script type=&quot;math/tex&quot;&gt;\Theta&lt;/script&gt;. We’re going to estimate our parameter of interest &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; with 
-&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. Since we’re in the business of comparing estimators, we need a way
-to assess their quality. We’ll do this using &lt;strong&gt;loss functions&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;A loss function measures the discrepancy between &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. 
-Formally,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;L: \Theta \times \Theta \to \reals.&lt;/script&gt;
-
-&lt;p&gt;Some common loss functions are:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;squared-error loss: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \|\theta - \hat{\theta}\|^2_2&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;absolute-error: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \| \theta - \hat{\theta} \|_1&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;Kullback–Leibler: &lt;script type=&quot;math/tex&quot;&gt;L(\theta, \hat{\theta}) = \int \log 
-                     \frac{f(x;\theta)}{f(x;\hat{\theta})} f(x;\theta) \, dx&lt;/script&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now we have some tools to assess the quality of our estimators, but we still have some 
-work to do because our estimators (most likely) depend on random variables. 
-To remove the randomness, we’ll take an average which will give us the &lt;strong&gt;risk&lt;/strong&gt;
-of our estimator. The risk of &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt; is given&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(\theta, \hat{\theta}) = \E_\theta \big( L(\theta, \hat{\theta}) \big) 
-	= \int L(\theta, \hat{\theta}) f(x; \theta) \, dx&lt;/script&gt;
-
-&lt;p&gt;where the expectation is over the data. (The &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; subscript on the 
-expectation is just a way for us to index our distribution—in other words, we can read
-it as “the expectation when the parameter is &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.”)
-The risk quantifies how good or bad our estimator is, where “low risk”
-is good and “high risk” is bad.&lt;/p&gt;
-
-&lt;p&gt;If we took an additional expectation across the parameter (&lt;em&gt;your Bayesian neurons should
-be lighting up&lt;/em&gt;), then we have the &lt;strong&gt;Bayes risk&lt;/strong&gt; of the estimator:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_\mathrm{Bayes}(g,\hat{\theta}) = \int R(\theta, \hat{\theta}) g(\theta) \, d\theta
-	= \int \left( \int L(\theta, \hat{\theta}) f(x; \theta) \, dx \right) g(\theta) \, d\theta&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;g(\theta)&lt;/script&gt; is a prior distribution for &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;. But don’t get too attached to
-the name because this is an expectation over the data (frequentist) and over the 
-parameter (Bayesian).&lt;/p&gt;
-
-&lt;p&gt;A true Bayesian statistician would be more interested in the &lt;strong&gt;posterior risk&lt;/strong&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_\mathrm{post}(\hat{\theta} \mid x) = \int L(\theta, \hat{\theta}) g(\theta \mid x) \, dx&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;g(\theta \mid x)&lt;/script&gt; is the posterior density of &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;So, now we have three notions of risk at our disposal:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;the (regular) &lt;strong&gt;risk&lt;/strong&gt;, which has a frequentist feel;&lt;/li&gt;
-  &lt;li&gt;the &lt;strong&gt;posterior risk&lt;/strong&gt;, which has a Bayesian feel; and&lt;/li&gt;
-  &lt;li&gt;the &lt;strong&gt;Bayes risk&lt;/strong&gt;, which has an independent-of-statistical-philosophy feel.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;Neural connection!&lt;/strong&gt;
-When we use the squared-error loss (also known as the &lt;em&gt;&lt;script type=&quot;math/tex&quot;&gt;\ell_2&lt;/script&gt;-loss&lt;/em&gt; or
-the &lt;em&gt;mean squared error&lt;/em&gt;), we can write the risk using bias and variance of our estimator
-&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;. We’ll use the “add-and-subtract” trick to show this relationship.
-Let &lt;script type=&quot;math/tex&quot;&gt;\mu = \E_\theta (\hat{\theta})&lt;/script&gt;, then&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\E_\theta (\theta - \hat{\theta})^2 
-	&amp;= \E_\theta (\theta - \mu + \mu - \hat{\theta})^2 \\
-	&amp;= \E_\theta(\mu - \hat{\theta})^2 + (\theta - \mu)^2 +
-		2 \E_\theta(\mu - \hat{\theta})(\theta - \mu) \\
-	&amp;= \Var_\theta (\hat{\theta}) + \big( \E_\theta (\hat{\theta} - \mu) \big)^2.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;h3 id=&quot;a-warm-up-calculation&quot;&gt;A warm-up calculation&lt;/h3&gt;
-
-&lt;p&gt;Let’s assume we have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; data points, &lt;script type=&quot;math/tex&quot;&gt;X_1&lt;/script&gt;,…,&lt;script type=&quot;math/tex&quot;&gt;X_n&lt;/script&gt; sampled from Bernoulli 
-distribution with an unknown probability of success &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;. We’ll estimate &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; with 
-two different estimators&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{p}_1 = \bar{X}&lt;/script&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;and compare their risk functions, using the squared-error loss function.&lt;/p&gt;
-
-&lt;p&gt;The estimator &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1 = \bar{X}&lt;/script&gt; is an unbiased estimator of the true parameter 
-&lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt;. So, the risk of &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1&lt;/script&gt; is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(p, \hat{p}_1) = \E_p (p - \bar{X})^2 
-	= \Var_p (\bar{X}) 
-	= \frac{p(1-p)}{n}.&lt;/script&gt;
-
-&lt;p&gt;The estimator &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt; has a bias but no variance term. Its risk is given by&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R(p, \hat{p}_2) = \E_p (p - 0.5)^2 
-	= (E(0.5) - p)^2 
-	= (0.5 - p)^2.&lt;/script&gt;
-
-&lt;p&gt;The risk of the first estimator is a concave quadratic and the risk of the second 
-estimator is a convex quadratic.
-So, neither one of these risk functions is strictly better (&lt;em&gt;i.e.&lt;/em&gt;, uniformly dominates)
-the other one as &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; ranges from 0 to 1.&lt;/p&gt;
-
-&lt;h3 id=&quot;maximum-risk&quot;&gt;Maximum risk&lt;/h3&gt;
-
-&lt;p&gt;In the spirit of (working towards) minimax, we could ask: what value of &lt;script type=&quot;math/tex&quot;&gt;p&lt;/script&gt; maximizes
-the risk of our estimator?&lt;/p&gt;
-
-&lt;p&gt;For &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_1&lt;/script&gt;, we can expand the quadratic &lt;script type=&quot;math/tex&quot;&gt;(p - p^2)/n&lt;/script&gt;, take derivatives
-&lt;script type=&quot;math/tex&quot;&gt;(1 - 2p)/n&lt;/script&gt;, set it equal to 0, and find that &lt;script type=&quot;math/tex&quot;&gt;p = 1/2&lt;/script&gt; maximizes the risk. (Note
-that this results holds independent of &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt;; however, the value of the risk function
-decreases at a rate of &lt;script type=&quot;math/tex&quot;&gt;1/n&lt;/script&gt;.)&lt;/p&gt;
-
-&lt;p&gt;For &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2&lt;/script&gt;, the story is a bit different because we’re dealing with a convex 
-quadratic—so, think endpoints. Because we chose &lt;script type=&quot;math/tex&quot;&gt;\hat{p}_2 = 0.5&lt;/script&gt;, both 0 and 1
-maximize the risk of this expression.&lt;/p&gt;
-
-&lt;h3 id=&quot;setting-up-the-minimax-game&quot;&gt;Setting up the minimax game&lt;/h3&gt;
-
-&lt;p&gt;The central object of this post is the minimax risk, which is a (hopefully) minimized, 
-worst-case risk, defined as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta}).&lt;/script&gt;
-
-&lt;p&gt;We can interpret the minimax risk as a type of game: it’s us (&lt;em&gt;the statisticians&lt;/em&gt;) 
-against nature.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Nature gets to choose &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We get to choose &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;Nature chooses &lt;script type=&quot;math/tex&quot;&gt;\sup_{\theta} R(\theta, \hat{\theta})&lt;/script&gt; 
-adversarially to maximize our risk.&lt;/li&gt;
-  &lt;li&gt;We do our best to minimize our risk given nature’s choice of &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.
-    &lt;ul&gt;
-      &lt;li&gt;That is, we pick &lt;script type=&quot;math/tex&quot;&gt;\inf_{\hat{\theta}} \sup_{\theta} R(\theta, \hat{\theta})&lt;/script&gt;.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post draws on material from&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Theoretical Statistics&lt;/em&gt; by Robert Keener;&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;All of Statistics&lt;/em&gt; by Larry Wasserman;&lt;/li&gt;
-  &lt;li&gt;lectures by Michael Jordan.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about statistical decision theory, which is a topic with its origins in the 1950s. Decision theory is cool because it gives us a way to compare statistical procedures. Moreover, it connects frequentist and Bayesian inference.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that is useful in many areas… statistics, optimization, life-in-general… I call it idea chaining. My guess is that most people are already aware of this notion on an intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry></feed>

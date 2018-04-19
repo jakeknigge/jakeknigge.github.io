@@ -1,5 +1,264 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-14T14:45:35-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Bandits!</title><link href="http://localhost:4000/jekyll/update/2018/04/14/bandits.html" rel="alternate" type="text/html" title="Bandits!" /><published>2018-04-14T17:00:00-06:00</published><updated>2018-04-14T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/14/bandits</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/14/bandits.html">&lt;p&gt;Today we’re talking about bandits. Bandit problems, not dissimilar from Markov 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-18T19:15:36-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Upper confidence bounds</title><link href="http://localhost:4000/jekyll/update/2018/04/18/ucb.html" rel="alternate" type="text/html" title="Upper confidence bounds" /><published>2018-04-18T21:00:00-06:00</published><updated>2018-04-18T21:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/18/ucb</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/18/ucb.html">&lt;p&gt;Today we’re going to prove the upper bound that results from the upper
+confidence bound (UCB) strategy. The UCB strategy allowed us to bound
+the pseudo-regret that by a term which is logarithmic in the number of
+rounds played. Generally speaking, “good” regret bounds for bandit problems
+are sublinear in the number of rounds played.&lt;/p&gt;
+
+&lt;h3 id=&quot;stochastic-bandit-problems&quot;&gt;Stochastic bandit problems&lt;/h3&gt;
+
+&lt;p&gt;As a quick review, here’s the set-up for the stochastic multi-armed bandit
+problem.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There are &lt;script type=&quot;math/tex&quot;&gt;\{1,\dots,K\}&lt;/script&gt; arms.&lt;/li&gt;
+  &lt;li&gt;Each arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; corresponds to an unknown probability distribution &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;At each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, the player selects an arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; (independently of 
+previous choices) and receives a reward &lt;script type=&quot;math/tex&quot;&gt;X_{I_t,t} \sim p_{I_t}&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;We assess a player’s performance by her &lt;strong&gt;regret&lt;/strong&gt;, which
+compares her performance to (something like) the best-possible performance.&lt;/li&gt;
+  &lt;li&gt;After the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds of the game, the player’s regret is&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_n = \max_{i=1,\dots,K} \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t},&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;where &lt;script type=&quot;math/tex&quot;&gt;K&lt;/script&gt; is the number of bandit arms, &lt;script type=&quot;math/tex&quot;&gt;X_{i,t}&lt;/script&gt; is the reward of arm 
+&lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; at time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; is the player’s (possibly randomly) chosen arm.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We’ll denote the mean of distribution &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;\mu_i&lt;/script&gt; and define&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu^\star = \max_{i=1,\dots,K} \mu_i \quad \textsf{and} \quad
+	i^\star = \argmax_{i=1,\dots,K} \mu_i&lt;/script&gt;
+
+&lt;p&gt;as optimal parameters. Instead of using the regret to assess our player’s performance,
+we’ll use the &lt;strong&gt;pseudo-regret&lt;/strong&gt;, which is defined as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\bar{R}_n &amp;= \max_{i=1,\dots,K} \E 
+	\left[ \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t} \right] \\
+	&amp;= n \mu^\star - \E \sum_{t=1}^n \mu_{I_t}.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;We know that &lt;script type=&quot;math/tex&quot;&gt;\bar{R}_n \le \E R_n&lt;/script&gt; because of Jensen’s inequality for convex 
+functions. For our purposes, a more informative form of the pseudo-regret is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n = \sum_{i=1}^K \Delta_i \E T_i(n),&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\Delta_i = \mu^\star - \mu_i&lt;/script&gt; is the suboptimality of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; and the
+random variable &lt;script type=&quot;math/tex&quot;&gt;T_i(n) = \sum_{i=1}^n \ind{}\{I_t = i\}&lt;/script&gt; is the number of times 
+arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is selected in the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds.&lt;/p&gt;
+
+&lt;h3 id=&quot;upper-confidence-bounds&quot;&gt;Upper confidence bounds&lt;/h3&gt;
+
+&lt;p&gt;One approach for simultaneously performing &lt;strong&gt;exploration&lt;/strong&gt; and &lt;strong&gt;exploitation&lt;/strong&gt; is 
+to use &lt;strong&gt;upper confidence bound&lt;/strong&gt; (UCB) strategies. UCB strategies produce upper
+bounds (based on a confidence level) on the current estimate for each arm’s mean 
+reward. The player selects the arm that is the best using the UCB-modified estimate.&lt;/p&gt;
+
+&lt;p&gt;In the spirit of brevity, we’re going to gloss over a few important details 
+(&lt;em&gt;e.g.&lt;/em&gt;, Legendre–Fenchel duals and Hoeffding’s lemma) but here’s the gist of 
+the UCB set-up.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Define &lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,n} = \frac{1}{n} \sum_{j=1}^n X_{i,j}&lt;/script&gt; as the sample
+mean of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; after being played &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; times.&lt;/li&gt;
+  &lt;li&gt;For a convex function &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt; with convex conjugate &lt;script type=&quot;math/tex&quot;&gt;\psi^*&lt;/script&gt; and parameter 
+&lt;script type=&quot;math/tex&quot;&gt;\lambda &gt; 0&lt;/script&gt;, the cumulant generating function of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; is bounded by &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\ln \E e^{\lambda(X - \E X)} \le \psi(\lambda) \quad \textsf{and} \quad
+\ln \E e^{\lambda(\E X - X)} \le \psi(\lambda).&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;By Markov’s inequality and the Cramér–Chernoff technique&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left( \mu_i - \widehat{\mu}_{i,n} \ge \varepsilon \right) \le
+	e^{-n \psi^*(\varepsilon)}.&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Markov’s inequality means that, with probability &lt;script type=&quot;math/tex&quot;&gt;1 - \delta&lt;/script&gt;, we have an 
+upper bound on the estimate of the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th arm:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\mu_i &lt; \widehat{\mu}_{i,n} + (\psi^*)^{-1} 
+	\left(\frac{1}{n} \ln \frac{1}{\delta} \right). %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The &lt;strong&gt;UCB strategy&lt;/strong&gt; is (very) simple; at each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, select the arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_t \in \argmax_{i=1,\dots,K} \left\{ \widehat{\mu}_{i,T_i(t-1)} + 
+	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) \right\}.&lt;/script&gt;
+
+&lt;p&gt;&lt;strong&gt;The tradeoff.&lt;/strong&gt;
+Let’s pick apart this term and see how it encourages exploration and exploitation.
+We’re going to use &lt;script type=&quot;math/tex&quot;&gt;\psi(x) = x^2/8&lt;/script&gt; with convex conjugate 
+&lt;script type=&quot;math/tex&quot;&gt;\psi^*(z) = 2z^2&lt;/script&gt;, so that &lt;script type=&quot;math/tex&quot;&gt;(\psi^*)^{-1}(z) = (x/2)^{1/2}&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;When arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; has not been played many times before time $t$, &lt;em&gt;i.e.&lt;/em&gt;, when 
+&lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; is small numerator of &lt;script type=&quot;math/tex&quot;&gt;\frac{\alpha \ln t}{T_i(t-1)}&lt;/script&gt; dominates 
+and the UCB-adjusted estimate of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is likely to relatively high, which
+encourages arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; to be chosen. In other words, it encourages exploration.&lt;/p&gt;
+
+&lt;p&gt;As arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is chosen more, &lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; increases and the estimate
+&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; improves. If arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is the optimal arm, then the 
+&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; term dominates the estimates for other arms and the
+UCB-adjustment further encourages selection of this arm. This means that the 
+algorithm exploits high-yielding arms.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Upper bound on pseudo-regret.&lt;/strong&gt;
+If our player follows the UCB scheme specified above, then for &lt;script type=&quot;math/tex&quot;&gt;\alpha &gt; 2&lt;/script&gt;
+her pseudo-regret is upperbounded as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n \le \sum_{i: \Delta_i &gt; 0} \left( 
+\frac{\alpha \Delta_i}{\psi^*(\Delta_i / 2)} \ln n + \frac{\alpha}{\alpha - 2} 
+\right).&lt;/script&gt;
+
+&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
+
+&lt;p&gt;Okay, here goes. We incur regret when we don’t pick the optimal arm, &lt;em&gt;i.e.&lt;/em&gt;,
+when &lt;script type=&quot;math/tex&quot;&gt;I_t \neq i^\star&lt;/script&gt;. So, we need to analyze the conditions that lead
+us to choose a suboptimal arm.&lt;/p&gt;
+
+&lt;p&gt;Assume we’ve played arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; a total of &lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; times and arm &lt;script type=&quot;math/tex&quot;&gt;i^\star&lt;/script&gt; 
+a total of &lt;script type=&quot;math/tex&quot;&gt;T_{i^\star}(t-1)&lt;/script&gt; times. By the set up of our bandit scenario, 
+if &lt;script type=&quot;math/tex&quot;&gt;I_t = i&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_t = i = \argmax_{j=1,\dots,K} \left\{ \widehat{\mu}_{j,T_j(t-1)} + 
+	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) \right\},&lt;/script&gt;
+
+&lt;p&gt;then at least one of the following holds&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\widehat{\mu}_{i^\star, T_{i^\star}(t-1)} + 
+	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_{i^\star}(t-1)} \right) &amp;\le \mu^\star 
+	&amp;&amp; \#1 \\
+\mu_i + (\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) &amp;&lt; 
+	\widehat{\mu}_{i, T_i(t-1)} &amp;&amp; \#2 \\
+\mu^\star - 2(\psi^*)^{-1} \left( \frac{\alpha \ln n}{T_i(t-1)} \right) &amp;&lt; \mu_i &amp;&amp; \#3.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The first indicates that our current UCB-adjusted estimate of the mean for the
+optimal arm is less than its true value. It occurs with probability&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left(  \widehat{\mu}_{i^\star, T_{i^\star}(t-1)} + 
+	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_{i^\star}(t-1)} \right) 
+	\ge \mu^\star \right) \le 
+	\exp \left ( -\alpha \ln t \right) = t^{-\alpha}.&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The second indicates that our estimate for arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; exceeds its true value by
+an amount greater than the UCB—hence the UCB adjustment is not yet helpful. 
+It occurs with probability&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left(  \mu_i + (\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) &gt; 
+	\widehat{\mu}_{i, T_i(t-1)} \right) \le 
+	\exp \left ( -\alpha \ln t \right) = t^{-\alpha}.&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The third follows from similar logic as the second, and is illuminated by 
+the rewriting:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\Delta_i  = \mu^\star - \mu_i &amp;&lt; 
+	2(\psi^*)^{-1} \left( \frac{\alpha \ln n}{T_i(t-1)} \right) \\
+\psi^*(\Delta_i / 2) &lt; \frac{\alpha \ln n}{T_i(t-1)} &amp;\iff
+T_i(t-1) &lt; \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)}.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The probability of the third event is 0 when 
+&lt;script type=&quot;math/tex&quot;&gt;T_i(n) \ge u = 
+  \left\lceil \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} \right\rceil&lt;/script&gt;.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If #1, #2, and #3 are false, then we pick the optimal arm, meaning we incur
+no regret.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now, we let’s consider the implications of these events on &lt;script type=&quot;math/tex&quot;&gt;\E T_i(t-1)&lt;/script&gt;,
+because this will allow us to bound the pseudo-regret. We have that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E T_i(n) &amp;= \E \sum_{t=1}^n \ind{}\{I_t = i\} \\
+	&amp;\le u + \E \sum_{t=u+1}^n \ind{}\{I_t = i \textsf{ and inequality #3 is false}\} \\
+	&amp;\le u + \E \sum_{t=u+1}^n \ind{}\{\textsf{inequality #1 or #2 is true}\} \\
+	&amp;= u + \sum_{t=u+1}^n \prob\left( \ind{\textsf{inequality #1}} \right) + 
+		\prob\left( \ind{\textsf{inequality #2}} \right) \\
+	&amp;\le u + 2\sum_{t=1}^n \sum_{s=1}^t \frac{1}{t^\alpha} \\
+	&amp;= u + 2\sum_{t=1}^n \frac{1}{t^{\alpha-1}} \\
+	&amp;\le \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} + 
+		2 \int_{1}^{\infty} \frac{dt}{t^{\alpha-1}} \\
+	&amp;= \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} + \frac{\alpha}{\alpha-2}.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;&lt;em&gt;(It took me a few times to follow that argument, so I would re-read it a few times.
+I also put some notes in the &lt;a href=&quot;#the-intermediate-steps&quot;&gt;intermediate steps&lt;/a&gt;
+subsection below.)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Now, we just sum over the suboptimal arms to get the pseudo-regret bound&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n \le \sum_{i: \Delta_i &gt; 0} \left( 
+\frac{\alpha \Delta_i}{\psi^*(\Delta_i / 2)} \ln n + \frac{\alpha}{\alpha - 2}
+\right).&lt;/script&gt;
+
+&lt;p&gt;This is the proof given in Bubeck and Cesa-Bianchi’s &lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;bandits survey&lt;/a&gt;, 
+which is an adaptation of the proof of Auer, Cesa-Bianchi, and Fischer’s
+&lt;a href=&quot;http://cesa-bianchi.di.unimi.it/Pubblicazioni/ml-02.pdf&quot;&gt;original analysis&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… a proof of that cool inequality that helped us in the proof of 
+concentration inequality implied by the 
+&lt;a href=&quot;/jekyll/update/2018/04/07/lsi.html&quot;&gt;logarithmic Sobolev inequality&lt;/a&gt; a few posts back!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is based on material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems&lt;/em&gt;
+by S. Bubeck and N. Cesa-Bianchi. A digital copy can be found 
+&lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Finite-time Analysis of the Multiarmed Bandit Problem&lt;/em&gt; by P. Auer, N. 
+Cesa-Bianchi, and P. Fischer. A digital copy can be found &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/Pubblicazioni/ml-02.pdf&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; (a.k.a. “Perdition, Burning, and Flames”) 
+by N. Cesa-Bianchi and G. Lugosi. Find a description of the book and its 
+table of contents &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/predbook/&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;the-intermediate-steps&quot;&gt;The intermediate steps&lt;/h4&gt;
+
+&lt;p&gt;We can interpret the relationship&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E T_i(n) = \E \sum_{t=1}^n \ind{}\{I_t = i\} \le 
+	u + \E \sum_{t=u+1}^n \ind{}\{I_t = i \textsf{ and inequality #3 is false}\}&lt;/script&gt;
+
+&lt;p&gt;by observing that the indicator &lt;script type=&quot;math/tex&quot;&gt;\ind{}\{I_t = i\}&lt;/script&gt; and be written as
+&lt;script type=&quot;math/tex&quot;&gt;\ind{}\{I_t = i \textsf{ and inequality #3 is false or true}\}&lt;/script&gt;. 
+Inequality #3 is true when 
+&lt;script type=&quot;math/tex&quot;&gt;T_i(k) \le u = 
+	\left\lceil \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} \right\rceil&lt;/script&gt;.
+So, the bound follows by assuming that indicator is active at &lt;script type=&quot;math/tex&quot;&gt;k=1,\dots,u&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;Because we allow either #1 or #2 to be true, the event&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\big\{I_t = i \textsf{ and inequality #3 is false}\big\} \subseteq
+	\big\{\textsf{inequality #1 or #2 is true}\big\},&lt;/script&gt;
+
+&lt;p&gt;meaning the probability of the second event is larger.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today we’re going to prove the upper bound that results from the upper confidence bound (UCB) strategy. The UCB strategy allowed us to bound the pseudo-regret that by a term which is logarithmic in the number of rounds played. Generally speaking, “good” regret bounds for bandit problems are sublinear in the number of rounds played.</summary></entry><entry><title type="html">Bandits!</title><link href="http://localhost:4000/jekyll/update/2018/04/14/bandits.html" rel="alternate" type="text/html" title="Bandits!" /><published>2018-04-14T17:00:00-06:00</published><updated>2018-04-14T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/14/bandits</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/14/bandits.html">&lt;p&gt;Today we’re talking about bandits. Bandit problems, not dissimilar from Markov 
 chains, are one of those simple models that apply to a wide variety of
 problems. Indeed, many results of “sequential decision making” stem from
 the study of bandit problems. Plus the name is cool, so that should provide
@@ -1180,192 +1439,4 @@ is added to the random variable, &lt;em&gt;i.e.&lt;/em&gt;, when we translate it
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises.</summary></entry><entry><title type="html">Idea chaining</title><link href="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html" rel="alternate" type="text/html" title="Idea chaining" /><published>2018-02-11T20:40:00-07:00</published><updated>2018-02-11T20:40:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/11/idea-chaining</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/11/idea-chaining.html">&lt;p&gt;In this post, we’re going to talk about a concept that is useful in many areas…
-statistics, optimization, life-in-general… I call it &lt;strong&gt;idea chaining&lt;/strong&gt;. My guess is that
-most people are already aware of this notion on an intuitive level. Systems thinkers would
-probably call it something like “problem decomposition”, mathematicians would think of
-lemmas… basically we take a problem, split it into smaller, easier-to-solve 
-sub-problems, and then chain our results together to solve the original problem.&lt;/p&gt;
-
-&lt;h3 id=&quot;a-convex-calculus-for-convexity-verification&quot;&gt;A (convex) calculus for convexity verification&lt;/h3&gt;
-
-&lt;p&gt;In convex analysis and optimization, we’re often interested in whether or not a given
-function is convex. There are a few ways to go about showing the “vexity” of a 
-particular function, such as using:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;the definition of convexity;&lt;/li&gt;
-  &lt;li&gt;the restriction-to-a-line technique;&lt;/li&gt;
-  &lt;li&gt;first-order (&lt;em&gt;i.e.&lt;/em&gt;, derivative) conditions;&lt;/li&gt;
-  &lt;li&gt;second-order conditions; or&lt;/li&gt;
-  &lt;li&gt;a convex calculus.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The &lt;strong&gt;convex calculus&lt;/strong&gt; approach is appealing because it gives us a toolbox to 
-(mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. In the context of convex optimization, this 
-&lt;strong&gt;constructive convex verification process&lt;/strong&gt; 
-is part of an approach known as &lt;strong&gt;disciplined convex 
-programming&lt;/strong&gt; (DCP). The DCP ideas arose from the work of Michael Grant and 
-Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
-convex calculus in their books from the 1990s.&lt;/p&gt;
-
-&lt;p&gt;Let’s put the ideas to work on an example that came up on the quiz page of the 
-&lt;a href=&quot;http://dcp.stanford.edu/&quot;&gt;DCP&lt;/a&gt; website (which teaches the principles of disciplined convex programming).&lt;/p&gt;
-
-&lt;p&gt;Our function of interest is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(u,w,y,z) = \log \left( \exp \left\{ e^{\max(u, z)} \right\} + 
-						 \exp \left\{ g_{\mathrm{hub}}(w) \right\} +
-						 \exp \left\{ y - 42 \right\}  \right),&lt;/script&gt;
-
-&lt;p&gt;where&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-g_{\mathrm{hub}}(w) = 
-\begin{cases}
-	2|x| - 1, &amp; |x| \ge 1 \\
-	|x|^2, 	  &amp; |x| &lt; 1.
-\end{cases} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;At first sight, this looks ugly because we have a concave function with &lt;script type=&quot;math/tex&quot;&gt;\log&lt;/script&gt;, a couple
-convex functions with &lt;script type=&quot;math/tex&quot;&gt;\max&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\exp&lt;/script&gt;, an affine function &lt;script type=&quot;math/tex&quot;&gt;y - 42&lt;/script&gt;, and that Huber
-function &lt;script type=&quot;math/tex&quot;&gt;g_{\mathrm{hub}}&lt;/script&gt; (which is actually convex, but may not be recognized as 
-such). Moreover, we have four variables!&lt;/p&gt;
-
-&lt;p&gt;The DCP / convex calculus approach turns this problem into an easy verification process.
-The non-obvious and key ingredient is the “log-sum-exp” function, also called the soft-max
-function. For &lt;script type=&quot;math/tex&quot;&gt;x \in \reals^n&lt;/script&gt;, the log-sum-exp function is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).&lt;/script&gt;
-
-&lt;p&gt;This function is convex—if you’re suspicious, calculate its Hessian and 
-convince yourself. With this single fact, we’re nearly done because the functions 
-appearing within the exponentials are convex and affine. Then we use that log-sum-exp is 
-convex and we’re done.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Tips and tricks.&lt;/strong&gt; Here are the DCP rules we used:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;an increasing convex function of a convex function is convex; and&lt;/li&gt;
-  &lt;li&gt;a sum of convex functions is convex.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;So, with two rules and a few basic functions we’ve show a rather complicated function to 
-be convex—no gradients, subgradients, or Hessians required. We reduced the problem
-to a few simple subproblems (&lt;em&gt;e.g.&lt;/em&gt;, verifying the convexity of 
-&lt;script type=&quot;math/tex&quot;&gt;e^{g_{\mathrm{hub}}(w)}&lt;/script&gt; and the like) and then strung everything together using a
-couple rules. Bam.&lt;/p&gt;
-
-&lt;p&gt;If you’re interested in seeing the “vexity” parse tree for this function, check out the 
-DCP site’s “&lt;a href=&quot;http://dcp.stanford.edu/analyzer&quot;&gt;Analyzer&lt;/a&gt;” and type in 
-&lt;em&gt;log_sum_exp(exp(max(u, z)), huber(w) + y - 42)&lt;/em&gt;. Do it!&lt;/p&gt;
-
-&lt;h3 id=&quot;le-cams-inequality&quot;&gt;Le Cam’s inequality&lt;/h3&gt;
-
-&lt;p&gt;Our next example of idea chaining stems from a problem from Tom Ferguson’s (excellent) 
-mathematical statistics book called &lt;em&gt;A Course in Large Sample Theory&lt;/em&gt;. Problem 5 of 
-chapter 3 (“Convergence in Law”) walks us through Le Cam’s inequality.&lt;/p&gt;
-
-&lt;p&gt;Here’s the set up.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;We have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; independent Bernoulli random variables each with its own probability of
-success, &lt;script type=&quot;math/tex&quot;&gt;p_i = \prob(X_i = 1)&lt;/script&gt;. We’ll call these &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We define &lt;script type=&quot;math/tex&quot;&gt;S_n = \sum_{i=1}^n X_i&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We define &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; as a Poisson random variable with parameter 
-&lt;script type=&quot;math/tex&quot;&gt;\lambda = \sum_{i=1}^n p_i&lt;/script&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;We want to show that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;| \prob(S_n \in A) - \prob(Z \in A)| \le \sum_{i=1}^n p_i^2&lt;/script&gt;
-
-&lt;p&gt;for all sets &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt;. In other words, we’re computing a bound on the error of using a 
-Poisson approximation.&lt;/p&gt;
-
-&lt;p&gt;We’ll solve this problem by solving three simpler sub-problems.&lt;/p&gt;
-
-&lt;p&gt;(1) First, we’ll show that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;| \prob(S_n \in A) - \prob(Z \in A)| \le \prob(S_n \neq Z).&lt;/script&gt;
-
-&lt;p&gt;(2) Then, we’ll show that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(S_n \neq Z) \le \sum_{i=1}^n \prob(X_i \neq Y_i).&lt;/script&gt;
-
-&lt;p&gt;(3) Finally, we’ll show that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(X_i \neq Y_i) \le \sum_{i=1}^n p_i^2.&lt;/script&gt;
-
-&lt;p&gt;To show (1), (2), and (3), we’re going to couple &lt;script type=&quot;math/tex&quot;&gt;S_n&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; to the same underlying 
-probability space.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The variables &lt;script type=&quot;math/tex&quot;&gt;U_1,\dots,U_n&lt;/script&gt; are uniformly distributed on &lt;script type=&quot;math/tex&quot;&gt;[0,1]&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We can define &lt;script type=&quot;math/tex&quot;&gt;X_i = \ind{}(U_i &gt; 1 - p_i)&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;\E X_i = p_i&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We introduce &lt;script type=&quot;math/tex&quot;&gt;Y \sim \mathrm{Poisson}(p_i)&lt;/script&gt; as&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-Y_i =
-\begin{cases}
-0, &amp; U_i &lt; e^{-p_i} \\ 
-k, &amp; F(k-1) &lt; U_i &lt; F(k),
-\end{cases} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;F(k) = e^{-p_i} \sum_{j=0}^{k} p_i^j/j!&lt;/script&gt; is the cumulative distribution function
-for a Poisson random variable with parameter &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Proof of (1).&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Without loss of generality we can assume that &lt;script type=&quot;math/tex&quot;&gt;\prob(S_n \in A) \ge \prob(Z \in A)&lt;/script&gt;. 
-This allows us to conclude that &lt;script type=&quot;math/tex&quot;&gt;\{S_n \in A\} \supseteq \{Z \in A\}&lt;/script&gt;. Now, we isolate
-the set where &lt;script type=&quot;math/tex&quot;&gt;\{S_n \neq Z\}&lt;/script&gt; by noting that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(S_n \in A) - \prob(Z \in A) \le \prob(S_n \in A) - \prob(S_n \cap Z \in A) 
-	= \prob(S_n \neq Z).&lt;/script&gt;
-
-&lt;p&gt;One down, two to go.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Proof of (2).&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;First, let’s rewrite &lt;script type=&quot;math/tex&quot;&gt;\prob(S_n \neq Z)&lt;/script&gt; as &lt;script type=&quot;math/tex&quot;&gt;\prob \left( \sum_i X_i \neq Z \right)&lt;/script&gt;.
-This implies that there’s at least one &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; not equal to &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;. (The &lt;em&gt;at least&lt;/em&gt; 
-phrase should be triggering the part of your brain associated with &lt;em&gt;unions&lt;/em&gt;.) 
-So, we have that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left( \bigcup_{i=1}^n \{X_i \neq Y_i\} \right) \le \sum_{i=1}^n \prob(X_i \neq Y_i)&lt;/script&gt;
-
-&lt;p&gt;by the subadditivity of probability.&lt;/p&gt;
-
-&lt;p&gt;Two down, one to go.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Proof of (3).&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Using our definitions of &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;, we can write&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\prob(X_i \neq Y_i) &amp;= 1 - \prob(X_i = 0) - \prob(Y_i = 1) \\
-	&amp;= 1 - (1 - p_i) - p_i e^{-p_i} \\
-	&amp;= p_i - p_i e^{-p_i} \qquad \qquad \textsf{(because $(1-e^{-p_i}) \le p_i$)}\\
-	&amp;\le p_i^2.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Now, we sum both sides of the equation and we’ve got it.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Bringing it all back home.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Finally, chain the inequalities in (1), (2), and (3) together and we’ve proved Le Cam’s
-inequality. Heck yeah!&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post draws on material from:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Stephen Boyd’s “&lt;a href=&quot;https://web.stanford.edu/~boyd/papers/cvx_short_course.html&quot;&gt;Convex Optimization Short Course&lt;/a&gt;” notes;&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;Fundamentals of Convex Analysis&lt;/em&gt; by Hiriart-Urruty and Lemaréchal; and&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;A Course in Large Sample Theory&lt;/em&gt; by Thomas Ferguson.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to talk about a concept that is useful in many areas… statistics, optimization, life-in-general… I call it idea chaining. My guess is that most people are already aware of this notion on an intuitive level. Systems thinkers would probably call it something like “problem decomposition”, mathematicians would think of lemmas… basically we take a problem, split it into smaller, easier-to-solve sub-problems, and then chain our results together to solve the original problem.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises.</summary></entry></feed>

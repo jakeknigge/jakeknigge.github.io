@@ -1,5 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-18T19:21:08-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Upper confidence bounds</title><link href="http://localhost:4000/jekyll/update/2018/04/18/ucb.html" rel="alternate" type="text/html" title="Upper confidence bounds" /><published>2018-04-18T21:00:00-06:00</published><updated>2018-04-18T21:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/18/ucb</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/18/ucb.html">&lt;p&gt;Today we’re going to prove the upper bound that results from the upper
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-21T19:21:26-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">A neat inequality</title><link href="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" rel="alternate" type="text/html" title="A neat inequality" /><published>2018-04-21T17:00:00-06:00</published><updated>2018-04-21T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/21/ineq</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/21/ineq.html">&lt;p&gt;As promised, this post will be about the useful inequality from 
+&lt;a href=&quot;/jekyll/update/2018/04/07/lsi.html&quot;&gt;logarithmic Sobolev inequality post&lt;/a&gt;. Without further ado…&lt;/p&gt;
+
+&lt;h3 id=&quot;starting-simple&quot;&gt;Starting simple&lt;/h3&gt;
+
+&lt;p&gt;We are going to prove the inequality&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\left( e^{z/2} - e^{y/2} \right)^2 \le \frac{(z-y)^2}{8}(e^{z} + e^{y})&lt;/script&gt;
+
+&lt;p&gt;for real numbers &lt;script type=&quot;math/tex&quot;&gt;z \ge y&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
+
+&lt;p&gt;We can be rewrite the inequality as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\left( e^{(z-y)/2} - 1 \right)^2 \le \frac{(z-y)^2}{8}(e^{z-y} + 1).&lt;/script&gt;
+
+&lt;p&gt;Now, let’s define &lt;script type=&quot;math/tex&quot;&gt;x = z - y&lt;/script&gt;, where &lt;script type=&quot;math/tex&quot;&gt;x \ge 0&lt;/script&gt; because &lt;script type=&quot;math/tex&quot;&gt;z \ge y&lt;/script&gt;. Let’s
+move everything to the righthand side and open up the square, which gives&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le \frac{x^2}{8} (e^x + 1) - \left( e^x - 2e^{x/2} + 1 \right).&lt;/script&gt;
+
+&lt;p&gt;Now, let’s collect like terms&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1 = f(x).&lt;/script&gt;
+
+&lt;p&gt;When &lt;script type=&quot;math/tex&quot;&gt;x = 0&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;f(x)&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;, the righthand side, is also 0. Let’s look at the
+derivative of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; to see whether the function is increasing or decreasing:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{df(x)}{dx} = \frac{1}{8} e^x (x^2 + 2x - 8) + \frac{x}{4} + e^{x/2}.&lt;/script&gt;
+
+&lt;p&gt;Unfortunately, that pesky &lt;script type=&quot;math/tex&quot;&gt;-e^x&lt;/script&gt; means we still have some work to do. Let’s 
+keep taking derivatives and see if we can’t get rid of that negative:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\frac{d^2f(x)}{dx^2} &amp;= 
+	\frac{1}{8} \left( e^x \left( x^2 + 4x - 6 \right) + 4e^{x/2} + 2 \right) \\
+\frac{d^3f(x)}{dx^3} &amp;= 
+	\frac{1}{8} \left( e^x \left( x^2 + 6x - 2 \right) + 2e^{x/2} \right) \\
+\frac{d^4f(x)}{dx^4} &amp;= 
+	\frac{1}{8} \left( e^x \left( x^2 + 8x + 4 \right) + e^{x/2} \right).
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Cool! The righthand side of &lt;script type=&quot;math/tex&quot;&gt;\frac{d^4f(x)}{dx^4} &gt; 0&lt;/script&gt; since &lt;script type=&quot;math/tex&quot;&gt;x &gt; 0&lt;/script&gt;. 
+Also, we have that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{df(0)}{dx} = \frac{d^2f(0)}{dx^2} = \frac{d^3f(0)}{dx^3} = 0,&lt;/script&gt;
+
+&lt;p&gt;which means we’re in good shape (because the fourth derivative being positive). 
+In particular, we integrate the fourth derivative four times and conclude that 
+our original function that is always greater than zero&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+0 \le
+\int \frac{d^4f(x)}{dx^4} \, d^4x &amp;= \frac{e^x (x^2 - 8)}{8} + 2 e^{(x/2)}
+	+ \frac{c_1 x^3}{6} + \frac{c_2 x^2}{2} + c_3 x + c_4 \\
+		&amp;= e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1,
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;c_4 = -1&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;c_3 = 0&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;c_2 = 1/4&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;c_1 = 0&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h4 id=&quot;remarks&quot;&gt;Remarks&lt;/h4&gt;
+
+&lt;p&gt;This inequality is neat because you can approach it a few different ways. If
+we didn’t use &lt;script type=&quot;math/tex&quot;&gt;x = z - y&lt;/script&gt;, and worked directly with the function of &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt;
+and &lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt;, we could’ve gotten away with taking two derivatives instead of 
+four. I find the “&lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt;-consolidated”, “fourth derivative” approach easier 
+as it requires less bookkeeping for &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;And the best for last: the easiest way to solve this problem is to plot it. 😏&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… more Rademacher rad-ness, modified logarithmic Sobolev inequalities &lt;strong&gt;or&lt;/strong&gt; 
+bandits!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Chapter 5 of (my new favorite book):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…</summary></entry><entry><title type="html">Upper confidence bounds</title><link href="http://localhost:4000/jekyll/update/2018/04/18/ucb.html" rel="alternate" type="text/html" title="Upper confidence bounds" /><published>2018-04-18T21:00:00-06:00</published><updated>2018-04-18T21:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/18/ucb</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/18/ucb.html">&lt;p&gt;Today we’re going to prove the upper bound that results from the upper
 confidence bound (UCB) strategy. The UCB strategy allowed us to bound
 the pseudo-regret by a term which is logarithmic in the number of
 rounds played. Generally speaking, “good” regret bounds for bandit problems
@@ -1358,85 +1443,4 @@ version of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;, &lt;em&gt;i
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.</summary></entry><entry><title type="html">A Poincaré inequality for the Laplace distribution</title><link href="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html" rel="alternate" type="text/html" title="A Poincaré inequality for the Laplace distribution" /><published>2018-02-24T13:30:00-07:00</published><updated>2018-02-24T13:30:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/24/poincare-inequality.html">&lt;p&gt;Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s
-&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt;. The book is (very)
-well written, self-contained, and full of lots of useful tools (&lt;em&gt;i.e.&lt;/em&gt;, theorems, lemmas,
-corollaries, and the like), as well as many thought provoking examples and exercises.&lt;/p&gt;
-
-&lt;p&gt;In this post, we’re going to work through a problem from Chapter 3, which is titled
-&lt;em&gt;Bounding the Variance&lt;/em&gt;, that proves a Poincaré-type inequality.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
-
-&lt;p&gt;Suppose we have a random variable &lt;script type=&quot;math/tex&quot;&gt;X \sim \mathrm{Laplace}(\lambda = 1)&lt;/script&gt;, with a density 
-given by&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;g(x) = \frac{1}{2}\exp(-|x|), \qquad x \in \reals.&lt;/script&gt;
-
-&lt;p&gt;Assume that we have a differentiable function &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; that has finite variance, &lt;em&gt;i.e.&lt;/em&gt;,
-&lt;script type=&quot;math/tex&quot;&gt;% &lt;![CDATA[
-\Var(f(X)) &lt; \infty %]]&gt;&lt;/script&gt;. We’re going to prove that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\Var(f(X)) &lt; 4 \E \left[ (f'(X))^2 \right], %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;f'&lt;/script&gt; is the derivative of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-proof&quot;&gt;The proof&lt;/h3&gt;
-
-&lt;p&gt;First, take a moment to appreciate what this result says: the variance of the function
-of a relatively heavy-tailed distribution is controlled by its expected value; in other
-words, the tails of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; &lt;strong&gt;don’t&lt;/strong&gt; lead to wild behavior of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;. That’s cool!&lt;/p&gt;
-
-&lt;p&gt;We’ll use the following (&lt;em&gt;integration by parts&lt;/em&gt;) fact in the proof:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \big( h(X) \big) = h(0) + E \big( \mathrm{sgn}(X) h'(X) \big),&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\mathrm{sgn}&lt;/script&gt; is the function that returns -1 when its argument is negative and
-+1 when its argument is positive.&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\Var(f(X)) &amp;\stackrel{\textsf{(a)}}{=} \Var(f(X) - f(0)) \\
-	&amp;\stackrel{\textsf{def}}{=} \Var(h(X)) \\
-	&amp;\stackrel{\textsf{(b)}}{\le} \E \left[ \big( h(X) \big)^2 \right] \\
-	&amp;\stackrel{\textsf{(c)}}{=} 2 \E \left[ \mathrm{sgn}(X) h'(X) h(X) \right] \\
-	&amp;\stackrel{\textsf{(d)}}{\le} 2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
-								  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2}. \\	
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Now we compare the third and fifth lines and note that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\E \left[ \big( h(X) \big)^2 \right] &amp;\le 
-	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2}
-	  \left(\E \left[\big(h(X)\big)^2\right]\right)^{1/2} \\
-\left(\E \left[ \big( h(X) \big)^2 \right]\right)^{1/2} &amp;\le 
-	2 \left(\E \left[\big(h'(X)\big)^2\right]\right)^{1/2} \\
-\E \left[ \big( h(X) \big)^2 \right] &amp;\le 
-	4 \E \left[\big(h'(X)\big)^2\right].
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Finally, we chain everything together and we complete the proof:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(f(X)) \le 4 \E \left[\big(h'(X)\big)^2\right].&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Tips and tricks.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;In &lt;strong&gt;(a)&lt;/strong&gt; we used that the variance of a random variable is not changed when a constant
-is added to the random variable, &lt;em&gt;i.e.&lt;/em&gt;, when we translate it.&lt;/li&gt;
-  &lt;li&gt;In &lt;strong&gt;(b)&lt;/strong&gt; we used that &lt;script type=&quot;math/tex&quot;&gt;\Var(Y) + (\E Y)^2 = \E(Y^2)&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;In &lt;strong&gt;(c)&lt;/strong&gt; we used the &lt;em&gt;integration by parts&lt;/em&gt; fact.&lt;/li&gt;
-  &lt;li&gt;In &lt;strong&gt;(d)&lt;/strong&gt; we used the Cauchy-Schwarz inequality.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Lately, I’ve been reading and working through Boucheron, Lugosi, and Massart’s Concentration Inequalities: A Nonasymptotic Theory of Independence. The book is (very) well written, self-contained, and full of lots of useful tools (i.e., theorems, lemmas, corollaries, and the like), as well as many thought provoking examples and exercises.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.</summary></entry></feed>

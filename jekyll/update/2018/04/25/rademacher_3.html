@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Rademachers are rad - part III
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Rademachers are rad - part III | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Rademachers are rad - part III" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact)." />
+<meta property="og:description" content="After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact)." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-04-25T17:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact).","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html","headline":"Rademachers are rad - part III","dateModified":"2018-04-25T17:00:00-06:00","datePublished":"2018-04-25T17:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Rademachers are rad - part III</h1>
+    <p class="post-meta">Apr 25, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
+once again. We’re going to prove a minimax lower bound for an expert prediction
+problem. As we’ll see, Rademacher random variables will come to our rescue 
+(twice, in fact).</p>
+
+<h3 id="prediction-with-experts">Prediction with experts</h3>
+
+<p>Let’s say that we disagree with statistical learning theory on philosophical grounds,
+<em>i.e.</em>, we don’t believe that our data are generated via a stochastic model that
+assumes independence (or exchangeability). Can we predict in the absence of a
+statistical assumptions? If so, how would we do it?</p>
+
+<ul>
+  <li><em>Can we predict in the absence of a statistical assumptions?</em> <strong>Yes!</strong></li>
+  <li><em>If so, how could we do it?</em> <strong>Using the advice of experts!</strong></li>
+</ul>
+
+<p>The <strong>prediction with expert advice</strong> framework has the following set up:</p>
+
+<ul>
+  <li>a decision space <script type="math/tex">\mathcal{D}</script>;</li>
+  <li>an outcome space <script type="math/tex">\mathcal{Y}</script>;</li>
+  <li>a loss function <script type="math/tex">l</script>; and</li>
+  <li>a set of expert indices <script type="math/tex">\mathcal{E}</script>;</li>
+</ul>
+
+<p>At each time <script type="math/tex">t = 1, 2, \dots</script></p>
+<ol>
+  <li>the environment chooses the next outcome <script type="math/tex">y_t</script> and the experts choose
+ <script type="math/tex">\left\{ f_{E,t} \in \mathcal{D} \mid E \in \mathcal{E} \right\}</script>;</li>
+  <li>the expert advice is provided to the forecaster;</li>
+  <li>the forecast chooses a prediction <script type="math/tex">\widehat{p}_t \in \mathcal{D}</script>;</li>
+  <li>the environment reveals the next outcome <script type="math/tex">y_t \in \mathcal{Y}</script>;</li>
+  <li>the forecaster incurs a loss <script type="math/tex">l(\widehat{p}_t, y_t)</script> and each expert <script type="math/tex">E</script> incurs
+ a loss <script type="math/tex">l(f_{E,t}, y_t)</script>.</li>
+</ol>
+
+<h3 id="minimax-lower-bound">Minimax lower bound</h3>
+
+<p>We want to show that if <script type="math/tex">l</script> is the absolute loss, then</p>
+
+<script type="math/tex; mode=display">\sup_{n,N} \frac{\mathfrak{M}(n,N,l)}{\sqrt{(n/2) \ln N}} \ge 1</script>
+
+<p>where the minimax regret <script type="math/tex">\mathfrak{M}</script> for <script type="math/tex">n</script> rounds is defined as</p>
+
+<script type="math/tex; mode=display">\mathfrak{M}(n,N,l) = \inf_P \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
+	\sup_{y^n \in \mathcal{Y}^n} \max_{i=1,\dots,N}
+	\left\{ \sum_{i=1}^n l(\hat{p}_t, y_t) - l \left( f_{i,t}, y_t \right) \right\},</script>
+
+<p>with <script type="math/tex">\mathcal{F}</script> is a set of <script type="math/tex">N</script> static experts, <script type="math/tex">P</script> is a forecasting strategy, 
+<script type="math/tex">l</script> is a <script type="math/tex">[0,1]</script>-valued convex loss function, and <script type="math/tex">n</script> is the number of rounds.
+(A static expert is one with constant-valued predictions, <em>i.e.</em>, they only depend on the 
+current round.)</p>
+
+<h3 id="proof">Proof</h3>
+
+<p>We’re going to lower bound a lower bound on <script type="math/tex">\mathfrak{M}(n,N,l)</script>, which may seem
+odd, but is a fairly common technique. (So keep it in your back pocket the next time
+you have to bound something.) In particular, we’re going to use the fact that a fixed
+class of static experts lower bounds the minimax regret as</p>
+
+<script type="math/tex; mode=display">\mathfrak{M}(n,N,l) \ge 
+	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l)</script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">\mathfrak{M}(n, \mathcal{F}, l) = \inf_P \sup_{y^n \in \{0,1\}} \sup_{f \in \mathcal{F}}
+	\left\{ \sum_{t=1}^n |\hat{p}_t - y_t| -  |f_t - y_t| \right\}.</script>
+
+<p>Then we’ll lower bound <script type="math/tex">\mathfrak{M}(n, \mathcal{F}, l)</script>, which implies the minimax
+regret bound.</p>
+
+<p>First, we use the <em>average-is-less-than-the-max</em> trick to get</p>
+
+<script type="math/tex; mode=display">\mathfrak{M}(n, \mathcal{F}, l) \ge \inf_P \E \left[ \sup_{f \in \mathcal{F}}
+	\left\{ \sum_{t=1}^n |\hat{p}_t - Y_t| -  |f_t - Y_t| \right\} \right],</script>
+
+<p>where the expectation is over the randomness in <script type="math/tex">Y_t</script>. By the definitions of the 
+infimum and supremum, we can rewrite this guy as</p>
+
+<script type="math/tex; mode=display">\inf_P \E \left[ \sum_{t=1}^n |\hat{p}_t - Y_t| \right] -  
+ \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right].</script>
+
+<p>Okay, cool. Now we’re going to use the fact that 
+<script type="math/tex">\E \sum_{t=1}^n |\hat{p}_t - Y_t| = n/2</script> for all
+forecasting strategies because of the randomness of the <script type="math/tex">Y_t</script>. (To see this, split the
+absolute value into two parts, enjoy some nice cancellations and sum it all up.)
+We’ll use this fact and then introduce some Rademacher random variables defined as 
+<script type="math/tex">W_t = 1 - 2Y_t</script> to write</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathfrak{M}(n, \mathcal{F}, l) &\ge 
+\frac{n}{2} - \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right] \\
+	&= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \frac{1}{2} - |f_t - Y_t| \right]\\
+	&= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n 
+		\left( \frac{1}{2} - f_t \right)  W_t \right].
+\end{align*} %]]></script>
+
+<p>Now, let’s take supremums of both sides, do another Rademacher trick, and then 
+exploit the symmetry of Rademachers:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) 
+	&\ge \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
+		\E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \left( \frac{1}{2} - f_t \right) 
+		 W_t \right] \\
+	&\ge \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} W_t \right] \\
+	&= \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} \right],
+\end{align*} %]]></script>
+
+<p>where we used that <script type="math/tex">(1/2)(1 - 2f_t) = (1/2)Z_{i,t}</script> and <script type="math/tex">Z_{i,t}W_t \sim Z_{i,t}</script>.</p>
+
+<p>The final step is an appeal to <em>ye-old</em> central limit theorem and a maximal inequality
+for (sub-)Gaussian random variables. The CLT says that for each <script type="math/tex">i = 1,\dots,N</script></p>
+
+<script type="math/tex; mode=display">\frac{1}{\sqrt{n}} \sum_{t=1}^n Z_{i,t} \sim N(0,1) \implies
+\lim_{n \to \infty} \E \left[ \frac{1}{\sqrt{n}} \max_{i=1,...,N} 
+								\sum_{t=1}^n Z_{i,t} \right] =
+	\E \left[ \max_{i=1,...,N} X_i \right].</script>
+
+<p>for standard normals <script type="math/tex">X_1,\dots,X_n</script>. The maximal inequality gives</p>
+
+<script type="math/tex; mode=display">\E \left[ \max_{i=1,...,N} X_i \right] \le \sqrt{2 \ln N}.</script>
+
+<p>Now, we stitch everything back together and conclude the proof with</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathfrak{M}(n,N,l) &\ge 
+	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) \\
+	&\ge \frac{\E \left[ \max_{i=1,...,N} X_i \right]}{\sqrt{2 \ln N}} \\
+	&\ge 1.
+\end{align*} %]]></script>
+
+<p>Rademacher’s to the rescue once again.</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… modified logarithmic Sobolev inequalities <strong>or</strong> bandits!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is related to material from Chapters 2 and 3 of:</p>
+
+<ul>
+  <li><em>Prediction, Learning, and Games</em> by N. Cesa-Bianchi and G. Lugosi.</li>
+</ul>
+
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

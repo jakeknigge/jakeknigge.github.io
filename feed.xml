@@ -1,5 +1,153 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-21T19:25:42-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">A neat inequality</title><link href="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" rel="alternate" type="text/html" title="A neat inequality" /><published>2018-04-21T17:00:00-06:00</published><updated>2018-04-21T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/21/ineq</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/21/ineq.html">&lt;p&gt;As promised, this post will be about the useful inequality from 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-25T20:01:45-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Rademachers are rad - part III</title><link href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" rel="alternate" type="text/html" title="Rademachers are rad - part III" /><published>2018-04-25T17:00:00-06:00</published><updated>2018-04-25T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/25/rademacher_3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html">&lt;p&gt;After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
+once again. We’re going to prove a minimax lower bound for an expert prediction
+problem. As we’ll see, Rademacher random variables will come to our rescue 
+(twice, in fact).&lt;/p&gt;
+
+&lt;h3 id=&quot;prediction-with-experts&quot;&gt;Prediction with experts&lt;/h3&gt;
+
+&lt;p&gt;Let’s say that we disagree with statistical learning theory on philosophical grounds,
+&lt;em&gt;i.e.&lt;/em&gt;, we don’t believe that our data are generated via a stochastic model that
+assumes independence (or exchangeability). Can we predict in the absence of a
+statistical assumptions? If so, how would we do it?&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Can we predict in the absence of a statistical assumptions?&lt;/em&gt; &lt;strong&gt;Yes!&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;If so, how could we do it?&lt;/em&gt; &lt;strong&gt;Using the advice of experts!&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The &lt;strong&gt;prediction with expert advice&lt;/strong&gt; framework has the following set up:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a decision space &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}&lt;/script&gt;;&lt;/li&gt;
+  &lt;li&gt;an outcome space &lt;script type=&quot;math/tex&quot;&gt;\mathcal{Y}&lt;/script&gt;;&lt;/li&gt;
+  &lt;li&gt;a loss function &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt;; and&lt;/li&gt;
+  &lt;li&gt;a set of expert indices &lt;script type=&quot;math/tex&quot;&gt;\mathcal{E}&lt;/script&gt;;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At each time &lt;script type=&quot;math/tex&quot;&gt;t = 1, 2, \dots&lt;/script&gt;&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;the environment chooses the next outcome &lt;script type=&quot;math/tex&quot;&gt;y_t&lt;/script&gt; and the experts choose
+ &lt;script type=&quot;math/tex&quot;&gt;\left\{ f_{E,t} \in \mathcal{D} \mid E \in \mathcal{E} \right\}&lt;/script&gt;;&lt;/li&gt;
+  &lt;li&gt;the expert advice is provided to the forecaster;&lt;/li&gt;
+  &lt;li&gt;the forecast chooses a prediction &lt;script type=&quot;math/tex&quot;&gt;\widehat{p}_t \in \mathcal{D}&lt;/script&gt;;&lt;/li&gt;
+  &lt;li&gt;the environment reveals the next outcome &lt;script type=&quot;math/tex&quot;&gt;y_t \in \mathcal{Y}&lt;/script&gt;;&lt;/li&gt;
+  &lt;li&gt;the forecaster incurs a loss &lt;script type=&quot;math/tex&quot;&gt;l(\widehat{p}_t, y_t)&lt;/script&gt; and each expert &lt;script type=&quot;math/tex&quot;&gt;E&lt;/script&gt; incurs
+ a loss &lt;script type=&quot;math/tex&quot;&gt;l(f_{E,t}, y_t)&lt;/script&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;minimax-lower-bound&quot;&gt;Minimax lower bound&lt;/h3&gt;
+
+&lt;p&gt;We want to show that if &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; is the absolute loss, then&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{n,N} \frac{\mathfrak{M}(n,N,l)}{\sqrt{(n/2) \ln N}} \ge 1&lt;/script&gt;
+
+&lt;p&gt;where the minimax regret &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}&lt;/script&gt; for &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds is defined as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n,N,l) = \inf_P \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
+	\sup_{y^n \in \mathcal{Y}^n} \max_{i=1,\dots,N}
+	\left\{ \sum_{i=1}^n l(\hat{p}_t, y_t) - l \left( f_{i,t}, y_t \right) \right\},&lt;/script&gt;
+
+&lt;p&gt;with &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F}&lt;/script&gt; is a set of &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; static experts, &lt;script type=&quot;math/tex&quot;&gt;P&lt;/script&gt; is a forecasting strategy, 
+&lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; is a &lt;script type=&quot;math/tex&quot;&gt;[0,1]&lt;/script&gt;-valued convex loss function, and &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; is the number of rounds.
+(A static expert is one with constant-valued predictions, &lt;em&gt;i.e.&lt;/em&gt;, they only depend on the 
+current round.)&lt;/p&gt;
+
+&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
+
+&lt;p&gt;We’re going to lower bound a lower bound on &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}(n,N,l)&lt;/script&gt;, which may seem
+odd, but is a fairly common technique. (So keep it in your back pocket the next time
+you have to bound something.) In particular, we’re going to use the fact that a fixed
+class of static experts lower bounds the minimax regret as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n,N,l) \ge 
+	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l)&lt;/script&gt;
+
+&lt;p&gt;where&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l) = \inf_P \sup_{y^n \in \{0,1\}} \sup_{f \in \mathcal{F}}
+	\left\{ \sum_{t=1}^n |\hat{p}_t - y_t| -  |f_t - y_t| \right\}.&lt;/script&gt;
+
+&lt;p&gt;Then we’ll lower bound &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l)&lt;/script&gt;, which implies the minimax
+regret bound.&lt;/p&gt;
+
+&lt;p&gt;First, we use the &lt;em&gt;average-is-less-than-the-max&lt;/em&gt; trick to get&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l) \ge \inf_P \E \left[ \sup_{f \in \mathcal{F}}
+	\left\{ \sum_{t=1}^n |\hat{p}_t - Y_t| -  |f_t - Y_t| \right\} \right],&lt;/script&gt;
+
+&lt;p&gt;where the expectation is over the randomness in &lt;script type=&quot;math/tex&quot;&gt;Y_t&lt;/script&gt;. By the definitions of the 
+infimum and supremum, we can rewrite this guy as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\inf_P \E \left[ \sum_{t=1}^n |\hat{p}_t - Y_t| \right] -  
+ \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right].&lt;/script&gt;
+
+&lt;p&gt;Okay, cool. Now we’re going to use the fact that 
+&lt;script type=&quot;math/tex&quot;&gt;\E \sum_{t=1}^n |\hat{p}_t - Y_t| = n/2&lt;/script&gt; for all
+forecasting strategies because of the randomness of the &lt;script type=&quot;math/tex&quot;&gt;Y_t&lt;/script&gt;. (To see this, split the
+absolute value into two parts, enjoy some nice cancellations and sum it all up.)
+We’ll use this fact and then introduce some Rademacher random variables defined as 
+&lt;script type=&quot;math/tex&quot;&gt;W_t = 1 - 2Y_t&lt;/script&gt; to write&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\mathfrak{M}(n, \mathcal{F}, l) &amp;\ge 
+\frac{n}{2} - \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right] \\
+	&amp;= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \frac{1}{2} - |f_t - Y_t| \right]\\
+	&amp;= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n 
+		\left( \frac{1}{2} - f_t \right)  W_t \right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Now, let’s take supremums of both sides, do another Rademacher trick, and then 
+exploit the symmetry of Rademachers:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) 
+	&amp;\ge \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
+		\E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \left( \frac{1}{2} - f_t \right) 
+		 W_t \right] \\
+	&amp;\ge \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} W_t \right] \\
+	&amp;= \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} \right],
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;where we used that &lt;script type=&quot;math/tex&quot;&gt;(1/2)(1 - 2f_t) = (1/2)Z_{i,t}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z_{i,t}W_t \sim Z_{i,t}&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;The final step is an appeal to &lt;em&gt;ye-old&lt;/em&gt; central limit theorem and a maximal inequality
+for (sub-)Gaussian random variables. The CLT says that for each &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,N&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{1}{\sqrt{n}} \sum_{t=1}^n Z_{i,t} \sim N(0,1) \implies
+\lim_{n \to \infty} \E \left[ \frac{1}{\sqrt{n}} \max_{i=1,...,N} 
+								\sum_{t=1}^n Z_{i,t} \right] =
+	\E \left[ \max_{i=1,...,N} X_i \right].&lt;/script&gt;
+
+&lt;p&gt;for standard normals &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt;. The maximal inequality gives&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \left[ \max_{i=1,...,N} X_i \right] \le \sqrt{2 \ln N}.&lt;/script&gt;
+
+&lt;p&gt;Now, we stitch everything back together and conclude the proof with&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\mathfrak{M}(n,N,l) &amp;\ge 
+	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) \\
+	&amp;\ge \frac{\E \left[ \max_{i=1,...,N} X_i \right]}{\sqrt{2 \ln N}} \\
+	&amp;\ge 1.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Rademacher’s to the rescue once again.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… modified logarithmic Sobolev inequalities &lt;strong&gt;or&lt;/strong&gt; bandits!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Chapters 2 and 3 of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; by N. Cesa-Bianchi and G. Lugosi.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact).</summary></entry><entry><title type="html">A neat inequality</title><link href="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" rel="alternate" type="text/html" title="A neat inequality" /><published>2018-04-21T17:00:00-06:00</published><updated>2018-04-21T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/21/ineq</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/21/ineq.html">&lt;p&gt;As promised, this post will be about the useful inequality from 
 &lt;a href=&quot;/jekyll/update/2018/04/07/lsi.html&quot;&gt;logarithmic Sobolev inequality post&lt;/a&gt;. Without further ado…&lt;/p&gt;
 
 &lt;h3 id=&quot;starting-simple&quot;&gt;Starting simple&lt;/h3&gt;
@@ -1333,114 +1481,4 @@ by a bounded amount if the value of the &lt;script type=&quot;math/tex&quot;&gt;
 	| f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_i',x_{i+1},\dots,x_n) |
 	\le c_i,&lt;/script&gt;
 
-&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and constants &lt;script type=&quot;math/tex&quot;&gt;c_1,\dots,c_n&lt;/script&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to play with Rademacher random variables, which are quite useful in many problems that arise in “modern” statistics and machine learning problems. They also pop up in empirical process theory and geometry. So, it’s safe to say that we should at least be acquainted with them.</summary></entry><entry><title type="html">Better bounds: moment vs. Chernoff</title><link href="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html" rel="alternate" type="text/html" title="Better bounds: moment vs. Chernoff" /><published>2018-02-28T20:00:00-07:00</published><updated>2018-02-28T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/02/28/moment-v-chernoff.html">&lt;p&gt;In this post, we’re going to work through a problem from Chapter 2 of
-&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt;. The exercise 
-shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
-
-&lt;p&gt;Our task to show that moment bounds are &lt;strong&gt;always&lt;/strong&gt; better than Cramér–Chernoff bounds.
-Assume we have a nonnegative random variable &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; and a positive number &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;. The best
-moment bound is &lt;script type=&quot;math/tex&quot;&gt;\prob(Y \ge t) = \min_{q \in \integers} \E(Y^q)t^{-q}&lt;/script&gt;. On the other
-hand, the best Cramér–Chernoff bound is &lt;script type=&quot;math/tex&quot;&gt;\inf_{\lambda &gt; 0} \E e^{\lambda(Y-t)}&lt;/script&gt;. So,
-our job is to show that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\min_{q \in \integers} \E(Y^q)t^{-q} \le \inf_{\lambda &gt; 0} \E e^{\lambda(Y-t)}.&lt;/script&gt;
-
-&lt;h3 id=&quot;the-proof&quot;&gt;The proof&lt;/h3&gt;
-
-&lt;p&gt;We’re going to write the &lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt;-th moment of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; as &lt;script type=&quot;math/tex&quot;&gt;m^q&lt;/script&gt;. Now, we’ll write the 
-moment generating function of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; as a series&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E e^{\lambda Y} = \sum_{k=1}^\infty \frac{\lambda^k m^k}{k!},&lt;/script&gt;
-
-&lt;p&gt;which allows us to write the shifted moment generating function as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E e^{\lambda(Y-t)} = \left. \sum_{k=1}^\infty \frac{\lambda^k m^k}{k!} 
-						 \middle/
-						\sum_{k=1}^\infty \frac{\lambda^k t^k}{k!}  \right.&lt;/script&gt;
-
-&lt;p&gt;By assumption, &lt;script type=&quot;math/tex&quot;&gt;q&lt;/script&gt; is the integer that minimizes &lt;script type=&quot;math/tex&quot;&gt;\E(Y^q)t^{-q}&lt;/script&gt;, which means
-that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E(Y^q)t^{-q} = \frac{m^q}{t^q}
-	\le \left. \frac{\lambda^k m^k}{k!} \middle/ \frac{\lambda^k t^k}{k!} \right.
-	= \frac{m^k}{t^k!} \qquad \textsf{for } t \in \reals_{++} \text{ and } k \in \integers_+.&lt;/script&gt;
-
-&lt;p&gt;At this point, we’ve got the result because this holds for all &lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;, in particular, 
-when &lt;script type=&quot;math/tex&quot;&gt;k = 0&lt;/script&gt;. So, when we sum up the right-hand-side of the inequality 
-(from &lt;script type=&quot;math/tex&quot;&gt;k=0&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;\infty&lt;/script&gt;) and then take the infimum over &lt;script type=&quot;math/tex&quot;&gt;\lambda&lt;/script&gt;, we’re still 
-larger than the (optimal) moment bound.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Tips and tricks.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;For the analysts out there, there’s a nice result on ratios of series that provides
-(precise) justification for the result. Assume that &lt;script type=&quot;math/tex&quot;&gt;\sum_{k=0}^\infty x_k&lt;/script&gt; and 
-&lt;script type=&quot;math/tex&quot;&gt;\sum_{k=0}^\infty z_k&lt;/script&gt; are finite and that &lt;script type=&quot;math/tex&quot;&gt;c \le x_k / z_k&lt;/script&gt; for all &lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;. Then
-it can be shown that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-c \le \frac{\sum_{k=0}^\infty x_k}{\sum_{k=0}^\infty z_k}
-	\quad \text{and} \quad
-c &lt; \frac{\sum_{k=0}^\infty x_k}{\sum_{k=0}^\infty z_k} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;when &lt;script type=&quot;math/tex&quot;&gt;x_i / z_i \neq x_j / z_j&lt;/script&gt; for at least one &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;j&lt;/script&gt; pair.&lt;/p&gt;
-
-&lt;p&gt;We can use this result by setting&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;c = \min_{q \in \integers} \E(Y^q)t^{-q}, \qquad
-	x_k = \frac{\lambda^k m^k}{k!}, \qquad 
-	z_k = \frac{\lambda^k t^k}{k!},&lt;/script&gt;
-
-&lt;p&gt;and noting that the ratio &lt;script type=&quot;math/tex&quot;&gt;x_k/z_k&lt;/script&gt; changes for different values of &lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;final-thoughts&quot;&gt;Final thoughts&lt;/h3&gt;
-
-&lt;p&gt;Although moment bounds can be much tighter than Cramér–Chernoff bounds, working with 
-the latter is often (much, much) easier. For example, Cramér–Chernoff bounds play 
-nicely with sums of random variables.&lt;/p&gt;
-
-&lt;p&gt;Interestingly, Markov’s inequality and Chebyshev’s inequality, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(Y \ge t) \le \frac{\E Y}{t} \quad \text{and} \quad
-\prob(|Y - \E Y| \ge t) \le \frac{\Var(Y)}{t^2}&lt;/script&gt;
-
-&lt;p&gt;are often not as sharp as Cramér–Chernoff bounds.&lt;/p&gt;
-
-&lt;p&gt;For example, let &lt;script type=&quot;math/tex&quot;&gt;Y \sim \text{Poisson}(\beta)&lt;/script&gt;. The mean of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt; is 
-&lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt; and the variance is &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;. The moment generating function of the centered
-version of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;, &lt;script type=&quot;math/tex&quot;&gt;Z = Y - \beta&lt;/script&gt; is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E e^{\lambda Y} = e^{-\lambda \beta - \beta} e^{\beta e^\lambda}.&lt;/script&gt;
-
-&lt;p&gt;The optimal value of &lt;script type=&quot;math/tex&quot;&gt;\lambda&lt;/script&gt; which minimizes this expression is 
-&lt;script type=&quot;math/tex&quot;&gt;\lambda = \log(1 + t/\beta)&lt;/script&gt;. So, we have that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\inf_{\lambda &gt; 0} \E e^{\lambda(Y-t)} = e^t(1+t/\beta)^{-(\beta+t)}.&lt;/script&gt;
-
-&lt;p&gt;Say &lt;script type=&quot;math/tex&quot;&gt;\beta = 100&lt;/script&gt; and we set &lt;script type=&quot;math/tex&quot;&gt;t = 20&lt;/script&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Markov: 100/20 = 5, which is useless;&lt;/li&gt;
-  &lt;li&gt;Chebyshev: 100/400 = 0.25;&lt;/li&gt;
-  &lt;li&gt;Cramér–Chernoff: see formula above = 0.153;&lt;/li&gt;
-  &lt;li&gt;actual: 0.023.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now turn up &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt; to 50.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Markov: 100/50 = 2, which is still useless;&lt;/li&gt;
-  &lt;li&gt;Chebyshev: 100/2500 = 0.004;&lt;/li&gt;
-  &lt;li&gt;Cramér–Chernoff: &lt;script type=&quot;math/tex&quot;&gt;2\times10^{-5}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;actual: &lt;script type=&quot;math/tex&quot;&gt;1.23\times10^{-6}&lt;/script&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through a problem from Chapter 2 of Concentration Inequalities: A Nonasymptotic Theory of Independence. The exercise shows that moment bounds can be tighter than Cramér–Chernoff-type bounds.</summary></entry></feed>
+&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and constants &lt;script type=&quot;math/tex&quot;&gt;c_1,\dots,c_n&lt;/script&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to play with Rademacher random variables, which are quite useful in many problems that arise in “modern” statistics and machine learning problems. They also pop up in empirical process theory and geometry. So, it’s safe to say that we should at least be acquainted with them.</summary></entry></feed>

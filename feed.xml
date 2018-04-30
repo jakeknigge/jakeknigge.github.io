@@ -1,5 +1,81 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-25T20:01:45-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Rademachers are rad - part III</title><link href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" rel="alternate" type="text/html" title="Rademachers are rad - part III" /><published>2018-04-25T17:00:00-06:00</published><updated>2018-04-25T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/25/rademacher_3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html">&lt;p&gt;After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-29T21:16:41-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">The entropy method</title><link href="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html" rel="alternate" type="text/html" title="The entropy method" /><published>2018-04-29T22:00:00-06:00</published><updated>2018-04-29T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html">&lt;p&gt;Welcome back! This post is going to start us down the path of the &lt;strong&gt;entropy method&lt;/strong&gt;
+for obtaining concentration inequalities. The idea is pretty straightforward. We
+take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type 
+argument, derive exponential concentration inequalities.&lt;/p&gt;
+
+&lt;p&gt;In a deviation from previous posts, we’re going to take as given the concentration
+behavior (&lt;em&gt;i.e.&lt;/em&gt;, we’re doing an example instead of a proof) and look at a neat 
+application that puts it to work.&lt;/p&gt;
+
+&lt;h3 id=&quot;an-eigenvalue-bound&quot;&gt;An eigenvalue bound&lt;/h3&gt;
+
+&lt;p&gt;The largest eigenvalue of a random symmetric matrix is a quantity that naturally
+arises in many “modern” statistical problems—&lt;em&gt;e.g.&lt;/em&gt;, in random correlation matrices. 
+We can describe the behavior of the variance of this eigenvalue using the Efron–Stein 
+inequality; however, we can obtain concentration convergence rates using the entropy
+method. In particular, we’ll use bounded differences-inspired condition to evoke
+a fast concentration inequality.&lt;/p&gt;
+
+&lt;p&gt;Assume we have independent random &lt;script type=&quot;math/tex&quot;&gt;X_{ij}, 1 \le i \le j \le n&lt;/script&gt; that are bounded
+by 1 in absolute value. The symmetric matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; has entries &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt;. Our 
+object of interest is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \lambda_{\max} = \sup_{\|u\| = 1} u^T A u = v^T A v,&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt; is the eigenvector associated with &lt;script type=&quot;math/tex&quot;&gt;\lambda_{\max}&lt;/script&gt;. Assume that
+&lt;script type=&quot;math/tex&quot;&gt;\tilde{X}_{ij}&lt;/script&gt; is an independent copy of &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\tilde{A}_{ij}&lt;/script&gt;
+is the matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; with entropy &lt;script type=&quot;math/tex&quot;&gt;(i,j)&lt;/script&gt; replaced by the independent copy.
+Similarly, let &lt;script type=&quot;math/tex&quot;&gt;\tilde{Z}_{ij}&lt;/script&gt; be the maximum eigenvalue of &lt;script type=&quot;math/tex&quot;&gt;\tilde{A}_{ij}&lt;/script&gt;.
+Here’s where it starts to get good.&lt;/p&gt;
+
+&lt;p&gt;In the spirit of bounded differences, we can calculate&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\big(Z - \tilde{Z}_{ij}\big)_+ &amp;\le 
+	(v^TAv - v^T\tilde{A}_{ij}v) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
+	&amp;= \big( v^T(A-\tilde{A}_{ij})v \big) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
+	&amp;\le 2 \left( v_i v_j \left( X_{ij} - \tilde{X}_{ij} \right) \right)_+ \\
+	&amp;\le 4 |v_i v_j|.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The first line results from the assumption on &lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt; and the use of the indicator variable.
+The third line follows from a rewriting of the matrix multiplication and the observation
+that all but two entries of the sum cancel each other.&lt;/p&gt;
+
+&lt;p&gt;If we throw this guy into the Efron–Stein inequality, we get that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le 16.&lt;/script&gt;
+
+&lt;p&gt;Now, we can use the logarithmic Sobolev machinery to get the exponential
+concentration inequality&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(Z - \E Z &gt; t) \le e^{-t^2 / (2c)} = e^{-t^2 / (32)},&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;c&lt;/script&gt; is a constant that bounds &lt;script type=&quot;math/tex&quot;&gt;\sum_{i=1}^n (Z - \tilde{Z}_{ij})^2&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;linear-algebra-aside&quot;&gt;Linear algebra aside&lt;/h3&gt;
+
+&lt;p&gt;A theorem from linear algebra tells us that the maximum eigenvalue of a symmetric
+matrix is upper-bounded by the largest row sum and lower-bounded the smallest row
+sum. So, the above ideas become interesting and useful when have big matrices…
+precisely the kind arising in &lt;em&gt;modern&lt;/em&gt; applications!&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… honestly, I’m not sure! I’m thinking we could start to unpack the machinery
+that supported our blind use of the entropy method. Or it could be about bandits,
+prediction with expert advice, Markov chains, something from convex optimization…&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Chapters 3 and 6 of:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Welcome back! This post is going to start us down the path of the entropy method for obtaining concentration inequalities. The idea is pretty straightforward. We take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type argument, derive exponential concentration inequalities.</summary></entry><entry><title type="html">Rademachers are rad - part III</title><link href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" rel="alternate" type="text/html" title="Rademachers are rad - part III" /><published>2018-04-25T17:00:00-06:00</published><updated>2018-04-25T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/25/rademacher_3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html">&lt;p&gt;After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
 once again. We’re going to prove a minimax lower bound for an expert prediction
 problem. As we’ll see, Rademacher random variables will come to our rescue 
 (twice, in fact).&lt;/p&gt;
@@ -1371,114 +1447,4 @@ R code to do it.&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality.</summary></entry><entry><title type="html">Rademachers are rad - part I</title><link href="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html" rel="alternate" type="text/html" title="Rademachers are rad - part I" /><published>2018-03-04T20:00:00-07:00</published><updated>2018-03-04T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/04/rademacher</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/04/rademacher.html">&lt;p&gt;In this post, we’re going to play with Rademacher random variables, which are
-quite useful in many problems that arise in “modern” statistics and machine 
-learning problems. They also pop up in empirical process theory and geometry.
-So, it’s safe to say that we should at least be acquainted with them.&lt;/p&gt;
-
-&lt;p&gt;In case Rademacher random variables are new to you, please meet the Rademacher 
-random variable &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;, which takes the values &lt;script type=&quot;math/tex&quot;&gt;+1&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;-1&lt;/script&gt; with probability
-&lt;script type=&quot;math/tex&quot;&gt;1/2&lt;/script&gt;. For those of you who prefer a more formal introduction, please meet the
-probability mass function of &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-f_Y(y) = 
-\begin{cases}
-+1, &amp; \textsf{with probability } 0.5 \\
--1, &amp; \textsf{with probability } 0.5.
-\end{cases} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Sometimes Rademacher random variables introduce themselves as &lt;em&gt;random sign 
-variables&lt;/em&gt;. Now, that we’ve been properly introduced, let’s move on to the fun 
-stuff.&lt;/p&gt;
-
-&lt;h3 id=&quot;rademacher-averages&quot;&gt;Rademacher averages&lt;/h3&gt;
-
-&lt;p&gt;To build a Rademacher average, we’ll need a collection of real numbers that
-are indexed by the number of variables we have &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; and an index set 
-&lt;script type=&quot;math/tex&quot;&gt;\mathcal{T}&lt;/script&gt;. We’ll also need some Rademacher variables &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt;.
-The &lt;strong&gt;Rademacher average&lt;/strong&gt; is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t} Y_i.&lt;/script&gt;
-
-&lt;p&gt;The random variable &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; depends on the &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; in a somewhat complicated way
-but we can see that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; cannot change by much if we changed the value of a
-single &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;. In particular, when we flip the value of &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; can 
-only change by &lt;script type=&quot;math/tex&quot;&gt;2\sup_{t \in \mathcal{T}} |a_{i,t}|&lt;/script&gt;. (The 2 comes from the
-Rademacher variable and the supremum-absolute value combo reflects the 
-“maximum” change.)&lt;/p&gt;
-
-&lt;p&gt;We can use this &lt;strong&gt;bounded differences property&lt;/strong&gt; and the Efron–Stein inequality
-to bound the &lt;script type=&quot;math/tex&quot;&gt;\Var(Z)&lt;/script&gt; even though we can’t say much about the behavior of 
-&lt;script type=&quot;math/tex&quot;&gt;\E Z&lt;/script&gt;, which is pretty rad.&lt;/p&gt;
-
-&lt;p&gt;In particular, we can say that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le \sum_{i=1}^n \frac{1}{4} \left( 
-		 	2\sup_{t \in \mathcal{T}} |a_{i,t}| \right)^2 =
-		 	\sum_{i=1}^n \sup_{t \in \mathcal{T}} a_{i,t}^2.&lt;/script&gt;
-
-&lt;p&gt;The inequality results from the bounded differences inequality (which we can
-prove using the Efron–Stein inequality).&lt;/p&gt;
-
-&lt;p&gt;But… we can do better.&lt;/p&gt;
-
-&lt;h4 id=&quot;sneaking-the-supremum-past-the-sum&quot;&gt;Sneaking the supremum past the sum&lt;/h4&gt;
-
-&lt;p&gt;Now, we define &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt; as an independent copy of &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt;.
-We’ll also set &lt;script type=&quot;math/tex&quot;&gt;t^\star&lt;/script&gt; to be the (possibly random) index that achieves
-the supremum, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t} Y_i 
-	= \sum_{i=1}^n a_{i,t^\star} Y_i.&lt;/script&gt;
-
-&lt;p&gt;So, we can bound the difference between &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; with the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th
-coordinate changed from &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; to &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt;. That is,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z - Z_i \le (Y_i - X_i) a_{i,t^\star}
-\implies
-(Z - Z_i)_+^2 \le (Y_i - X_i)^2 a_{i,t^\star}^2.&lt;/script&gt;
-
-&lt;p&gt;where in the implied inequality we square only the positive portion of
-&lt;script type=&quot;math/tex&quot;&gt;Z - Z_i&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now, we’ll use an expectation trick and the independence of &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;
-to say&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \left[ (Z - Z_i)_+^2 \right] \le 
-	\E \left[ \E \left( 
-		(Y_i - X_i)^2 a_{i,t^\star}^2 \mid Y_1,\dots,Y_n)
-	\right) \right] =
-	2 \E \left[ a_{i,t^\star}^2 \right].&lt;/script&gt;
-
-&lt;p&gt;We do the expectation-conditioning combo on &lt;script type=&quot;math/tex&quot;&gt;Y_1,\dots,Y_n&lt;/script&gt; to get rid of all
-randomness expect for that of &lt;script type=&quot;math/tex&quot;&gt;t^\star&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;Finally, we use the Efron–Stein inequality to say&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le 2 \E \left( \sum_{i=1}^n a_{i,t^\star}^2 \right) \le 
-	2 \sup_{t \in \mathcal{T}} \sum_{i=1}^n a_{i,t}^2.&lt;/script&gt;
-
-&lt;p&gt;So, through some Efron–Stein inspired analysis, we moved the supremum outside
-the sum at the expense of a factor of 2.&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from Chapter 3 of:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;bounded-differences-property&quot;&gt;Bounded differences property&lt;/h4&gt;
-
-&lt;p&gt;The bounded differences property states that the value of the function changes
-by a bounded amount if the value of the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th variable is changed. A function
-&lt;script type=&quot;math/tex&quot;&gt;f: \mathcal{S}^n \to \reals&lt;/script&gt; satisfies the bounded differences property if&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{\substack{x_1,\dots,x_n \\ x_i' \in \mathcal{S}}}
-	| f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_i',x_{i+1},\dots,x_n) |
-	\le c_i,&lt;/script&gt;
-
-&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and constants &lt;script type=&quot;math/tex&quot;&gt;c_1,\dots,c_n&lt;/script&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to play with Rademacher random variables, which are quite useful in many problems that arise in “modern” statistics and machine learning problems. They also pop up in empirical process theory and geometry. So, it’s safe to say that we should at least be acquainted with them.</summary></entry></feed>
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality.</summary></entry></feed>

@@ -1,24 +1,250 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-04-29T21:16:41-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">The entropy method</title><link href="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html" rel="alternate" type="text/html" title="The entropy method" /><published>2018-04-29T22:00:00-06:00</published><updated>2018-04-29T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html">&lt;p&gt;Welcome back! This post is going to start us down the path of the &lt;strong&gt;entropy method&lt;/strong&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-06T10:14:21-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Learning theory - statistical learning</title><link href="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html" rel="alternate" type="text/html" title="Learning theory - statistical learning" /><published>2018-05-06T11:30:00-06:00</published><updated>2018-05-06T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html">&lt;p&gt;Today’s post is the first in a set of three that will discuss two theories of learning.
+In particular, today’s post will cover (a very narrow aspect of)
+&lt;strong&gt;statistical learning theory&lt;/strong&gt;. The next post will present a game-theoretic
+view of learning, using &lt;strong&gt;online learning&lt;/strong&gt; as its primary analytical framework. The
+final post will connect the two perspectives.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-bit-of-background&quot;&gt;A bit of background&lt;/h3&gt;
+
+&lt;p&gt;Learning problems, specifically machine learning problems can be analyzed from at
+least two perspectives. In either case, our goal is to have a toolbox from which
+we can analyze how well a learning system works. For example, we want to be able to
+say when learning occurs, when it doesn’t, and how quickly it occurs or doesn’t. To
+make this problem tractable, we’ll require&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a model for the data;&lt;/li&gt;
+  &lt;li&gt;assumptions on the source of that data;&lt;/li&gt;
+  &lt;li&gt;functions to generate predictions;&lt;/li&gt;
+  &lt;li&gt;loss functions to assess the quality of our predictions; and&lt;/li&gt;
+  &lt;li&gt;learning algorithms to help us improve our predictions by understanding our losses.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;the-set-up&quot;&gt;The set-up&lt;/h3&gt;
+
+&lt;p&gt;We assume that our data consists of &lt;script type=&quot;math/tex&quot;&gt;(x, y)&lt;/script&gt; feature-output pairs with
+&lt;script type=&quot;math/tex&quot;&gt;x \in \reals^d&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;y \in \reals&lt;/script&gt;. The data comes from some &lt;strong&gt;fixed but unknown&lt;/strong&gt;
+source that could be &lt;strong&gt;stochastic&lt;/strong&gt; (as in the statistical learning framework) or
+&lt;strong&gt;nonstochastic&lt;/strong&gt; (as in online learning framework).&lt;/p&gt;
+
+&lt;p&gt;We a function &lt;script type=&quot;math/tex&quot;&gt;f: \reals^d \to \reals&lt;/script&gt; that maps data to
+estimates/forecasts/predictions. So, &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; gives us a mechanism to
+generate our own &lt;script type=&quot;math/tex&quot;&gt;\hat{y}&lt;/script&gt;’s that we can compare against the true &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt;’s; we assess
+our estimates via a loss function &lt;script type=&quot;math/tex&quot;&gt;l: \reals^n \times \reals \to \reals&lt;/script&gt;. You probably
+have many loss functions that you know and love…&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;squared-error loss: &lt;script type=&quot;math/tex&quot;&gt;l(y, \hat{y}) = \|y - \hat{y}\|^2_2&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;absolute-error: &lt;script type=&quot;math/tex&quot;&gt;l(y, \hat{y}) = \|y - \hat{y} \|_1&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;Kullback–Leibler: &lt;script type=&quot;math/tex&quot;&gt;l(y, \hat{y}) = y \log \frac{y}{\hat{y}}&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;hinge loss: &lt;script type=&quot;math/tex&quot;&gt;l(y, \hat{y}) = \max \{0, 1 - y \cdot \hat{y} \}&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;logistic loss: &lt;script type=&quot;math/tex&quot;&gt;l(y, \hat{y}) = \ln \frac{\hat{y}}{1 - \hat{y}}&lt;/script&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The final ingredient is a &lt;strong&gt;learning algorithm&lt;/strong&gt;, which we can think of as a map from data
+to models. This is way that V. Vapnik and A. Chervonenkis conceptualized learning
+algorithms and we think that it’s a useful mental model.&lt;/p&gt;
+
+&lt;p&gt;Before diving into either framework let’s give ourselves a learning goal: our algorithms
+should output good models with respect to the data source.&lt;/p&gt;
+
+&lt;h3 id=&quot;statistical-learning-theory&quot;&gt;Statistical learning theory&lt;/h3&gt;
+
+&lt;p&gt;In the statistical learning setting, we assume that our data is generated by a probability
+(&lt;em&gt;i.e.&lt;/em&gt;, stochastic) model with distribution
+&lt;script type=&quot;math/tex&quot;&gt;\mathcal{D} \subseteq \reals^d \times \reals&lt;/script&gt;. In particular, we’ll assume&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;(x, y) \stackrel{\textsf{i.i.d.}}{\sim} \mathcal{D}.&lt;/script&gt;
+
+&lt;p&gt;We are interested in learning by controlling the &lt;strong&gt;statistical risk&lt;/strong&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_{\mathcal{D}}(f) = \E \left[ l\big(f(X), Y\big) \right],&lt;/script&gt;
+
+&lt;p&gt;where the expectation is over the randomness in the data &lt;script type=&quot;math/tex&quot;&gt;(X,Y)&lt;/script&gt; and the model &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;
+belongs to some class of models &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F}&lt;/script&gt;. The class of models is a design
+parameter that we specify. For example, we could choose a set of linear predictors&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{F} = \left\{\theta \in \reals^d \mid x \mapsto \theta^T x\right\}.&lt;/script&gt;
+
+&lt;p&gt;Since we’re restricting our models to the class &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F}&lt;/script&gt;, we’re really interested
+in controlling our risk over that class. So we want a model&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f^\star \in \argmin_{f \in \mathcal{F}} R_{\mathcal{D}}(f).&lt;/script&gt;
+
+&lt;p&gt;But this is statistics, so we don’t have access to &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}&lt;/script&gt; at the population
+level. Instead, we have knowledge of &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}&lt;/script&gt; through &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; samples
+&lt;script type=&quot;math/tex&quot;&gt;(x_1,y_1),\dots,(x_n,y_n)&lt;/script&gt;. Hmmm…&lt;/p&gt;
+
+&lt;h3 id=&quot;empirical-risk-minimization&quot;&gt;Empirical risk minimization&lt;/h3&gt;
+
+&lt;p&gt;As statistically-minded individuals, we’ll use the &lt;strong&gt;empirical risk&lt;/strong&gt; as a surrogate
+for the population risk and pick our model as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f_n^\star \in \argmin_{f \in \mathcal{F}} R_n(f)
+	= \argmin_{f \in \mathcal{F}} \frac{1}{n} \sum_{i=1}^n l\big(f(x_i), y_i\big).&lt;/script&gt;
+
+&lt;p&gt;We want the empirical risk to a be a good proxy for the statistical risk. More
+specifically, we want it to be uniformly close to the statistical risk. By &lt;em&gt;uniformly
+close&lt;/em&gt;, we mean that we’re close over all models within our class and all data.&lt;/p&gt;
+
+&lt;p&gt;This might seem a bit extreme, but it prevents us from being lulled into believing we have
+a “good” model by getting easy training data or having an overly complex model
+class—think interpolating the data.&lt;/p&gt;
+
+&lt;h3 id=&quot;rademacher-complexity&quot;&gt;Rademacher complexity&lt;/h3&gt;
+
+&lt;p&gt;To help us assess our algorithms and models, we turn to &lt;strong&gt;Rademacher averages&lt;/strong&gt;, which
+is a Vapnik–Chervonenkis type notion of complexity that (also) has its origins in the
+Russian school of statistics (~1970s). We defined the empirical Rademacher average&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{R}_n(\mathcal{F}, S) = \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i f(x_i) \right],&lt;/script&gt;
+
+&lt;p&gt;for a class of functions &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; samples &lt;script type=&quot;math/tex&quot;&gt;S = \{x_1,\dots,x_n\}&lt;/script&gt;.
+Before moving on, note that the empirical Rademacher average does not depend on
+&lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt;, but only on the data. This will prove useful in the sequel.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Aside:&lt;/strong&gt; see the &lt;a href=&quot;/jekyll/update/2018/03/04/rademacher.html&quot;&gt;Rademachers are rad - part I&lt;/a&gt; and
+&lt;a href=&quot;/jekyll/update/2018/03/06/rademacher_2.html&quot;&gt;Rademachers are rad - part II&lt;/a&gt; post for Rademacher fun in the spirit of
+Rademacher complexity.&lt;/p&gt;
+
+&lt;h3 id=&quot;assessing-empirical-risk&quot;&gt;Assessing empirical risk&lt;/h3&gt;
+
+&lt;p&gt;Okay, now we’re going ready to assess how well empirical risk minimization works by
+studying the difference&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_{\mathcal{D}}(f) - R_{\mathcal{D}}(f^\star),&lt;/script&gt;
+
+&lt;p&gt;which is the difference between a suboptimal model and the optimal model—note that we
+don’t have an empirical risk term… yet.&lt;/p&gt;
+
+&lt;p&gt;Nonetheless, here goes. We can add and subtract the empirical risk getting&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) &amp;=
+	R_{\mathcal{D}}(f_n^\star) - R_n(f_n^\star) +
+		R_n(f_n^\star) - R_{\mathcal{D}}(f^\star) \\
+	&amp;\le \sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\} +
+		R_n(f^\star) - R_{\mathcal{D}}(f^\star).
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The &lt;script type=&quot;math/tex&quot;&gt;\sup&lt;/script&gt; term is a comparison of the selected model on the whole distribution versus
+the sample. The second term is the error of using the “best” model on the training sample
+versus the whole distribution. The inequality follows from the &lt;script type=&quot;math/tex&quot;&gt;\sup&lt;/script&gt; and the fact that
+&lt;script type=&quot;math/tex&quot;&gt;R_n(f_n^\star) \le R_n(f^\star)&lt;/script&gt; by definition of &lt;script type=&quot;math/tex&quot;&gt;f_n^\star&lt;/script&gt;. Also, we can interpret
+the first term as a measurement of how much the model overfits the data. And, in some
+sense, this is what we want to understand!&lt;/p&gt;
+
+&lt;h3 id=&quot;high-probability-bounds&quot;&gt;High probability bounds&lt;/h3&gt;
+
+&lt;p&gt;Both terms on the righthand side are random variables because they depend on the
+training data. So via Chernoff bounds (which we’re excluding from the current discussion),
+we can say that with probability &lt;script type=&quot;math/tex&quot;&gt;1 - \delta&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\} &amp;\le
+	\E \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right]+
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right) \\
+R_n(f^\star) - R_{\mathcal{D}}(f^\star) &amp;\le
+	\E \bigg[ R_n(f^\star) - R_{\mathcal{D}}(f^\star) \bigg]+
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right).
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The expected value of the second term is 0 because the expected value of the empirical
+risk, by our i.i.d. assumption, is the statistical risk. You can think of this term as
+a bias-like term. The first term is more interesting; it may have caused your
+Rademacher neurons to fire, but it’s not quite a Rademacher average… yet.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-ghost-sample&quot;&gt;The ghost sample&lt;/h3&gt;
+
+&lt;p&gt;Now, we’re going to use one of “modern” statistics favorite tricks: the &lt;strong&gt;ghost sample&lt;/strong&gt;.
+The ghost sample allows us to replace a (population) quantity by the sample quantity by
+pretending that we have access to a second, made-up sample from the distribution—it’s
+like we have a second training set. By the ghost sample trick (first equality) and
+Jensen’s inequality, our term is bounded as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right]
+	&amp;= \E_S \left[\sup_{f \in \mathcal{F}}
+		\bigg\{\E_{\tilde{S}} R_{\tilde{n}}(f) - R_n(f)\bigg\}\right]\\
+	&amp;\le \E_S \E_{\tilde{S}}
+		\left[\sup_{f \in \mathcal{F}}\big\{R_{\tilde{n}}(f) - R_n(f)\big\}\right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Okay, cool. The righthand side is the difference between two empirical risk quantities,
+one for the original training sample and the other for the ghost sample. We’re getting
+closer to bounding the overfitting term…&lt;/p&gt;
+
+&lt;h3 id=&quot;rademacher-magic&quot;&gt;Rademacher magic&lt;/h3&gt;
+
+&lt;p&gt;Now, we introduce Rademacher random variables &lt;script type=&quot;math/tex&quot;&gt;\sigma_i \sim \mathsf{Rademacher}&lt;/script&gt; into
+the problem which will allow us to bound the overfitting. Think of the Rademachers as
+randomly permuting an example from the training set with an example from the ghost sample.
+We want to control how much the risk changes when we exchange examples and do so via the
+empirical Rademacher average&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E_\sigma \left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \big( l_f(\tilde{z}_i) - l_f(z_i) \big) \right],&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;z_i = (x_i, y_i)&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;l_f(z_i)&lt;/script&gt; is the loss function for &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; evaluated on
+example &lt;script type=&quot;math/tex&quot;&gt;z_i&lt;/script&gt;. Now let’s manipulate this quantity, first distributing terms
+and then exchanging the supremum with a sum to get an inequality:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\E_\sigma &amp;\left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \big( l_f(\tilde{z}_i) - l_f(z_i) \big) \right]\\
+	&amp;= \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) +
+	   	\frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right] \\
+	&amp;\le \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) + \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right] \\
+	&amp;= \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	      \frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right] +
+		\E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	      \frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right].
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;So, this last calculation, the fact that &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt; has the same distribution as
+&lt;script type=&quot;math/tex&quot;&gt;-\sigma&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;z \sim \tilde{z}&lt;/script&gt;, imply that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right].&lt;/script&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… a short-and-sweet example of the material from this post and then the online learning
+perspective!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives.</summary></entry><entry><title type="html">The entropy method</title><link href="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html" rel="alternate" type="text/html" title="The entropy method" /><published>2018-04-29T22:00:00-06:00</published><updated>2018-04-29T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html">&lt;p&gt;Welcome back! This post is going to start us down the path of the &lt;strong&gt;entropy method&lt;/strong&gt;
 for obtaining concentration inequalities. The idea is pretty straightforward. We
-take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type 
+take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type
 argument, derive exponential concentration inequalities.&lt;/p&gt;
 
 &lt;p&gt;In a deviation from previous posts, we’re going to take as given the concentration
-behavior (&lt;em&gt;i.e.&lt;/em&gt;, we’re doing an example instead of a proof) and look at a neat 
+behavior (&lt;em&gt;i.e.&lt;/em&gt;, we’re doing an example instead of a proof) and look at a neat
 application that puts it to work.&lt;/p&gt;
 
 &lt;h3 id=&quot;an-eigenvalue-bound&quot;&gt;An eigenvalue bound&lt;/h3&gt;
 
 &lt;p&gt;The largest eigenvalue of a random symmetric matrix is a quantity that naturally
-arises in many “modern” statistical problems—&lt;em&gt;e.g.&lt;/em&gt;, in random correlation matrices. 
-We can describe the behavior of the variance of this eigenvalue using the Efron–Stein 
+arises in many “modern” statistical problems—&lt;em&gt;e.g.&lt;/em&gt;, in random correlation matrices.
+We can describe the behavior of the variance of this eigenvalue using the Efron–Stein
 inequality; however, we can obtain concentration convergence rates using the entropy
 method. In particular, we’ll use bounded differences-inspired condition to evoke
 a fast concentration inequality.&lt;/p&gt;
 
 &lt;p&gt;Assume we have independent random &lt;script type=&quot;math/tex&quot;&gt;X_{ij}, 1 \le i \le j \le n&lt;/script&gt; that are bounded
-by 1 in absolute value. The symmetric matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; has entries &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt;. Our 
+by 1 in absolute value. The symmetric matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; has entries &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt;. Our
 object of interest is&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \lambda_{\max} = \sup_{\|u\| = 1} u^T A u = v^T A v,&lt;/script&gt;
@@ -33,7 +259,7 @@ Here’s where it starts to get good.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
 \begin{align*}
-\big(Z - \tilde{Z}_{ij}\big)_+ &amp;\le 
+\big(Z - \tilde{Z}_{ij}\big)_+ &amp;\le
 	(v^TAv - v^T\tilde{A}_{ij}v) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
 	&amp;= \big( v^T(A-\tilde{A}_{ij})v \big) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
 	&amp;\le 2 \left( v_i v_j \left( X_{ij} - \tilde{X}_{ij} \right) \right)_+ \\
@@ -73,7 +299,7 @@ prediction with expert advice, Markov chains, something from convex optimization
 &lt;p&gt;This post is related to material from Chapters 3 and 6 of:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
+  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
 &lt;/ul&gt;</content><author><name></name></author><summary type="html">Welcome back! This post is going to start us down the path of the entropy method for obtaining concentration inequalities. The idea is pretty straightforward. We take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type argument, derive exponential concentration inequalities.</summary></entry><entry><title type="html">Rademachers are rad - part III</title><link href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" rel="alternate" type="text/html" title="Rademachers are rad - part III" /><published>2018-04-25T17:00:00-06:00</published><updated>2018-04-25T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/25/rademacher_3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html">&lt;p&gt;After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
 once again. We’re going to prove a minimax lower bound for an expert prediction
@@ -1291,160 +1517,4 @@ S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
       &lt;p&gt;That said, we now know and appreciate how closely related information theory and statistics really are. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
     &lt;/li&gt;
   &lt;/ol&gt;
-&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re putting on our information theory hats and digging into to a simple but useful inequality gifted to us by Te Sun Han in 1978. Han’s inequality is a generalization of the Efron–Stein inequality with roots in information theory rather than the statistical analysis of the jackknife.1 Before teeing up Han’s inequality, we’ll cover a few ideas from information theory. Andiamo! That said, we now know and appreciate how closely related information theory and statistics really are. &amp;#8617;</summary></entry><entry><title type="html">Rademachers are rad - part II</title><link href="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html" rel="alternate" type="text/html" title="Rademachers are rad - part II" /><published>2018-03-06T20:00:00-07:00</published><updated>2018-03-06T20:00:00-07:00</updated><id>http://localhost:4000/jekyll/update/2018/03/06/rademacher_2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/06/rademacher_2.html">&lt;p&gt;In this post, we’re going to work through another Rademacher-related problem.
-Like the previous post, the problem highlights the usefulness of the 
-Efron–Stein inequality.&lt;/p&gt;
-
-&lt;h3 id=&quot;conditional-rademacher-averages&quot;&gt;Conditional Rademacher averages&lt;/h3&gt;
-
-&lt;p&gt;In this section, we’re going to continue with a close cousin of the Rademacher
-average called the &lt;strong&gt;conditional Rademacher average&lt;/strong&gt;, which are used in high 
-dimensional statistics to measure the complexity of model classes. Its defined
-as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} \mid
-	X_1,\dots,X_n \right]&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;Y_i&lt;/script&gt; are Rademacher random variables and the &lt;script type=&quot;math/tex&quot;&gt;X_{i,j}&lt;/script&gt; are 
-independent random variables that live in &lt;script type=&quot;math/tex&quot;&gt;[-1,1]&lt;/script&gt;. The random variable &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt;
-is a function of the &lt;script type=&quot;math/tex&quot;&gt;X_{i} \in [-1,1]^d&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;Without lifting a finger, we can call our bound differences inequality friend
-and bound the variance of &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le n/4,&lt;/script&gt;
-
-&lt;p&gt;but that’s less-than-satisfying at this point in time. Instead, we can improve
-on this bound by showing that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; satisfies the &lt;strong&gt;self-bounding property&lt;/strong&gt;
-via the Efron–Stein inequality.&lt;/p&gt;
-
-&lt;p&gt;First, let’s define&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z_k = \E \left[ \max_{j=1,\dots,d} 
-	\sum_{\substack{i=1 \\ i \neq k}}^n Y_i X_{i,j} \mid X^{(k)}\right]&lt;/script&gt;
-
-&lt;p&gt;and observe that &lt;script type=&quot;math/tex&quot;&gt;0 \le Z - Z_k \le 1&lt;/script&gt; because the maximum value contributed
-by &lt;script type=&quot;math/tex&quot;&gt;X_k&lt;/script&gt; to the sum is 1. By summing the inequality and using a convexity
-argument (see below), we get that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k=1}^n Z - Z_k \le Z.&lt;/script&gt;
-
-&lt;p&gt;Now, we can use the Efron–Stein inequality to say&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\Var(Z) &amp;\le \E \left[ \sum_{k=1}^n (Z - Z_k)^2 \right] \\
-	&amp;\le \E \left[ \sum_{k=1}^n (Z - Z_k) \right] 
-	\qquad \textsf{(because $(Z - Z_k)^2 \in [0,1]$)}\\
-	&amp;\le \E Z,
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;which shows that &lt;script type=&quot;math/tex&quot;&gt;Z&lt;/script&gt; is a self-bounding function.&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from Chapter 3 of:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;self-bounding-property&quot;&gt;Self-bounding property&lt;/h4&gt;
-
-&lt;p&gt;Loosely speaking, the self-bounding property states that the difference 
-between a function and a &lt;em&gt;similar&lt;/em&gt; function that omits one variable is bounded
-between 0 and 1.&lt;/p&gt;
-
-&lt;p&gt;Formally, a nonnegative function &lt;script type=&quot;math/tex&quot;&gt;f: \mathcal{S}^n \to [0,\infty)&lt;/script&gt; satisfies
-the self-bounding property when functions &lt;script type=&quot;math/tex&quot;&gt;f_i: \mathcal{S}^{n-1} \to \reals&lt;/script&gt;
-exist and the following two conditions hold:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \le 1&lt;/script&gt;
-
-&lt;p&gt;and&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) 
-	\le f(x_1,\dots,x_n)&lt;/script&gt;
-
-&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;x_1,\dots,x_n&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;If we combine the first and second conditions, we can say that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n
-\big( f(x_1,\dots,x_n) - f_i(x_1,\dots,x_{i-1},x_{i+1},\dots,x_n) \big)^2 
-	\le f(x_1,\dots,x_n),&lt;/script&gt;
-
-&lt;p&gt;which means we can use the Efron–Stein inequality to bound the variance
-by the expected value.&lt;/p&gt;
-
-&lt;h4 id=&quot;convexity-argument&quot;&gt;Convexity argument&lt;/h4&gt;
-
-&lt;p&gt;The convexity argument used in the conditional Rademacher averages example
-goes as follows:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\sum_{k=1}^n Z - Z_k &amp;= \sum_{k=1}^n 
-\E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
-	\, \middle| \,
-	X_1,\dots,X_n \right] - \E \left[ \max_{j=1,\dots,d} 
-	\sum_{i \neq k}^n Y_i X_{i,j} 
-	\middle| 
-	X^{(k)}\right] \\
-
-&amp;= \sum_{k=1}^n \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
-	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j} 
-	\, \middle| \,
-	X_1,\dots,X_n \right] \\
-
-&amp;\le \sum_{k=1}^n \E \left[ 
-	 Y_i X_{i,j^\star}
-	\, \middle| \,
-	X_1,\dots,X_n \right] \\
-
-&amp;\le \E \left[ \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} 
-	\, \middle| \,
-	X_1,\dots,X_n \right] \\
-
-&amp;= Z,
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;k^\star = \argmax_{k=1,\dots,d} \sum_{i = 1}^n Y_i X_{i,k}&lt;/script&gt;
-
-&lt;p&gt;and&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le \max_{j=1,\dots,d} \sum_{i=1}^n Y_i X_{i,j} -  			 	
-	\max_{j=1,\dots,d} \sum_{i \neq k}^n Y_i X_{i,j}
-	= Y_i X_{i,j^\star} - Y_k X_{k,j^\star} \le 1.&lt;/script&gt;
-
-&lt;h4 id=&quot;r-simulation&quot;&gt;R simulation&lt;/h4&gt;
-
-&lt;p&gt;If you want to play around with conditional Rademacher averages, here’s some
-R code to do it.&lt;/p&gt;
-
-&lt;div class=&quot;language-r highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;# simulate X variables&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matrix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;runif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nrow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n_trials&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rbinom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yX&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%*%&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-            &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;colSums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EZ&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re going to work through another Rademacher-related problem. Like the previous post, the problem highlights the usefulness of the Efron–Stein inequality.</summary></entry></feed>
+&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re putting on our information theory hats and digging into to a simple but useful inequality gifted to us by Te Sun Han in 1978. Han’s inequality is a generalization of the Efron–Stein inequality with roots in information theory rather than the statistical analysis of the jackknife.1 Before teeing up Han’s inequality, we’ll cover a few ideas from information theory. Andiamo! That said, we now know and appreciate how closely related information theory and statistics really are. &amp;#8617;</summary></entry></feed>

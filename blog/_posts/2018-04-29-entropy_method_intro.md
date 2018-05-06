@@ -6,24 +6,24 @@ categories: jekyll update
 ---
 Welcome back! This post is going to start us down the path of the **entropy method**
 for obtaining concentration inequalities. The idea is pretty straightforward. We
-take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type 
+take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type
 argument, derive exponential concentration inequalities.
 
 In a deviation from previous posts, we're going to take as given the concentration
-behavior (*i.e.*, we're doing an example instead of a proof) and look at a neat 
+behavior (*i.e.*, we're doing an example instead of a proof) and look at a neat
 application that puts it to work.
 
 ### An eigenvalue bound
 
 The largest eigenvalue of a random symmetric matrix is a quantity that naturally
-arises in many "modern" statistical problems---*e.g.*, in random correlation matrices. 
-We can describe the behavior of the variance of this eigenvalue using the Efron--Stein 
+arises in many "modern" statistical problems---*e.g.*, in random correlation matrices.
+We can describe the behavior of the variance of this eigenvalue using the Efron--Stein
 inequality; however, we can obtain concentration convergence rates using the entropy
 method. In particular, we'll use bounded differences-inspired condition to evoke
 a fast concentration inequality.
 
 Assume we have independent random $$X_{ij}, 1 \le i \le j \le n$$ that are bounded
-by 1 in absolute value. The symmetric matrix $$A$$ has entries $$X_{ij}$$. Our 
+by 1 in absolute value. The symmetric matrix $$A$$ has entries $$X_{ij}$$. Our
 object of interest is
 
 $$
@@ -40,7 +40,7 @@ In the spirit of bounded differences, we can calculate
 
 $$
 \begin{align*}
-\big(Z - \tilde{Z}_{ij}\big)_+ &\le 
+\big(Z - \tilde{Z}_{ij}\big)_+ &\le
 	(v^TAv - v^T\tilde{A}_{ij}v) \ind{} \{Z > \tilde{Z}_{ij}\} \\
 	&= \big( v^T(A-\tilde{A}_{ij})v \big) \ind{} \{Z > \tilde{Z}_{ij}\} \\
 	&\le 2 \left( v_i v_j \left( X_{ij} - \tilde{X}_{ij} \right) \right)_+ \\
@@ -50,7 +50,7 @@ $$
 
 The first line results from the assumption on $$v$$ and the use of the indicator variable.
 The third line follows from a rewriting of the matrix multiplication and the observation
-that all but two entries of the sum cancel each other. 
+that all but two entries of the sum cancel each other.
 
 If we throw this guy into the Efron--Stein inequality, we get that
 
@@ -85,8 +85,8 @@ prediction with expert advice, Markov chains, something from convex optimization
 
 This post is related to material from Chapters 3 and 6 of:
 
-* *Concentration Inequalities: A Nonasymptotic Theory of Independence* by 
+* *Concentration Inequalities: A Nonasymptotic Theory of Independence* by
   S. Boucheron, G. Lugosi, and P. Masart.
 
-  
+
 [lsi-post]: /jekyll/update/2018/04/07/lsi.html

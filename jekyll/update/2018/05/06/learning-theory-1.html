@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Learning theory - statistical learning
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Learning theory - statistical learning | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Learning theory - statistical learning" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives." />
+<meta property="og:description" content="Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-05-06T11:30:00-06:00" />
+<script type="application/ld+json">
+{"description":"Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html","headline":"Learning theory - statistical learning","dateModified":"2018-05-06T11:30:00-06:00","datePublished":"2018-05-06T11:30:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Learning theory - statistical learning</h1>
+    <p class="post-meta">May 6, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>Today’s post is the first in a set of three that will discuss two theories of learning.
+In particular, today’s post will cover (a very narrow aspect of)
+<strong>statistical learning theory</strong>. The next post will present a game-theoretic
+view of learning, using <strong>online learning</strong> as its primary analytical framework. The
+final post will connect the two perspectives.</p>
+
+<h3 id="a-bit-of-background">A bit of background</h3>
+
+<p>Learning problems, specifically machine learning problems can be analyzed from at
+least two perspectives. In either case, our goal is to have a toolbox from which
+we can analyze how well a learning system works. For example, we want to be able to
+say when learning occurs, when it doesn’t, and how quickly it occurs or doesn’t. To
+make this problem tractable, we’ll require</p>
+
+<ul>
+  <li>a model for the data;</li>
+  <li>assumptions on the source of that data;</li>
+  <li>functions to generate predictions;</li>
+  <li>loss functions to assess the quality of our predictions; and</li>
+  <li>learning algorithms to help us improve our predictions by understanding our losses.</li>
+</ul>
+
+<h3 id="the-set-up">The set-up</h3>
+
+<p>We assume that our data consists of <script type="math/tex">(x, y)</script> feature-output pairs with
+<script type="math/tex">x \in \reals^d</script> and <script type="math/tex">y \in \reals</script>. The data comes from some <strong>fixed but unknown</strong>
+source that could be <strong>stochastic</strong> (as in the statistical learning framework) or
+<strong>nonstochastic</strong> (as in online learning framework).</p>
+
+<p>We a function <script type="math/tex">f: \reals^d \to \reals</script> that maps data to
+estimates/forecasts/predictions. So, <script type="math/tex">f</script> gives us a mechanism to
+generate our own <script type="math/tex">\hat{y}</script>’s that we can compare against the true <script type="math/tex">y</script>’s; we assess
+our estimates via a loss function <script type="math/tex">l: \reals^n \times \reals \to \reals</script>. You probably
+have many loss functions that you know and love…</p>
+
+<ul>
+  <li>squared-error loss: <script type="math/tex">l(y, \hat{y}) = \|y - \hat{y}\|^2_2</script>.</li>
+  <li>absolute-error: <script type="math/tex">l(y, \hat{y}) = \|y - \hat{y} \|_1</script>.</li>
+  <li>Kullback–Leibler: <script type="math/tex">l(y, \hat{y}) = y \log \frac{y}{\hat{y}}</script>.</li>
+  <li>hinge loss: <script type="math/tex">l(y, \hat{y}) = \max \{0, 1 - y \cdot \hat{y} \}</script>.</li>
+  <li>logistic loss: <script type="math/tex">l(y, \hat{y}) = \ln \frac{\hat{y}}{1 - \hat{y}}</script>.</li>
+</ul>
+
+<p>The final ingredient is a <strong>learning algorithm</strong>, which we can think of as a map from data
+to models. This is way that V. Vapnik and A. Chervonenkis conceptualized learning
+algorithms and we think that it’s a useful mental model.</p>
+
+<p>Before diving into either framework let’s give ourselves a learning goal: our algorithms
+should output good models with respect to the data source.</p>
+
+<h3 id="statistical-learning-theory">Statistical learning theory</h3>
+
+<p>In the statistical learning setting, we assume that our data is generated by a probability
+(<em>i.e.</em>, stochastic) model with distribution
+<script type="math/tex">\mathcal{D} \subseteq \reals^d \times \reals</script>. In particular, we’ll assume</p>
+
+<script type="math/tex; mode=display">(x, y) \stackrel{\textsf{i.i.d.}}{\sim} \mathcal{D}.</script>
+
+<p>We are interested in learning by controlling the <strong>statistical risk</strong></p>
+
+<script type="math/tex; mode=display">R_{\mathcal{D}}(f) = \E \left[ l\big(f(X), Y\big) \right],</script>
+
+<p>where the expectation is over the randomness in the data <script type="math/tex">(X,Y)</script> and the model <script type="math/tex">f</script>
+belongs to some class of models <script type="math/tex">\mathcal{F}</script>. The class of models is a design
+parameter that we specify. For example, we could choose a set of linear predictors</p>
+
+<script type="math/tex; mode=display">\mathcal{F} = \left\{\theta \in \reals^d \mid x \mapsto \theta^T x\right\}.</script>
+
+<p>Since we’re restricting our models to the class <script type="math/tex">\mathcal{F}</script>, we’re really interested
+in controlling our risk over that class. So we want a model</p>
+
+<script type="math/tex; mode=display">f^\star \in \argmin_{f \in \mathcal{F}} R_{\mathcal{D}}(f).</script>
+
+<p>But this is statistics, so we don’t have access to <script type="math/tex">\mathcal{D}</script> at the population
+level. Instead, we have knowledge of <script type="math/tex">\mathcal{D}</script> through <script type="math/tex">n</script> samples
+<script type="math/tex">(x_1,y_1),\dots,(x_n,y_n)</script>. Hmmm…</p>
+
+<h3 id="empirical-risk-minimization">Empirical risk minimization</h3>
+
+<p>As statistically-minded individuals, we’ll use the <strong>empirical risk</strong> as a surrogate
+for the population risk and pick our model as</p>
+
+<script type="math/tex; mode=display">f_n^\star \in \argmin_{f \in \mathcal{F}} R_n(f)
+	= \argmin_{f \in \mathcal{F}} \frac{1}{n} \sum_{i=1}^n l\big(f(x_i), y_i\big).</script>
+
+<p>We want the empirical risk to a be a good proxy for the statistical risk. More
+specifically, we want it to be uniformly close to the statistical risk. By <em>uniformly
+close</em>, we mean that we’re close over all models within our class and all data.</p>
+
+<p>This might seem a bit extreme, but it prevents us from being lulled into believing we have
+a “good” model by getting easy training data or having an overly complex model
+class—think interpolating the data.</p>
+
+<h3 id="rademacher-complexity">Rademacher complexity</h3>
+
+<p>To help us assess our algorithms and models, we turn to <strong>Rademacher averages</strong>, which
+is a Vapnik–Chervonenkis type notion of complexity that (also) has its origins in the
+Russian school of statistics (~1970s). We defined the empirical Rademacher average</p>
+
+<script type="math/tex; mode=display">\mathcal{R}_n(\mathcal{F}, S) = \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i f(x_i) \right],</script>
+
+<p>for a class of functions <script type="math/tex">\mathcal{F}</script>, <script type="math/tex">n</script> samples <script type="math/tex">S = \{x_1,\dots,x_n\}</script>.
+Before moving on, note that the empirical Rademacher average does not depend on
+<script type="math/tex">y</script>, but only on the data. This will prove useful in the sequel.</p>
+
+<p><strong>Aside:</strong> see the <a href="/jekyll/update/2018/03/04/rademacher.html">Rademachers are rad - part I</a> and
+<a href="/jekyll/update/2018/03/06/rademacher_2.html">Rademachers are rad - part II</a> post for Rademacher fun in the spirit of
+Rademacher complexity.</p>
+
+<h3 id="assessing-empirical-risk">Assessing empirical risk</h3>
+
+<p>Okay, now we’re going ready to assess how well empirical risk minimization works by
+studying the difference</p>
+
+<script type="math/tex; mode=display">R_{\mathcal{D}}(f) - R_{\mathcal{D}}(f^\star),</script>
+
+<p>which is the difference between a suboptimal model and the optimal model—note that we
+don’t have an empirical risk term… yet.</p>
+
+<p>Nonetheless, here goes. We can add and subtract the empirical risk getting</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) &=
+	R_{\mathcal{D}}(f_n^\star) - R_n(f_n^\star) +
+		R_n(f_n^\star) - R_{\mathcal{D}}(f^\star) \\
+	&\le \sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\} +
+		R_n(f^\star) - R_{\mathcal{D}}(f^\star).
+\end{align*} %]]></script>
+
+<p>The <script type="math/tex">\sup</script> term is a comparison of the selected model on the whole distribution versus
+the sample. The second term is the error of using the “best” model on the training sample
+versus the whole distribution. The inequality follows from the <script type="math/tex">\sup</script> and the fact that
+<script type="math/tex">R_n(f_n^\star) \le R_n(f^\star)</script> by definition of <script type="math/tex">f_n^\star</script>. Also, we can interpret
+the first term as a measurement of how much the model overfits the data. And, in some
+sense, this is what we want to understand!</p>
+
+<h3 id="high-probability-bounds">High probability bounds</h3>
+
+<p>Both terms on the righthand side are random variables because they depend on the
+training data. So via Chernoff bounds (which we’re excluding from the current discussion),
+we can say that with probability <script type="math/tex">1 - \delta</script></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\} &\le
+	\E \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right]+
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right) \\
+R_n(f^\star) - R_{\mathcal{D}}(f^\star) &\le
+	\E \bigg[ R_n(f^\star) - R_{\mathcal{D}}(f^\star) \bigg]+
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right).
+\end{align*} %]]></script>
+
+<p>The expected value of the second term is 0 because the expected value of the empirical
+risk, by our i.i.d. assumption, is the statistical risk. You can think of this term as
+a bias-like term. The first term is more interesting; it may have caused your
+Rademacher neurons to fire, but it’s not quite a Rademacher average… yet.</p>
+
+<h3 id="the-ghost-sample">The ghost sample</h3>
+
+<p>Now, we’re going to use one of “modern” statistics favorite tricks: the <strong>ghost sample</strong>.
+The ghost sample allows us to replace a (population) quantity by the sample quantity by
+pretending that we have access to a second, made-up sample from the distribution—it’s
+like we have a second training set. By the ghost sample trick (first equality) and
+Jensen’s inequality, our term is bounded as</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right]
+	&= \E_S \left[\sup_{f \in \mathcal{F}}
+		\bigg\{\E_{\tilde{S}} R_{\tilde{n}}(f) - R_n(f)\bigg\}\right]\\
+	&\le \E_S \E_{\tilde{S}}
+		\left[\sup_{f \in \mathcal{F}}\big\{R_{\tilde{n}}(f) - R_n(f)\big\}\right].
+\end{align*} %]]></script>
+
+<p>Okay, cool. The righthand side is the difference between two empirical risk quantities,
+one for the original training sample and the other for the ghost sample. We’re getting
+closer to bounding the overfitting term…</p>
+
+<h3 id="rademacher-magic">Rademacher magic</h3>
+
+<p>Now, we introduce Rademacher random variables <script type="math/tex">\sigma_i \sim \mathsf{Rademacher}</script> into
+the problem which will allow us to bound the overfitting. Think of the Rademachers as
+randomly permuting an example from the training set with an example from the ghost sample.
+We want to control how much the risk changes when we exchange examples and do so via the
+empirical Rademacher average</p>
+
+<script type="math/tex; mode=display">\E_\sigma \left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \big( l_f(\tilde{z}_i) - l_f(z_i) \big) \right],</script>
+
+<p>where <script type="math/tex">z_i = (x_i, y_i)</script> and <script type="math/tex">l_f(z_i)</script> is the loss function for <script type="math/tex">f</script> evaluated on
+example <script type="math/tex">z_i</script>. Now let’s manipulate this quantity, first distributing terms
+and then exchanging the supremum with a sum to get an inequality:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\E_\sigma &\left[ \sup_{f \in \mathcal{F}}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \big( l_f(\tilde{z}_i) - l_f(z_i) \big) \right]\\
+	&= \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) +
+	   	\frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right] \\
+	&\le \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) + \sup_{f \in \mathcal{F}}
+	   	\frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right] \\
+	&= \E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	      \frac{1}{n} \sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right] +
+		\E_\sigma \left[ \sup_{f \in \mathcal{F}}
+	      \frac{1}{n} \sum_{i=1}^n (-\sigma_i) l_f(z_i) \right].
+\end{align*} %]]></script>
+
+<p>So, this last calculation, the fact that <script type="math/tex">\sigma</script> has the same distribution as
+<script type="math/tex">-\sigma</script>, and <script type="math/tex">z \sim \tilde{z}</script>, imply that</p>
+
+<script type="math/tex; mode=display">\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right].</script>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… a short-and-sweet example of the material from this post and then the online learning
+perspective!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: <a href="http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/">MLSS 2011 lectures</a>.</p>
+
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

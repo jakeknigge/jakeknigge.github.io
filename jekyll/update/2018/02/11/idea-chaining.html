@@ -94,13 +94,13 @@
 statistics, optimization, life-in-general… I call it <strong>idea chaining</strong>. My guess is that
 most people are already aware of this notion on an intuitive level. Systems thinkers would
 probably call it something like “problem decomposition”, mathematicians would think of
-lemmas… basically we take a problem, split it into smaller, easier-to-solve 
+lemmas… basically we take a problem, split it into smaller, easier-to-solve
 sub-problems, and then chain our results together to solve the original problem.</p>
 
 <h3 id="a-convex-calculus-for-convexity-verification">A (convex) calculus for convexity verification</h3>
 
 <p>In convex analysis and optimization, we’re often interested in whether or not a given
-function is convex. There are a few ways to go about showing the “vexity” of a 
+function is convex. There are a few ways to go about showing the “vexity” of a
 particular function, such as using:</p>
 
 <ul>
@@ -111,28 +111,28 @@ particular function, such as using:</p>
   <li>a convex calculus.</li>
 </ul>
 
-<p>The <strong>convex calculus</strong> approach is appealing because it gives us a toolbox to 
-(mindlessly) construct or decompose a function, using a set of basic functions and a few 
-rules that preserve convexity. In the context of convex optimization, this 
-<strong>constructive convex verification process</strong> 
-is part of an approach known as <strong>disciplined convex 
-programming</strong> (DCP). The DCP ideas arose from the work of Michael Grant and 
-Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a 
+<p>The <strong>convex calculus</strong> approach is appealing because it gives us a toolbox to
+(mindlessly) construct or decompose a function, using a set of basic functions and a few
+rules that preserve convexity. In the context of convex optimization, this
+<strong>constructive convex verification process</strong>
+is part of an approach known as <strong>disciplined convex
+programming</strong> (DCP). The DCP ideas arose from the work of Michael Grant and
+Stephen Boyd in the mid-2000s. Hiriart-Urruty and Lemaréchal discuss the notion of a
 convex calculus in their books from the 1990s.</p>
 
-<p>Let’s put the ideas to work on an example that came up on the quiz page of the 
+<p>Let’s put the ideas to work on an example that came up on the quiz page of the
 <a href="http://dcp.stanford.edu/">DCP</a> website (which teaches the principles of disciplined convex programming).</p>
 
 <p>Our function of interest is</p>
 
-<script type="math/tex; mode=display">f(u,w,y,z) = \log \left( \exp \left\{ e^{\max(u, z)} \right\} + 
+<script type="math/tex; mode=display">f(u,w,y,z) = \log \left( \exp \left\{ e^{\max(u, z)} \right\} +
 						 \exp \left\{ g_{\mathrm{hub}}(w) \right\} +
 						 \exp \left\{ y - 42 \right\}  \right),</script>
 
 <p>where</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
-g_{\mathrm{hub}}(w) = 
+g_{\mathrm{hub}}(w) =
 \begin{cases}
 	2|x| - 1, & |x| \ge 1 \\
 	|x|^2, 	  & |x| < 1.
@@ -140,7 +140,7 @@ g_{\mathrm{hub}}(w) =
 
 <p>At first sight, this looks ugly because we have a concave function with <script type="math/tex">\log</script>, a couple
 convex functions with <script type="math/tex">\max</script> and <script type="math/tex">\exp</script>, an affine function <script type="math/tex">y - 42</script>, and that Huber
-function <script type="math/tex">g_{\mathrm{hub}}</script> (which is actually convex, but may not be recognized as 
+function <script type="math/tex">g_{\mathrm{hub}}</script> (which is actually convex, but may not be recognized as
 such). Moreover, we have four variables!</p>
 
 <p>The DCP / convex calculus approach turns this problem into an easy verification process.
@@ -149,9 +149,9 @@ function. For <script type="math/tex">x \in \reals^n</script>, the log-sum-exp f
 
 <script type="math/tex; mode=display">h(x) = \log \left( \sum_{i = 1}^n \exp ( x_i ) \right).</script>
 
-<p>This function is convex—if you’re suspicious, calculate its Hessian and 
-convince yourself. With this single fact, we’re nearly done because the functions 
-appearing within the exponentials are convex and affine. Then we use that log-sum-exp is 
+<p>This function is convex—if you’re suspicious, calculate its Hessian and
+convince yourself. With this single fact, we’re nearly done because the functions
+appearing within the exponentials are convex and affine. Then we use that log-sum-exp is
 convex and we’re done.</p>
 
 <p><strong>Tips and tricks.</strong> Here are the DCP rules we used:</p>
@@ -161,20 +161,20 @@ convex and we’re done.</p>
   <li>a sum of convex functions is convex.</li>
 </ul>
 
-<p>So, with two rules and a few basic functions we’ve show a rather complicated function to 
+<p>So, with two rules and a few basic functions we’ve show a rather complicated function to
 be convex—no gradients, subgradients, or Hessians required. We reduced the problem
-to a few simple subproblems (<em>e.g.</em>, verifying the convexity of 
+to a few simple subproblems (<em>e.g.</em>, verifying the convexity of
 <script type="math/tex">e^{g_{\mathrm{hub}}(w)}</script> and the like) and then strung everything together using a
 couple rules. Bam.</p>
 
-<p>If you’re interested in seeing the “vexity” parse tree for this function, check out the 
-DCP site’s “<a href="http://dcp.stanford.edu/analyzer">Analyzer</a>” and type in 
+<p>If you’re interested in seeing the “vexity” parse tree for this function, check out the
+DCP site’s “<a href="http://dcp.stanford.edu/analyzer">Analyzer</a>” and type in
 <em>log_sum_exp(exp(max(u, z)), huber(w) + y - 42)</em>. Do it!</p>
 
 <h3 id="le-cams-inequality">Le Cam’s inequality</h3>
 
-<p>Our next example of idea chaining stems from a problem from Tom Ferguson’s (excellent) 
-mathematical statistics book called <em>A Course in Large Sample Theory</em>. Problem 5 of 
+<p>Our next example of idea chaining stems from a problem from Tom Ferguson’s (excellent)
+mathematical statistics book called <em>A Course in Large Sample Theory</em>. Problem 5 of
 chapter 3 (“Convergence in Law”) walks us through Le Cam’s inequality.</p>
 
 <p>Here’s the set up.</p>
@@ -183,7 +183,7 @@ chapter 3 (“Convergence in Law”) walks us through Le Cam’s inequality.</p>
   <li>We have <script type="math/tex">n</script> independent Bernoulli random variables each with its own probability of
 success, <script type="math/tex">p_i = \prob(X_i = 1)</script>. We’ll call these <script type="math/tex">X_1,\dots,X_n</script>.</li>
   <li>We define <script type="math/tex">S_n = \sum_{i=1}^n X_i</script>.</li>
-  <li>We define <script type="math/tex">Z</script> as a Poisson random variable with parameter 
+  <li>We define <script type="math/tex">Z</script> as a Poisson random variable with parameter
 <script type="math/tex">\lambda = \sum_{i=1}^n p_i</script>.</li>
 </ul>
 
@@ -191,7 +191,7 @@ success, <script type="math/tex">p_i = \prob(X_i = 1)</script>. We’ll call the
 
 <script type="math/tex; mode=display">| \prob(S_n \in A) - \prob(Z \in A)| \le \sum_{i=1}^n p_i^2</script>
 
-<p>for all sets <script type="math/tex">A</script>. In other words, we’re computing a bound on the error of using a 
+<p>for all sets <script type="math/tex">A</script>. In other words, we’re computing a bound on the error of using a
 Poisson approximation.</p>
 
 <p>We’ll solve this problem by solving three simpler sub-problems.</p>
@@ -208,7 +208,7 @@ Poisson approximation.</p>
 
 <script type="math/tex; mode=display">\prob(X_i \neq Y_i) \le \sum_{i=1}^n p_i^2.</script>
 
-<p>To show (1), (2), and (3), we’re going to couple <script type="math/tex">S_n</script> and <script type="math/tex">Z</script> to the same underlying 
+<p>To show (1), (2), and (3), we’re going to couple <script type="math/tex">S_n</script> and <script type="math/tex">Z</script> to the same underlying
 probability space.</p>
 
 <ul>
@@ -220,7 +220,7 @@ probability space.</p>
 <script type="math/tex; mode=display">% <![CDATA[
 Y_i =
 \begin{cases}
-0, & U_i < e^{-p_i} \\ 
+0, & U_i < e^{-p_i} \\
 k, & F(k-1) < U_i < F(k),
 \end{cases} %]]></script>
 
@@ -229,11 +229,11 @@ for a Poisson random variable with parameter <script type="math/tex">p_i</script
 
 <p><strong>Proof of (1).</strong></p>
 
-<p>Without loss of generality we can assume that <script type="math/tex">\prob(S_n \in A) \ge \prob(Z \in A)</script>. 
+<p>Without loss of generality we can assume that <script type="math/tex">\prob(S_n \in A) \ge \prob(Z \in A)</script>.
 This allows us to conclude that <script type="math/tex">\{S_n \in A\} \supseteq \{Z \in A\}</script>. Now, we isolate
 the set where <script type="math/tex">\{S_n \neq Z\}</script> by noting that</p>
 
-<script type="math/tex; mode=display">\prob(S_n \in A) - \prob(Z \in A) \le \prob(S_n \in A) - \prob(S_n \cap Z \in A) 
+<script type="math/tex; mode=display">\prob(S_n \in A) - \prob(Z \in A) \le \prob(S_n \in A) - \prob(S_n \cap Z \in A)
 	= \prob(S_n \neq Z).</script>
 
 <p>One down, two to go.</p>
@@ -241,8 +241,8 @@ the set where <script type="math/tex">\{S_n \neq Z\}</script> by noting that</p>
 <p><strong>Proof of (2).</strong></p>
 
 <p>First, let’s rewrite <script type="math/tex">\prob(S_n \neq Z)</script> as <script type="math/tex">\prob \left( \sum_i X_i \neq Z \right)</script>.
-This implies that there’s at least one <script type="math/tex">X_i</script> not equal to <script type="math/tex">Y_i</script>. (The <em>at least</em> 
-phrase should be triggering the part of your brain associated with <em>unions</em>.) 
+This implies that there’s at least one <script type="math/tex">X_i</script> not equal to <script type="math/tex">Y_i</script>. (The <em>at least</em>
+phrase should be triggering the part of your brain associated with <em>unions</em>.)
 So, we have that</p>
 
 <script type="math/tex; mode=display">\prob \left( \bigcup_{i=1}^n \{X_i \neq Y_i\} \right) \le \sum_{i=1}^n \prob(X_i \neq Y_i)</script>

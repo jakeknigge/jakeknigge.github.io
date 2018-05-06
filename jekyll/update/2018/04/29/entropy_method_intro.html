@@ -92,24 +92,24 @@
   <article class="post-content">
     <p>Welcome back! This post is going to start us down the path of the <strong>entropy method</strong>
 for obtaining concentration inequalities. The idea is pretty straightforward. We
-take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type 
+take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type
 argument, derive exponential concentration inequalities.</p>
 
 <p>In a deviation from previous posts, we’re going to take as given the concentration
-behavior (<em>i.e.</em>, we’re doing an example instead of a proof) and look at a neat 
+behavior (<em>i.e.</em>, we’re doing an example instead of a proof) and look at a neat
 application that puts it to work.</p>
 
 <h3 id="an-eigenvalue-bound">An eigenvalue bound</h3>
 
 <p>The largest eigenvalue of a random symmetric matrix is a quantity that naturally
-arises in many “modern” statistical problems—<em>e.g.</em>, in random correlation matrices. 
-We can describe the behavior of the variance of this eigenvalue using the Efron–Stein 
+arises in many “modern” statistical problems—<em>e.g.</em>, in random correlation matrices.
+We can describe the behavior of the variance of this eigenvalue using the Efron–Stein
 inequality; however, we can obtain concentration convergence rates using the entropy
 method. In particular, we’ll use bounded differences-inspired condition to evoke
 a fast concentration inequality.</p>
 
 <p>Assume we have independent random <script type="math/tex">X_{ij}, 1 \le i \le j \le n</script> that are bounded
-by 1 in absolute value. The symmetric matrix <script type="math/tex">A</script> has entries <script type="math/tex">X_{ij}</script>. Our 
+by 1 in absolute value. The symmetric matrix <script type="math/tex">A</script> has entries <script type="math/tex">X_{ij}</script>. Our
 object of interest is</p>
 
 <script type="math/tex; mode=display">Z = \lambda_{\max} = \sup_{\|u\| = 1} u^T A u = v^T A v,</script>
@@ -124,7 +124,7 @@ Here’s where it starts to get good.</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align*}
-\big(Z - \tilde{Z}_{ij}\big)_+ &\le 
+\big(Z - \tilde{Z}_{ij}\big)_+ &\le
 	(v^TAv - v^T\tilde{A}_{ij}v) \ind{} \{Z > \tilde{Z}_{ij}\} \\
 	&= \big( v^T(A-\tilde{A}_{ij})v \big) \ind{} \{Z > \tilde{Z}_{ij}\} \\
 	&\le 2 \left( v_i v_j \left( X_{ij} - \tilde{X}_{ij} \right) \right)_+ \\
@@ -164,7 +164,7 @@ prediction with expert advice, Markov chains, something from convex optimization
 <p>This post is related to material from Chapters 3 and 6 of:</p>
 
 <ul>
-  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
+  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by
 S. Boucheron, G. Lugosi, and P. Masart.</li>
 </ul>
 

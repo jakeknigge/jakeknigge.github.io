@@ -5,7 +5,7 @@ date:   2018-05-07 21:00:00 -0700
 categories: jekyll update
 ---
 This post illustrates how we use Rademacher complexities in statistical learning theory.
-To that end, we'll assume that we're working with our toolbox developed in
+To that end, we'll assume that we're working with our toolbox developed in the
 [last post][lt1-post].
 
 ### A quick recap

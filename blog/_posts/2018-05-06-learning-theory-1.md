@@ -235,7 +235,7 @@ $$-\sigma$$, and $$z \sim \tilde{z}$$, imply that
 $$
 \E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
 	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
-					\sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right].
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right].
 $$
 
 ### Next up

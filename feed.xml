@@ -1,5 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-06T10:14:21-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Learning theory - statistical learning</title><link href="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html" rel="alternate" type="text/html" title="Learning theory - statistical learning" /><published>2018-05-06T11:30:00-06:00</published><updated>2018-05-06T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html">&lt;p&gt;Today’s post is the first in a set of three that will discuss two theories of learning.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-07T20:51:11-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Statistical learning theory - complexity example</title><link href="http://localhost:4000/jekyll/update/2018/05/07/slt-example.html" rel="alternate" type="text/html" title="Statistical learning theory - complexity example" /><published>2018-05-07T22:00:00-06:00</published><updated>2018-05-07T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/07/slt-example</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/07/slt-example.html">&lt;p&gt;This post illustrates how we use Rademacher complexities in statistical learning theory.
+To that end, we’ll assume that we’re working with our toolbox developed in
+&lt;a href=&quot;/jekyll/update/2018/05/06/learning-theory-1.html&quot;&gt;last post&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;a-quick-recap&quot;&gt;A quick recap&lt;/h3&gt;
+
+&lt;p&gt;Last post, our main result was that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right],&lt;/script&gt;
+
+&lt;p&gt;which allowed us to bound the statistical risk as&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right] +
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right),&lt;/script&gt;
+
+&lt;p&gt;with at least probability &lt;script type=&quot;math/tex&quot;&gt;1-\delta&lt;/script&gt;. In other words, Rademacher complexity helps
+us measure the tendency of a model class to overfit a sample.&lt;/p&gt;
+
+&lt;h3 id=&quot;warm-up&quot;&gt;Warm up&lt;/h3&gt;
+
+&lt;p&gt;Let’s Rademacherize our minds with a straightforward application of last post’s bound.
+We’ll assume that our loss functions are &lt;script type=&quot;math/tex&quot;&gt;L&lt;/script&gt;-Lipschitz. With this and this alone, we
+can show that&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+	\sum_{i=1}^n \sigma_i l_f(z_i) \right] \le
+	L \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+		\sum_{i=1}^n \sigma_i f(x_i) \right].&lt;/script&gt;
+
+&lt;p&gt;This is cool for at least two reasons. The first is that the righthand side doesn’t
+depend on &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt; anymore—only &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt;. The second is that the expectation no longer
+depends on &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt;, but only on &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;linear-regression-with-squared-loss&quot;&gt;Linear regression with squared loss&lt;/h3&gt;
+
+&lt;p&gt;To make these ideas concrete, we’ll look at one of the most commone models arising in
+statistics / machine learning: ordinary linear regression. Here’s our set up.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Our class of functions is &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F} = \{\theta \mid x \mapsto \theta^T x\}&lt;/script&gt; where
+&lt;script type=&quot;math/tex&quot;&gt;\|\theta\| \le B_\theta&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\|x\| \le B_x&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;By assumption on &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt;, we have &lt;script type=&quot;math/tex&quot;&gt;\|y\| \le B_\theta B_x&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;Our loss function &lt;script type=&quot;math/tex&quot;&gt;l(\theta^T x, y) = (\theta^T x - y)^2&lt;/script&gt;, with &lt;script type=&quot;math/tex&quot;&gt;L = 4B_\theta B_x&lt;/script&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We’re interested in the Rademacher complexity of our function class on &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; samples
+&lt;script type=&quot;math/tex&quot;&gt;S = \{(x_1,y_1),\dots,(x_n,y_n)\}&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+\mathcal{R}(\mathcal{F}, S) &amp;= \E_\sigma \left[ \sup_{\theta: \theta \le B_\theta}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \theta^T x_i \right] \\
+	&amp;= \frac{1}{n} \E_\sigma \left[ \sup_\theta \theta^T \left(
+		\sum_{i=1}^n \sigma_i x_i \right) \right]
+		&amp;&amp; {\small \textsf{(linearity)}} \\
+	&amp;= \frac{1}{n} \E_\sigma \left[ B_\theta \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\| \right]
+		&amp;&amp; {\small \textsf{(bound on $\theta$)}} \\
+	&amp;= \frac{B_\theta}{n} \E_\sigma \sqrt{ \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\|^2 }
+		&amp;&amp; {\small \textsf{(square-square root trick)}} \\
+	&amp;\le \frac{B_\theta}{n} \sqrt{\E_\sigma \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\|^2}
+		&amp;&amp; {\small \textsf{(Jensen for concave functions)}} \\
+	&amp;\le \frac{B_\theta}{n} \sqrt{n B_x^2}
+		&amp;&amp; {\small \textsf{(independence of $\sigma_i$ and $\|\sigma_i\|=1$)}}\\
+	&amp;= \frac{B_\theta B_x}{\sqrt{n}} \\
+	&amp;= \frac{\textsf{size of model class}}{\textsf{convergence rate}}.
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;The trickiest step is the one that exploits the independence of the Rademacher
+random variables and the bound on their norm. It’s easy to see if we write out
+the double sum&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_k \sum_j \sigma_k \sigma_j x_k^T x_j = \sum_k \sigma_k^2 x_k^T x_k +
+	\sum_{j \neq k} \sigma_j \sigma_k x_j^T x_k = \sum_k x_k^T x_k,&lt;/script&gt;
+
+&lt;p&gt;because the &lt;script type=&quot;math/tex&quot;&gt;\sigma_j&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\sigma_k&lt;/script&gt; are independent.&lt;/p&gt;
+
+&lt;h3 id=&quot;putting-it-all-together&quot;&gt;Putting it all together&lt;/h3&gt;
+
+&lt;p&gt;From last post and the above calculation, we conclude that with probability at least
+&lt;script type=&quot;math/tex&quot;&gt;1 - \delta&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align*}
+R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) &amp;\le
+	\frac{8(B_\theta B_x)^2}{\sqrt{n}} +
+	\mathcal{O}\left( \sqrt{\frac{1}{m} \ln \frac{1}{\delta}} \right) \\
+	&amp;=\mathcal{R}(\mathcal{F}, S) L +
+	\mathcal{O}\left( \sqrt{\frac{1}{m} \ln \frac{1}{\delta}} \right),
+\end{align*} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;for empirical risk minimization. Hot diggity!&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… the online learning perspective!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">This post illustrates how we use Rademacher complexities in statistical learning theory. To that end, we’ll assume that we’re working with our toolbox developed in last post.</summary></entry><entry><title type="html">Learning theory - statistical learning</title><link href="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html" rel="alternate" type="text/html" title="Learning theory - statistical learning" /><published>2018-05-06T11:30:00-06:00</published><updated>2018-05-06T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/06/learning-theory-1.html">&lt;p&gt;Today’s post is the first in a set of three that will discuss two theories of learning.
 In particular, today’s post will cover (a very narrow aspect of)
 &lt;strong&gt;statistical learning theory&lt;/strong&gt;. The next post will present a game-theoretic
 view of learning, using &lt;strong&gt;online learning&lt;/strong&gt; as its primary analytical framework. The
@@ -215,7 +321,7 @@ and then exchanging the supremum with a sum to get an inequality:&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
 	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
-					\sum_{i=1}^n \sigma_i l_f(\tilde{z}_i) \right].&lt;/script&gt;
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right].&lt;/script&gt;
 
 &lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
 
@@ -1385,136 +1491,4 @@ D_{\mathrm{kl}}\left(q^{(i)}(X), p^{(i)}(X)\right) &amp;=
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">(Happy St. Patrick’s Day!)</summary></entry><entry><title type="html">Han’s inequality</title><link href="http://localhost:4000/jekyll/update/2018/03/11/han.html" rel="alternate" type="text/html" title="Han's inequality" /><published>2018-03-11T23:00:00-06:00</published><updated>2018-03-11T23:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/03/11/han</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/03/11/han.html">&lt;p&gt;In this post, we’re putting on our information theory hats and digging into
-to a simple but useful inequality gifted to us by Te Sun Han in 1978. Han’s
-inequality is a generalization of the Efron–Stein inequality with roots in
-information theory rather than the statistical analysis of the jackknife.&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;
-Before teeing up Han’s inequality, we’ll cover a few ideas from information 
-theory. Andiamo!&lt;/p&gt;
-
-&lt;h3 id=&quot;a-modicum-of-information-theory&quot;&gt;A modicum of information theory&lt;/h3&gt;
-
-&lt;p&gt;We’ll need the idea of (Shannon’s) &lt;strong&gt;entropy&lt;/strong&gt; in Han’s inequality, so here it
-is for a discrete random variable &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;H(X) = \E\big( -\log p(X)\big ) = -\sum_{x \in \mathcal{S}} p(x) \log p(x),&lt;/script&gt;
-
-&lt;p&gt;with the standard convention that &lt;script type=&quot;math/tex&quot;&gt;0 \log 0 = 0&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;Also, we use the definition of &lt;strong&gt;conditional entropy&lt;/strong&gt;, which is defined as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;H(X | Y) = H(X, Y) - H(Y).&lt;/script&gt;
-
-&lt;p&gt;We can write the conditional entropy as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-H(X | Y) &amp;= -\sum_{x \in \mathcal{X}, y \in \mathcal{Y}} 
-			   p(x,y) \log p(x | y) \\
-	&amp;= \sum_{y \in \mathcal{Y}} p_Y(y) \left(- \sum_{x \in \mathcal{X}} 
-		p(x | y) \log p(x | y) \right) \\
-	&amp;= \E [-\log p(X | Y)],		
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where we use the relationship between conditional and joint probability in
-the second line.&lt;/p&gt;
-
-&lt;p&gt;Lastly, we’ll use the intuitive idea that &lt;strong&gt;conditioning decreases entropy&lt;/strong&gt;.
-This result follows from a relative entropy (&lt;em&gt;i.e.&lt;/em&gt;, Kullback–Leibler)
-calculation. For two random variables &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Y&lt;/script&gt;, with marginal 
-distributions &lt;script type=&quot;math/tex&quot;&gt;P_X&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;P_Y&lt;/script&gt;, and joint distribution &lt;script type=&quot;math/tex&quot;&gt;P_{X,Y}&lt;/script&gt;, the
-relative entropy between &lt;script type=&quot;math/tex&quot;&gt;P_{X,Y}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;P_X \otimes P_Y&lt;/script&gt; is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-D_{\mathrm{kl}}(P_{X,Y}, P_X \otimes P_Y) 
-	&amp;= \sum_{x \in \mathcal{X}, y \in \mathcal{Y}} P_{X,Y}(x,y)
-	\log \frac{P_{X,Y}(x,y)}{P_X(x)P_Y(y)} \\
- 	&amp;= \sum_{x \in \mathcal{X}, y \in \mathcal{Y}} P_{X,Y}(x,y)
-		\log \frac{P_{X|Y}(x|y)P_Y(y)}{P_X(x)P_Y(y)} \\
-	&amp;= \sum_{x \in \mathcal{X}, y \in \mathcal{Y}} P_{X,Y}(x,y)
-		\left( \log P_{X|Y}(x|y) - \log P_X(x) \right) \\
-	&amp;= H(X) - H(X|Y) \ge 0.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Since this is greater than 0, we have &lt;script type=&quot;math/tex&quot;&gt;H(X) \ge H(X|Y)&lt;/script&gt;, meaning that
-conditioning reduces entropy.&lt;/p&gt;
-
-&lt;h3 id=&quot;hans-inequality&quot;&gt;Han’s inequality&lt;/h3&gt;
-
-&lt;p&gt;In its simplest form, Han’s inequality works only with discrete random 
-variables. We’re going to look at that case.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Han’s inequality.&lt;/strong&gt; Assume &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt; are discrete random variables.
-Then&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;H(X_1,\dots,X_n) \le \frac{1}{n-1} 
-	\sum_{i=1}^n H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n).&lt;/script&gt;
-
-&lt;p&gt;Before proving the inequality, let’s interpret it. Roughly, it says that the 
-joint entropy is less than the average entropy with the $i$th observation
-removed. So, we’re better off (&lt;em&gt;i.e.&lt;/em&gt;, have less uncertainty) if we know 
-everything instead of accumulating (averaging) partial information.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Proof.&lt;/strong&gt; Han’s inequality relies on two things:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;the definition of conditional entropy and&lt;/li&gt;
-  &lt;li&gt;the fact that conditioning reduces entropy.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;For &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,n&lt;/script&gt;, we have&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-H(X_1,\dots,X_n) &amp;\stackrel{\textsf{(a)}}{=} 
-	H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n) + 
-	H(X_i|X_1\dots,X_{i-1},X_{i+1},\dots,X_n) \\
-	&amp;\stackrel{\textsf{(b)}}{\le} H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n) + 
-	H(X_i|X_1\dots,X_{i-1}),
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where in (a) we used the defintion of conditional entropy and in (b) we used
-the fact that conditioning reduces entropy. In other words, we have&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-H(X_1,\dots,X_n) &amp;\le H(X_2,\dots,X_n) + H(X_1) \\
-H(X_1,\dots,X_n) &amp;\le H(X_1,X_3,\dots,X_n) + H(X_2|X_1) \\
-H(X_1,\dots,X_n) &amp;\le H(X_1,X_2,X_4,\dots,X_n) + H(X_3|X_1, X_2) \\
-				 &amp;\,\,\, \vdots \\
-H(X_1,\dots,X_n) &amp;\le H(X_1,\dots,X_{n-1}) + H(X_n|X_1\dots,X_{n-1}).
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Now let’s sum both sides of the inequality, which gives&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;n H(X_1,\dots,X_n) \le 
-	\left( \sum_{i=1}^n H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n) \right) +
-						 H(X_1,\dots,X_n),&lt;/script&gt;
-
-&lt;p&gt;which can be rewritten as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;(n-1) H(X_1,\dots,X_n) \le H(X_1,\dots,X_{i-1},X_{i+1},\dots,X_n).&lt;/script&gt;
-
-&lt;p&gt;And that’s it!&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;… we’ll put Han’s inequality to work and look at the sub-additivity of 
-entropy! Stay tuned.&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from Chapter 4 of:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;footnotes&quot;&gt;
-  &lt;ol&gt;
-    &lt;li id=&quot;fn:1&quot;&gt;
-      &lt;p&gt;That said, we now know and appreciate how closely related information theory and statistics really are. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
-    &lt;/li&gt;
-  &lt;/ol&gt;
-&lt;/div&gt;</content><author><name></name></author><summary type="html">In this post, we’re putting on our information theory hats and digging into to a simple but useful inequality gifted to us by Te Sun Han in 1978. Han’s inequality is a generalization of the Efron–Stein inequality with roots in information theory rather than the statistical analysis of the jackknife.1 Before teeing up Han’s inequality, we’ll cover a few ideas from information theory. Andiamo! That said, we now know and appreciate how closely related information theory and statistics really are. &amp;#8617;</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">(Happy St. Patrick’s Day!)</summary></entry></feed>

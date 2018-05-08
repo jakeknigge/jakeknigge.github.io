@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Statistical learning theory - complexity example
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Statistical learning theory - complexity example | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Statistical learning theory - complexity example" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post illustrates how we use Rademacher complexities in statistical learning theory. To that end, we’ll assume that we’re working with our toolbox developed in last post." />
+<meta property="og:description" content="This post illustrates how we use Rademacher complexities in statistical learning theory. To that end, we’ll assume that we’re working with our toolbox developed in last post." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/05/07/slt-example.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/05/07/slt-example.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-05-07T22:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"This post illustrates how we use Rademacher complexities in statistical learning theory. To that end, we’ll assume that we’re working with our toolbox developed in last post.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/05/07/slt-example.html","headline":"Statistical learning theory - complexity example","dateModified":"2018-05-07T22:00:00-06:00","datePublished":"2018-05-07T22:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/05/07/slt-example.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Statistical learning theory - complexity example</h1>
+    <p class="post-meta">May 7, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>This post illustrates how we use Rademacher complexities in statistical learning theory.
+To that end, we’ll assume that we’re working with our toolbox developed in
+<a href="/jekyll/update/2018/05/06/learning-theory-1.html">last post</a>.</p>
+
+<h3 id="a-quick-recap">A quick recap</h3>
+
+<p>Last post, our main result was that</p>
+
+<script type="math/tex; mode=display">\E_S \left[\sup_{f \in \mathcal{F}} \big\{ R_{\mathcal{D}}(f) - R_n(f) \big\}\right] \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right],</script>
+
+<p>which allowed us to bound the statistical risk as</p>
+
+<script type="math/tex; mode=display">R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) \le
+	2 \E_S \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+					\sum_{i=1}^n \sigma_i l_f(z_i) \right] +
+	\mathcal{O} \left( \sqrt{\frac{1}{n} \ln \frac{1}{\delta}} \right),</script>
+
+<p>with at least probability <script type="math/tex">1-\delta</script>. In other words, Rademacher complexity helps
+us measure the tendency of a model class to overfit a sample.</p>
+
+<h3 id="warm-up">Warm up</h3>
+
+<p>Let’s Rademacherize our minds with a straightforward application of last post’s bound.
+We’ll assume that our loss functions are <script type="math/tex">L</script>-Lipschitz. With this and this alone, we
+can show that</p>
+
+<script type="math/tex; mode=display">\E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+	\sum_{i=1}^n \sigma_i l_f(z_i) \right] \le
+	L \E_\sigma \left[ \sup_{f \in \mathcal{F}} \frac{1}{n}
+		\sum_{i=1}^n \sigma_i f(x_i) \right].</script>
+
+<p>This is cool for at least two reasons. The first is that the righthand side doesn’t
+depend on <script type="math/tex">y</script> anymore—only <script type="math/tex">x</script>. The second is that the expectation no longer
+depends on <script type="math/tex">l</script>, but only on <script type="math/tex">f</script>.</p>
+
+<h3 id="linear-regression-with-squared-loss">Linear regression with squared loss</h3>
+
+<p>To make these ideas concrete, we’ll look at one of the most commone models arising in
+statistics / machine learning: ordinary linear regression. Here’s our set up.</p>
+
+<ul>
+  <li>Our class of functions is <script type="math/tex">\mathcal{F} = \{\theta \mid x \mapsto \theta^T x\}</script> where
+<script type="math/tex">\|\theta\| \le B_\theta</script> and <script type="math/tex">\|x\| \le B_x</script>.</li>
+  <li>By assumption on <script type="math/tex">\theta</script> and <script type="math/tex">x</script>, we have <script type="math/tex">\|y\| \le B_\theta B_x</script>.</li>
+  <li>Our loss function <script type="math/tex">l(\theta^T x, y) = (\theta^T x - y)^2</script>, with <script type="math/tex">L = 4B_\theta B_x</script>.</li>
+</ul>
+
+<p>We’re interested in the Rademacher complexity of our function class on <script type="math/tex">n</script> samples
+<script type="math/tex">S = \{(x_1,y_1),\dots,(x_n,y_n)\}</script>, <em>i.e.</em>,</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\mathcal{R}(\mathcal{F}, S) &= \E_\sigma \left[ \sup_{\theta: \theta \le B_\theta}
+ 	\frac{1}{n} \sum_{i=1}^n \sigma_i \theta^T x_i \right] \\
+	&= \frac{1}{n} \E_\sigma \left[ \sup_\theta \theta^T \left(
+		\sum_{i=1}^n \sigma_i x_i \right) \right]
+		&& {\small \textsf{(linearity)}} \\
+	&= \frac{1}{n} \E_\sigma \left[ B_\theta \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\| \right]
+		&& {\small \textsf{(bound on $\theta$)}} \\
+	&= \frac{B_\theta}{n} \E_\sigma \sqrt{ \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\|^2 }
+		&& {\small \textsf{(square-square root trick)}} \\
+	&\le \frac{B_\theta}{n} \sqrt{\E_\sigma \left\|
+		\sum_{i=1}^n \sigma_i x_i \right\|^2}
+		&& {\small \textsf{(Jensen for concave functions)}} \\
+	&\le \frac{B_\theta}{n} \sqrt{n B_x^2}
+		&& {\small \textsf{(independence of $\sigma_i$ and $\|\sigma_i\|=1$)}}\\
+	&= \frac{B_\theta B_x}{\sqrt{n}} \\
+	&= \frac{\textsf{size of model class}}{\textsf{convergence rate}}.
+\end{align*} %]]></script>
+
+<p>The trickiest step is the one that exploits the independence of the Rademacher
+random variables and the bound on their norm. It’s easy to see if we write out
+the double sum</p>
+
+<script type="math/tex; mode=display">\sum_k \sum_j \sigma_k \sigma_j x_k^T x_j = \sum_k \sigma_k^2 x_k^T x_k +
+	\sum_{j \neq k} \sigma_j \sigma_k x_j^T x_k = \sum_k x_k^T x_k,</script>
+
+<p>because the <script type="math/tex">\sigma_j</script> and <script type="math/tex">\sigma_k</script> are independent.</p>
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+
+<p>From last post and the above calculation, we conclude that with probability at least
+<script type="math/tex">1 - \delta</script></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+R_{\mathcal{D}}(f_n^\star) - R_{\mathcal{D}}(f^\star) &\le
+	\frac{8(B_\theta B_x)^2}{\sqrt{n}} +
+	\mathcal{O}\left( \sqrt{\frac{1}{m} \ln \frac{1}{\delta}} \right) \\
+	&=\mathcal{R}(\mathcal{F}, S) L +
+	\mathcal{O}\left( \sqrt{\frac{1}{m} \ln \frac{1}{\delta}} \right),
+\end{align*} %]]></script>
+
+<p>for empirical risk minimization. Hot diggity!</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… the online learning perspective!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: <a href="http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/">MLSS 2011 lectures</a>.</p>
+
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

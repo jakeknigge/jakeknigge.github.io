@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Learning theory - online learning
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Learning theory - online learning | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Learning theory - online learning" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Welcome back! Today’s post focuses on the online learning perspective of learning. The online learning approach differs from statistical learning because it makes no assumption on the data source. In other words, the process generating the data is arbitrary!1 Instead of focusing on the data source, online learning makes assumptions on the sequence of loss functions to attain some level of tractability. Yep, you read that correctly: we will have a sequence of loss functions—not just one to rule them all. If you’re like me, with more of stats background, then this might be an &#8617;" />
+<meta property="og:description" content="Welcome back! Today’s post focuses on the online learning perspective of learning. The online learning approach differs from statistical learning because it makes no assumption on the data source. In other words, the process generating the data is arbitrary!1 Instead of focusing on the data source, online learning makes assumptions on the sequence of loss functions to attain some level of tractability. Yep, you read that correctly: we will have a sequence of loss functions—not just one to rule them all. If you’re like me, with more of stats background, then this might be an &#8617;" />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-05-10T22:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Welcome back! Today’s post focuses on the online learning perspective of learning. The online learning approach differs from statistical learning because it makes no assumption on the data source. In other words, the process generating the data is arbitrary!1 Instead of focusing on the data source, online learning makes assumptions on the sequence of loss functions to attain some level of tractability. Yep, you read that correctly: we will have a sequence of loss functions—not just one to rule them all. If you’re like me, with more of stats background, then this might be an &#8617;","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html","headline":"Learning theory - online learning","dateModified":"2018-05-10T22:00:00-06:00","datePublished":"2018-05-10T22:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Learning theory - online learning</h1>
+    <p class="post-meta">May 10, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>Welcome back! Today’s post focuses on the <strong>online learning</strong> perspective of learning.
+The online learning approach differs from statistical learning because it makes no
+assumption on the data source. In other words, the process generating the data is
+arbitrary!<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> Instead of focusing on the data source, online learning makes assumptions
+on the sequence of loss functions to attain some level of tractability. Yep, you read
+that correctly: we will have a sequence of loss functions—not just one to
+<em>rule them all</em>.</p>
+
+<h3 id="a-protocol-for-online-learning">A protocol for online learning</h3>
+
+<p>Here’s how our online learning world works.</p>
+
+<ul>
+  <li>An algorithm generates an initial model <script type="math/tex">w_1</script>.</li>
+  <li>At each time <script type="math/tex">t = 1, 2, \dots</script>, the model is tested on a data point.</li>
+  <li>After being tested, the algorithm updates <script type="math/tex">w_t \to w_{t+1}</script>.</li>
+</ul>
+
+<p>The second step suggests that we’re going to need some notion of loss—<em>i.e.</em>, something
+like risk—to help us <em>test</em> our model. For our purposes, we’ll assume that
+the loss functions we encounter are <strong>convex</strong>, <strong>nonnegative</strong>, and <strong>differentiable</strong>.</p>
+
+<p>For application-minded readers, model spaces are typically linear but can be finite
+dimensional (<em>e.g.</em>, regression or support vector machine parameters) or infinite
+dimensional, via reproducing Kernel Hilbert spaces.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
+
+<h3 id="assessing-performance">Assessing performance</h3>
+
+<p>We’re going to assess the performance of our (model-generating) algorithm via its
+<strong>loss rate</strong>, defined as</p>
+
+<script type="math/tex; mode=display">\frac{1}{T} \sum_{t=1}^T l_t(w_t).</script>
+
+<p>But this is only part of the story. A loss rate by itself is uninteresting because
+losses are arbitrary. So, we’ll focus on controlling our <strong>regret</strong></p>
+
+<script type="math/tex; mode=display">\frac{1}{T} \sum_{t=1}^T l_t(w_t) - l_t(w^\star_T),</script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">w^\star_T = \argmin_{u: \|u\| \le U} \frac{1}{T} \sum_{t=1}^T l_t(u)</script>
+
+<p>is the best model in the class. When the regret goes to zero, then we are learning and
+also experiencing some type of consistency.</p>
+
+<h3 id="the-algorithm-of-choice---online-gradient-descent">The algorithm of choice - online gradient descent</h3>
+
+<p><strong>Online gradient descent</strong> (OGD) is akin to empirical risk minimization in statistical
+learning theory, but it’s a bit different than typical gradient descent because the losses
+can vary over time. Nonetheless, the algorithm is quite simple.</p>
+
+<hr />
+<p><strong>Algorithm</strong> <em>online gradient descent.</em></p>
+
+<ul>
+  <li><strong>given</strong> parameters <script type="math/tex">\alpha_1,\alpha_2,\dots</script>, a radius <script type="math/tex">U</script>, and an initial model
+<script type="math/tex">w_1 = 0</script>.</li>
+  <li><strong>repeat</strong> for <script type="math/tex">t=1,2,\dots</script>
+    <ul>
+      <li>compute a tentative gradient step:</li>
+    </ul>
+
+    <script type="math/tex; mode=display">\tilde{w}_{t+1} = w_t - \alpha_t \nabla l_t(w_t).</script>
+
+    <ul>
+      <li>project back to the model space:</li>
+    </ul>
+
+    <script type="math/tex; mode=display">w_{t+1} = \argmin_{w: \|w\| \le U} \|w - \tilde{w}_{t+1}\|.</script>
+  </li>
+</ul>
+
+<hr />
+
+<p><strong>Neural connection.</strong> Online gradient descent is similar to stochastic gradient except
+there’s no stochasticity in the data.</p>
+
+<p><strong>Food for thought.</strong>
+Online gradient descent is a local optimization perspective rather than global
+optimization as in empirical risk minimization. Because of this, online gradient descent
+scales gracefully to large problems.</p>
+
+<h3 id="analyzing-online-gradient-descent">Analyzing online gradient descent</h3>
+
+<p>Let’s fix a time <script type="math/tex">t</script> and analyze the instantaneous regret</p>
+
+<script type="math/tex; mode=display">l_t(w_t) - l_t(u).</script>
+
+<p>By convexity, the first-order Taylor expansion of <script type="math/tex">u</script> around <script type="math/tex">w_t</script> gives,</p>
+
+<script type="math/tex; mode=display">l_t(w_t) - l_t(u) \le \nabla l_t (w_t)^T (w_t - u).</script>
+
+<p>This is pretty much the definition of convexity.<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> By the OGD algorithm, we
+calculate</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+l_t(w_t) - l_t(u)
+&\le \nabla l_t (w_t)^T (w_t - u) \\
+&= \frac{1}{\alpha_t} (\tilde{w}_{t+1} - w_t)^T (w_t - u) \\
+&\stackrel{\textsf{(a)}}{=}
+	\frac{1}{\alpha_t} \left( \frac{1}{2} \|w_t - u\|^2
+		- \frac{1}{2} \|\tilde{w}_{t+1} - u\|^2
+		+ \frac{1}{2} \|\tilde{w}_{t+1} - w_t\|^2 \right) \\
+&\stackrel{\textsf{(b)}}{\le}
+	\frac{1}{\alpha_t} \left( \frac{1}{2} \|w_t - u\|^2
+		- \frac{1}{2} \|w_{t+1} - u\|^2
+		+ \frac{1}{2} \|\tilde{w}_{t+1} - w_t\|^2 \right) \\
+&\stackrel{\textsf{(c)}}{=}
+	\frac{1}{2\alpha_t} \|w_t - u\|^2
+		- \frac{1}{2\alpha_{t+1}} \|w_{t+1} - u\|^2
+		- \frac{1}{2\alpha_t} \|w_{t+1} - u\|^2 \\
+		&\qquad + \frac{1}{2\alpha_{t+1}} \|w_{t+1} - u\|^2
+		+ \frac{1}{2\alpha_t} \|\tilde{w}_{t+1} - w_t\|^2.
+\end{align*} %]]></script>
+
+<p>In (a) we compare the current model at time <script type="math/tex">t</script> to the best model <script type="math/tex">u</script> plus a
+penalty for changing models. In (b) we use the fact that projecting
+<script type="math/tex">\tilde{w}_{t+1} \to w_{t+1}</script> reduces the distance to <script type="math/tex">u</script>; since that term is
+negative, we get the inequality. In (c) we add and subtract the same term for reasons
+which will become clear shortly.</p>
+
+<h4 id="summing-it-up">Summing it up</h4>
+
+<p>Now, we need to sum over <script type="math/tex">t = 1, 2,\dots</script></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sum_{t=1}^T l_t(w_t) - l_t(u) &\le
+	\frac{1}{2\alpha_1} \|w_1 - u\|^2 -
+	\frac{1}{2\alpha_{T+1}} \|w_{T+1} - u\|^2
+		\\ &\qquad +
+	\frac{1}{2} \sum_{t=1}^T \|w_{t+1} - u\|^2 \left( \frac{1}{\alpha_{t+1}} -
+		\frac{1}{\alpha_t} \right)
+		\\ &\qquad +
+	\frac{1}{2} \sum_{t=1}^T \frac{1}{\alpha_t} \|\tilde{w}_{t+1} - w_t\|^2,
+\end{align*} %]]></script>
+
+<p>where <script type="math/tex">w_1 = 0</script>, <script type="math/tex">\|w_{t+1} - u\|^2 \le 4U^2</script>, and
+<script type="math/tex">\|\tilde{w}_{t+1} - w_t\|^2 = \alpha_t^2 \|\nabla l_t(w_t)\|^2</script>. Continuing from our
+last line and using <script type="math/tex">\|\nabla l_t(w_t)\| \le G</script>, we calculate</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sum_{t=1}^T l_t(w_t) - l_t(u) &\le
+	\frac{U^2}{2\alpha_1} - \frac{1}{2\alpha_{T+1}} \|w_{T+1} - u\|^2
+		\\ &\qquad
+	+ 2U^2 \sum_{t=1}^{T-1}
+		\left( \frac{1}{\alpha_{t+1}} - \frac{1}{\alpha_t} \right)
+		\\ &\qquad
+	+ \frac{1}{2\alpha_{T+1}} \|w_{T+1} - u\|^2
+	- \frac{1}{2\alpha_T} \|w_T - u\|^2
+		\\ &\qquad
+	+ \frac{G^2}{2} \sum_{t=1}^T \alpha_t,
+\end{align*} %]]></script>
+
+<p>by removing the last two terms,</p>
+
+<script type="math/tex; mode=display">\frac{1}{2\alpha_{T+1}} \|w_{T+1} - u\|^2 \quad \textsf{and} \quad
+\frac{1}{2\alpha_T} \|w_T - u\|^2,</script>
+
+<p>from the summation term involving <script type="math/tex">\alpha_{t+1}^{-1} - \alpha_t^{-1}</script>.
+The <script type="math/tex">\|w_{T+1} - u\|^2</script> terms cancel each other and we throw about the <script type="math/tex">\|w_T - u\|^2</script>
+term since it’s negative, leaving us with</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\sum_{t=1}^T l_t(w_t) - l_t(u) &\le
+	\frac{U^2}{2\alpha_1} + 2U^2 \sum_{t=1}^{T-1}
+		\left( \frac{1}{\alpha_{t+1}} - \frac{1}{\alpha_t} \right)
+	+ \frac{G^2}{2} \sum_{t=1}^T \alpha_t \\
+&\stackrel{\textsf{(a)}}{\le}
+	\frac{2U^2}{\alpha_T} + \frac{G^2}{2} \sum_{t=1}^T \alpha_t,
+\end{align*} %]]></script>
+
+<p>where we use telescoping and the <em>throw-away-a-negative-term</em> trick to get the
+inequality (a).</p>
+
+<h4 id="putting-it-all-together">Putting it all together</h4>
+
+<p>We can pick our <script type="math/tex">\alpha_t</script> terms to equate terms in the sum. Specifically,
+we choose them as</p>
+
+<script type="math/tex; mode=display">\alpha_t = \frac{\alpha}{\sqrt{t}}.</script>
+
+<p>So, choosing <script type="math/tex">\alpha_t</script> as above, selecting <script type="math/tex">\alpha = U\sqrt{2}/G</script>, and dividing by
+<script type="math/tex">T</script>, our final bound, <em>i.e.</em>, our <strong>rate</strong>, is</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align*}
+\frac{1}{T} \sum_{t=1}^T l_t(w_t) - l_t(u)
+	&\le \frac{2U^2}{\alpha\sqrt{T}} + \frac{\alpha G^2}{\sqrt{T}} \\
+	&= UG \sqrt{\frac{8}{T}}.
+\end{align*} %]]></script>
+
+<h3 id="linear-regression-with-squared-loss">Linear regression with squared loss</h3>
+
+<p>Let’s do linear regression with squared loss using the assumptions</p>
+
+<ul>
+  <li><script type="math/tex">G = 4UX^2</script>,</li>
+  <li><script type="math/tex">\|x_t\| \le X</script>, and</li>
+  <li><script type="math/tex">\|y\| \le UX</script>.</li>
+</ul>
+
+<p>Under this set up our regret is</p>
+
+<script type="math/tex; mode=display">8UX^2\sqrt{2/T}</script>
+
+<p>since <script type="math/tex">\nabla l(w) = 2(w^T x - y)x</script>.
+(The norm bound on <script type="math/tex">\nabla l(w)</script> makes use of the Cauchy–Schwarz inequality.)
+Now, hold on a sec… this is the same rate as the Rademacher complexity for the
+statistical learning approach!</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… reconciling and connecting statistical learning and online learning!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: <a href="http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/">MLSS 2011 lectures</a>.</p>
+
+<h4 id="footnotes">Footnotes</h4>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>If you’re like me, with more of stats background, then this might be an
+“aha!” moment. If it is, take a moment to enjoy it. <a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>Don’t worry if you’ve never heard of reproducing Kernel Hilbert spaces. They won’t
+show up here. <a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>The inequality may look more familiar as
+<script type="math/tex">l_t(w_t) - \nabla l_t (w_t)^T w_t \le l_t(u) - \nabla l_t (w_t)^T u</script>. <a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

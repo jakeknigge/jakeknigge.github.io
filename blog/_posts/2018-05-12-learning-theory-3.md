@@ -5,9 +5,9 @@ date:   2018-05-12 21:00:00 -0700
 categories: jekyll update
 ---
 Howdy learning theorists! Today we're going to connect statistical learning and online
-learning. We'll do via model averaging and exploiting online learning's local perspective.
-To that end, this post could have easily been called "the power of local optimization",
-which has a nice ring to it.
+learning. We'll do so via model averaging and exploiting online learning's local
+perspective. To that end, this post could have easily been called "the power of local
+optimization", which has a nice ring to it.
 
 Our goal is address a few questions that pop up when the online learning approach is
 unfamiliar.
@@ -19,7 +19,7 @@ unfamiliar.
 ### The approach
 
 Because online learning generates a sequence of models rather than a single model, we
-have to pick a model to compare to the empirical risk minimizer. In particular, we'll
+have to pick a model to compare against the empirical risk minimizer. In particular, we'll
 choose the average model. Then we can use the online analysis machinery to provide a
 risk bound on that model.
 

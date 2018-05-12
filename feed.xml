@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-12T12:36:23-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-12T14:34:32-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
 </subtitle><entry><title type="html">Learning theory - reconciliations and connections</title><link href="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html" rel="alternate" type="text/html" title="Learning theory - reconciliations and connections" /><published>2018-05-12T22:00:00-06:00</published><updated>2018-05-12T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html">&lt;p&gt;Howdy learning theorists! Today we’re going to connect statistical learning and online
-learning. We’ll do via model averaging and exploiting online learning’s local perspective.
-To that end, this post could have easily been called “the power of local optimization”,
-which has a nice ring to it.&lt;/p&gt;
+learning. We’ll do so via model averaging and exploiting online learning’s local
+perspective. To that end, this post could have easily been called “the power of local
+optimization”, which has a nice ring to it.&lt;/p&gt;
 
 &lt;p&gt;Our goal is address a few questions that pop up when the online learning approach is
 unfamiliar.&lt;/p&gt;
@@ -16,7 +16,7 @@ unfamiliar.&lt;/p&gt;
 &lt;h3 id=&quot;the-approach&quot;&gt;The approach&lt;/h3&gt;
 
 &lt;p&gt;Because online learning generates a sequence of models rather than a single model, we
-have to pick a model to compare to the empirical risk minimizer. In particular, we’ll
+have to pick a model to compare against the empirical risk minimizer. In particular, we’ll
 choose the average model. Then we can use the online analysis machinery to provide a
 risk bound on that model.&lt;/p&gt;
 
@@ -207,7 +207,7 @@ learning setting! Then a foray into the mind of R.A. Fisher with Brad Efron’s 
 &lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
 
 &lt;p&gt;This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
-Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Howdy learning theorists! Today we’re going to connect statistical learning and online learning. We’ll do via model averaging and exploiting online learning’s local perspective. To that end, this post could have easily been called “the power of local optimization”, which has a nice ring to it.</summary></entry><entry><title type="html">Learning theory - online learning</title><link href="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html" rel="alternate" type="text/html" title="Learning theory - online learning" /><published>2018-05-10T22:00:00-06:00</published><updated>2018-05-10T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html">&lt;p&gt;Welcome back! Today’s post focuses on the &lt;strong&gt;online learning&lt;/strong&gt; perspective of learning.
+Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Howdy learning theorists! Today we’re going to connect statistical learning and online learning. We’ll do so via model averaging and exploiting online learning’s local perspective. To that end, this post could have easily been called “the power of local optimization”, which has a nice ring to it.</summary></entry><entry><title type="html">Learning theory - online learning</title><link href="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html" rel="alternate" type="text/html" title="Learning theory - online learning" /><published>2018-05-10T22:00:00-06:00</published><updated>2018-05-10T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/10/learning-theory-2.html">&lt;p&gt;Welcome back! Today’s post focuses on the &lt;strong&gt;online learning&lt;/strong&gt; perspective of learning.
 The online learning approach differs from statistical learning because it makes no
 assumption on the data source. In other words, the process generating the data is
 arbitrary!&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; Instead of focusing on the data source, online learning makes assumptions

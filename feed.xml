@@ -1,5 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-12T14:34:32-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Learning theory - reconciliations and connections</title><link href="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html" rel="alternate" type="text/html" title="Learning theory - reconciliations and connections" /><published>2018-05-12T22:00:00-06:00</published><updated>2018-05-12T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html">&lt;p&gt;Howdy learning theorists! Today we’re going to connect statistical learning and online
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-14T17:51:31-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Online learning theory - strong convexity</title><link href="http://localhost:4000/jekyll/update/2018/05/12/ol-example.html" rel="alternate" type="text/html" title="Online learning theory - strong convexity" /><published>2018-05-12T22:00:00-06:00</published><updated>2018-05-12T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/12/ol-example</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/12/ol-example.html">&lt;p&gt;Today’s post is a neat example of what &lt;em&gt;exploiting structure&lt;/em&gt; can do. It ties back to
+the post that introduced &lt;a href=&quot;/jekyll/update/2018/05/10/learning-theory-2.html&quot;&gt;online learning&lt;/a&gt;. In that discussion, we had an
+online gradient descent algorithm that relied on an auxiliary sequence of models.
+We calculated the auxiliary sequence using gradient descent and then we projected back
+into our model space, which was all fine and good; however, in this post we’re going to
+show that we can avoid that projection step when we have a loss function that is strongly
+convex.&lt;/p&gt;
+
+&lt;h3 id=&quot;strong-convexity&quot;&gt;Strong convexity&lt;/h3&gt;
+
+&lt;p&gt;Before we defined strong convexity, try to guess what it could look like. If you imagined
+a function that has positive (more precisely, nonnegative) curvature everywhere, then
+you’re spot on!&lt;/p&gt;
+
+&lt;p&gt;We’ll assume that our loss function &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; is &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt;-strongly, meaning&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;l(w) - l(u) \le \nabla l(w)^T (w-u) - \frac{\sigma}{2} \|(w-u)\|^2.&lt;/script&gt;
+
+&lt;p&gt;(Technically, strong convexity is defined with respect to a norm—in this case, it’s
+the &lt;script type=&quot;math/tex&quot;&gt;\ell_2&lt;/script&gt; norm.) So, strong convexity means that our function grows faster than
+linearly in all directions.&lt;/p&gt;
+
+&lt;h3 id=&quot;online-gradient-descent&quot;&gt;Online gradient descent&lt;/h3&gt;
+
+&lt;p&gt;With strongly convex losses, the online gradient descent algorithm is a one-liner.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;strong&gt;Algorithm&lt;/strong&gt; &lt;em&gt;online gradient descent with strongly convex losses.&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;given&lt;/strong&gt; parameters &lt;script type=&quot;math/tex&quot;&gt;\alpha_1,\alpha_2,\dots&lt;/script&gt;, an initial model &lt;script type=&quot;math/tex&quot;&gt;w_1 = 0&lt;/script&gt;, and a
+bound on the norm of the gradient, &lt;em&gt;i.e.&lt;/em&gt;, &lt;script type=&quot;math/tex&quot;&gt;\|\nabla l(w)\| \le G&lt;/script&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;repeat&lt;/strong&gt; for &lt;script type=&quot;math/tex&quot;&gt;t=1,2,\dots&lt;/script&gt;
+    &lt;ul&gt;
+      &lt;li&gt;compute a gradient step:&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;w_{t+1} = w_t - \alpha_t \nabla l_t(w_t).&lt;/script&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;That’s it! Now here’s the cool part. If we know the minimum eigenvalue
+&lt;script type=&quot;math/tex&quot;&gt;\sigma = \lambda_\min(H)&lt;/script&gt;, associated with the Hessian of &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt;, then we can choose
+&lt;script type=&quot;math/tex&quot;&gt;\alpha_t = 1/t\sigma&lt;/script&gt; which gives&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{1}{T} \sum_{t=1}^T \big( l_t(w_t) - l_t(u^\star_T) \big) \le \frac{G^2}{2\sigma}
+      \frac{\ln T+1}{T}.&lt;/script&gt;
+
+&lt;p&gt;We can interpret this bound as: convergence is fast when we have global information about
+the sequence of loss functions. No proof this time (although it’s very similar to the
+online gradient descent proof), so that’s it for today!&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… a foray into the mind of R.A. Fisher with Brad Efron’s help!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today’s post is a neat example of what exploiting structure can do. It ties back to the post that introduced online learning. In that discussion, we had an online gradient descent algorithm that relied on an auxiliary sequence of models. We calculated the auxiliary sequence using gradient descent and then we projected back into our model space, which was all fine and good; however, in this post we’re going to show that we can avoid that projection step when we have a loss function that is strongly convex.</summary></entry><entry><title type="html">Learning theory - reconciliations and connections</title><link href="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html" rel="alternate" type="text/html" title="Learning theory - reconciliations and connections" /><published>2018-05-12T22:00:00-06:00</published><updated>2018-05-12T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/12/learning-theory-3.html">&lt;p&gt;Howdy learning theorists! Today we’re going to connect statistical learning and online
 learning. We’ll do so via model averaging and exploiting online learning’s local
 perspective. To that end, this post could have easily been called “the power of local
 optimization”, which has a nice ring to it.&lt;/p&gt;
@@ -1523,178 +1584,4 @@ table of contents &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/predbook/&quo
 &lt;p&gt;I would also recommend checking out Sébastien Bubeck’s blog 
 &lt;a href=&quot;https://blogs.princeton.edu/imabandit&quot;&gt;“I’m a bandit”&lt;/a&gt; and, in particular, his bandit tutorials:
 &lt;a href=&quot;https://blogs.princeton.edu/imabandit/2016/05/11/bandit-theory-part-i/&quot;&gt;part 1&lt;/a&gt; and &lt;a href=&quot;https://blogs.princeton.edu/imabandit/2016/05/13/bandit-theory-part-ii/&quot;&gt;part 2&lt;/a&gt;. Also check out his new YouTube
-channel: https://www.youtube.com/user/sebastienbubeck/videos.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today we’re talking about bandits. Bandit problems, not dissimilar from Markov chains, are one of those simple models that apply to a wide variety of problems. Indeed, many results of “sequential decision making” stem from the study of bandit problems. Plus the name is cool, so that should provide some motivation for wanting to study them. The name bandit originates from the term one-armed bandit, which was used to describe slot machines.</summary></entry><entry><title type="html">Logarithmic Sobolev inequalities</title><link href="http://localhost:4000/jekyll/update/2018/04/07/lsi.html" rel="alternate" type="text/html" title="Logarithmic Sobolev inequalities" /><published>2018-04-07T17:00:00-06:00</published><updated>2018-04-07T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/07/lsi</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/07/lsi.html">&lt;p&gt;As promised, this post will be about logarithmic Sobolev inequalities, which
-are (exponential) concentration inequalities for functions defined on the
-binary hypercube. In particular, we’ll review a specific case where we
-get speedy concentration thanks to a variance-like bound on our function of
-interest. Let’s concentrate some measure!&lt;/p&gt;
-
-&lt;h3 id=&quot;starting-simple&quot;&gt;Starting simple&lt;/h3&gt;
-
-&lt;p&gt;To get things going, we’ll look at a logarithmic Sobolev inequality for a 
-function defined on the &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; dimensional binary hypercube&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;f: \{-1,1\}^n \to \reals.&lt;/script&gt;
-
-&lt;p&gt;Our random variables &lt;script type=&quot;math/tex&quot;&gt;X \in \{-1,1\}^n&lt;/script&gt; are Rademacher random variables, 
-&lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-g_X(x) = 
-\begin{cases}
-+1, &amp; \textsf{with probability } 0.5 \\
--1, &amp; \textsf{with probability } 0.5.
-\end{cases} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;We define &lt;script type=&quot;math/tex&quot;&gt;Z = f(X)&lt;/script&gt; as our real-valued random variable of interest. 
-Logarithmic Sobolev inequalities compare to quantities related to &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;entropy functional&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathrm{ent}(f) = \E \big[ f(X) \log f(X) \big] - 
-				  \E f(X) \log \big( \E f(X) \big)&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Efron–Stein-like functional&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{E}(f) = \frac{1}{2} \E \left[ \sum_{i=1}^n \left( f(X) - 
-	f \left( \tilde{X}^{(i)} \right) \right)^2 \right].&lt;/script&gt;
-
-&lt;p&gt;The quantity &lt;script type=&quot;math/tex&quot;&gt;\tilde{X}^{(i)}&lt;/script&gt; is the vector &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; with its &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th
-component drawn from an independent copy—this is the same idea as in the
-Efron–Stein inequality. For our purposes, this implies that &lt;script type=&quot;math/tex&quot;&gt;X_i&lt;/script&gt; changes
-sign.&lt;/p&gt;
-
-&lt;p&gt;The &lt;strong&gt;logarithmic Sobolev inequality&lt;/strong&gt;for this set up is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathrm{ent}(f^2) \le 2 \mathcal{E}(f).&lt;/script&gt;
-
-&lt;h3 id=&quot;concentration-inequality&quot;&gt;Concentration inequality&lt;/h3&gt;
-
-&lt;p&gt;With our logarithmic Sobolev inequality pinned down, we’ll now prove
-a concentration inequality for a function satisfying&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{i=1}^n \left( f(x) - f \left( \tilde{x}^{(i)} \right) \right)^2 \le v&lt;/script&gt;
-
-&lt;p&gt;for some &lt;script type=&quot;math/tex&quot;&gt;v &gt; 0&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;x \in \{-1,1\}^n&lt;/script&gt;. In particular, we’ll show that
-for all &lt;script type=&quot;math/tex&quot;&gt;t &gt; 0&lt;/script&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(Z &gt; \E Z + t) \le e^{-2t^2/v}.&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Technical detail—hint.&lt;/strong&gt;
-The proof hinges on the following fact (which we’ll show in a later post
-because it uses some nice ideas)&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\left( e^{z/2} - e^{y/2} \right)^2 \le \frac{(z-y)^2}{8}(e^{z} + e^{y})&lt;/script&gt;
-
-&lt;p&gt;for &lt;script type=&quot;math/tex&quot;&gt;z \ge y&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
-
-&lt;p&gt;We’re going to follow the so-called &lt;strong&gt;Herbst argument&lt;/strong&gt; to prove the
-concentration inequality. The key ingredient of Herbst’s argument is the use
-of a &lt;strong&gt;differential inequality&lt;/strong&gt; on a function &lt;script type=&quot;math/tex&quot;&gt;g(x) = e^{\lambda f(x)/2}&lt;/script&gt;
-with parameter &lt;script type=&quot;math/tex&quot;&gt;\lambda&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Part 1: defining a differential inequality.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The entropy of &lt;script type=&quot;math/tex&quot;&gt;g^2&lt;/script&gt; is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathrm{ent}(g^2) = \mathrm{ent}(e^{\lambda f}) 
-	= \lambda \E \big[ e^{\lambda f(X)} f(X) \big] -  
-	  \E e^{\lambda f(X)} \log \big( \E e^{\lambda f(X)} \big).&lt;/script&gt;
-
-&lt;p&gt;Now, if we stare at this for a moment and let our &lt;em&gt;cumulant generating 
-function&lt;/em&gt; neurons fire, then we see that if we let 
-&lt;script type=&quot;math/tex&quot;&gt;F(\lambda) = \E e^{\lambda f(X)}&lt;/script&gt;, then we get a &lt;strong&gt;differential inequality&lt;/strong&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathrm{ent}(g^2) = \lambda F'(\lambda) - F(\lambda) \log F(\lambda).&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Part 2: putting the logarithmic Sobolev inequality to work.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The logarithmic Sobolev inequality states&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\mathrm{ent}(g^2) &amp;\le 2 \mathcal{E}(g) \\
-&amp;\stackrel{\textsf{def}}{=} 
-	\E \left[ \sum_{i=1}^n \left( e^{\lambda f(X) / 2} - 
-		e^{\lambda f \left( \tilde{X}^{(i)} \right) / 2} \right)^2 \right] \\
-&amp;\stackrel{\textsf{hint}}{\le} 
-	\frac{1}{8} \sum_{i=1}^n \E \left[ 
-	\lambda^2 \left( f(X) - f \left( \tilde{X}^{(i)} \right) \right)^2 
-	\left( e^{\lambda f(X)} - e^{\lambda f \left( \tilde{X}^{(i)} \right)} \right)
-	\right] \\
-&amp;\le \frac{\lambda^2 v}{8} \E \left[ e^{\lambda f(X)} \right].
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Part 3: connecting the dots with some calculus.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Okay, cool; we’ve shown that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathrm{ent}(e^{\lambda f}) \le \frac{\lambda^2 v}{8} 
-	\E \left[ e^{\lambda f(X)} \right]&lt;/script&gt;
-
-&lt;p&gt;which we can rewrite as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\lambda F'(\lambda) - F(\lambda) \log F(\lambda) \le 
-	\frac{\lambda^2 v}{8} F(\lambda).&lt;/script&gt;
-
-&lt;p&gt;Now, let’s write this guy in a slightly different form in the spirit of
-the Herbst argument:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\lambda F'(\lambda) - F(\lambda) \log F(\lambda)}{\lambda^2 F(\lambda)} 
-	= \frac{\lambda F'(\lambda) - \log F(\lambda)}{\lambda^2 F(\lambda)}
-	\le \frac{v}{8}.&lt;/script&gt;
-
-&lt;p&gt;The calculus part of brain might be screaming something like&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{d}{dz} \left( \frac{\log z}{z} \right) = \frac{1 - \log z}{z^2},&lt;/script&gt;
-
-&lt;p&gt;which we translate to&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{d}{dz} \left( \frac{\log F(\lambda)}{\lambda} \right) \le \frac{v}{8}.&lt;/script&gt;
-
-&lt;p&gt;Invoking more calculus ideas, l’Hospital’s rule says&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\lim_{\lambda \to 0} \frac{\log F(\lambda)}{\lambda} 
-	= \frac{F'(0)}{F(0)} = \E Z.&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;Part 4: bounding via Cramér–Chernoff and Markov.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;We’re almost there! Let’s assume that &lt;script type=&quot;math/tex&quot;&gt;\lambda &gt; 0&lt;/script&gt; and then integrate
-the inequality between &lt;script type=&quot;math/tex&quot;&gt;0&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\lambda&lt;/script&gt;. From l’Hospital’s rule, we get
-that &lt;script type=&quot;math/tex&quot;&gt;\log F(\lambda) / \lambda \le \E Z + \lambda v / 8&lt;/script&gt;. Now, let’s undo
-our &lt;script type=&quot;math/tex&quot;&gt;\lambda&lt;/script&gt;-in-the-denominator and our logarithmic term and write&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;F(\lambda) \le e^{\lambda \E Z + \lambda^2 v / 8}.&lt;/script&gt;
-
-&lt;p&gt;Finally, we can use the Cramér–Chernoff technique and Markov’s inequality to 
-say that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\prob(Z &gt; \E Z + t) 
-	&amp;\le \inf_{\lambda &gt; 0} F(\lambda)e^{-\lambda \E Z - \lambda t} \\
-	&amp;\le \inf_{\lambda &gt; 0}  e^{\lambda^2 v / 8 - \lambda t} \\
-	&amp;\le e^{-2t^2/v}.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;(Note that &lt;script type=&quot;math/tex&quot;&gt;\lambda = 4t/v&lt;/script&gt; minimizes the upper bound.) Pat yourself on the 
-back and give Mr. Herbst a (pretend) pat on the back too.&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;…bandits!&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from Chapter 5 of (my new favorite book):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">As promised, this post will be about logarithmic Sobolev inequalities, which are (exponential) concentration inequalities for functions defined on the binary hypercube. In particular, we’ll review a specific case where we get speedy concentration thanks to a variance-like bound on our function of interest. Let’s concentrate some measure!</summary></entry></feed>
+channel: https://www.youtube.com/user/sebastienbubeck/videos.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today we’re talking about bandits. Bandit problems, not dissimilar from Markov chains, are one of those simple models that apply to a wide variety of problems. Indeed, many results of “sequential decision making” stem from the study of bandit problems. Plus the name is cool, so that should provide some motivation for wanting to study them. The name bandit originates from the term one-armed bandit, which was used to describe slot machines.</summary></entry></feed>

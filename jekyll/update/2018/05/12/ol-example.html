@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	  <title>
+  	  	Online learning theory - strong convexity
+  	  </title>
+	</head>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Begin Jekyll SEO tag v2.4.0 -->
+<title>Online learning theory - strong convexity | Eggink Blog</title>
+<meta name="generator" content="Jekyll v3.7.2" />
+<meta property="og:title" content="Online learning theory - strong convexity" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Today’s post is a neat example of what exploiting structure can do. It ties back to the post that introduced online learning. In that discussion, we had an online gradient descent algorithm that relied on an auxiliary sequence of models. We calculated the auxiliary sequence using gradient descent and then we projected back into our model space, which was all fine and good; however, in this post we’re going to show that we can avoid that projection step when we have a loss function that is strongly convex." />
+<meta property="og:description" content="Today’s post is a neat example of what exploiting structure can do. It ties back to the post that introduced online learning. In that discussion, we had an online gradient descent algorithm that relied on an auxiliary sequence of models. We calculated the auxiliary sequence using gradient descent and then we projected back into our model space, which was all fine and good; however, in this post we’re going to show that we can avoid that projection step when we have a loss function that is strongly convex." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/05/12/ol-example.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/05/12/ol-example.html" />
+<meta property="og:site_name" content="Eggink Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-05-12T22:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Today’s post is a neat example of what exploiting structure can do. It ties back to the post that introduced online learning. In that discussion, we had an online gradient descent algorithm that relied on an auxiliary sequence of models. We calculated the auxiliary sequence using gradient descent and then we projected back into our model space, which was all fine and good; however, in this post we’re going to show that we can avoid that projection step when we have a loss function that is strongly convex.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/05/12/ol-example.html","headline":"Online learning theory - strong convexity","dateModified":"2018-05-12T22:00:00-06:00","datePublished":"2018-05-12T22:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/05/12/ol-example.html"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="alternate" type="application/rss+xml" title="Eggink Blog" href="/feed.xml">
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" rel="author" href="/">Eggink Blog</a>
+
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Online learning theory - strong convexity</h1>
+    <p class="post-meta">May 12, 2018</p>
+  </header>
+
+  <article class="post-content">
+    <p>Today’s post is a neat example of what <em>exploiting structure</em> can do. It ties back to
+the post that introduced <a href="/jekyll/update/2018/05/10/learning-theory-2.html">online learning</a>. In that discussion, we had an
+online gradient descent algorithm that relied on an auxiliary sequence of models.
+We calculated the auxiliary sequence using gradient descent and then we projected back
+into our model space, which was all fine and good; however, in this post we’re going to
+show that we can avoid that projection step when we have a loss function that is strongly
+convex.</p>
+
+<h3 id="strong-convexity">Strong convexity</h3>
+
+<p>Before we defined strong convexity, try to guess what it could look like. If you imagined
+a function that has positive (more precisely, nonnegative) curvature everywhere, then
+you’re spot on!</p>
+
+<p>We’ll assume that our loss function <script type="math/tex">l</script> is <script type="math/tex">\sigma</script>-strongly, meaning</p>
+
+<script type="math/tex; mode=display">l(w) - l(u) \le \nabla l(w)^T (w-u) - \frac{\sigma}{2} \|(w-u)\|^2.</script>
+
+<p>(Technically, strong convexity is defined with respect to a norm—in this case, it’s
+the <script type="math/tex">\ell_2</script> norm.) So, strong convexity means that our function grows faster than
+linearly in all directions.</p>
+
+<h3 id="online-gradient-descent">Online gradient descent</h3>
+
+<p>With strongly convex losses, the online gradient descent algorithm is a one-liner.</p>
+
+<hr />
+<p><strong>Algorithm</strong> <em>online gradient descent with strongly convex losses.</em></p>
+
+<ul>
+  <li><strong>given</strong> parameters <script type="math/tex">\alpha_1,\alpha_2,\dots</script>, an initial model <script type="math/tex">w_1 = 0</script>, and a
+bound on the norm of the gradient, <em>i.e.</em>, <script type="math/tex">\|\nabla l(w)\| \le G</script>.</li>
+  <li><strong>repeat</strong> for <script type="math/tex">t=1,2,\dots</script>
+    <ul>
+      <li>compute a gradient step:</li>
+    </ul>
+
+    <script type="math/tex; mode=display">w_{t+1} = w_t - \alpha_t \nabla l_t(w_t).</script>
+  </li>
+</ul>
+
+<hr />
+
+<p>That’s it! Now here’s the cool part. If we know the minimum eigenvalue
+<script type="math/tex">\sigma = \lambda_\min(H)</script>, associated with the Hessian of <script type="math/tex">l</script>, then we can choose
+<script type="math/tex">\alpha_t = 1/t\sigma</script> which gives</p>
+
+<script type="math/tex; mode=display">\frac{1}{T} \sum_{t=1}^T \big( l_t(w_t) - l_t(u^\star_T) \big) \le \frac{G^2}{2\sigma}
+      \frac{\ln T+1}{T}.</script>
+
+<p>We can interpret this bound as: convergence is fast when we have global information about
+the sequence of loss functions. No proof this time (although it’s very similar to the
+online gradient descent proof), so that’s it for today!</p>
+
+<h3 id="next-up">Next up</h3>
+
+<p>… a foray into the mind of R.A. Fisher with Brad Efron’s help!</p>
+
+<h3 id="references">References</h3>
+
+<p>This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
+Machine Learning Summer School in 2011. Watch them here: <a href="http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/">MLSS 2011 lectures</a>.</p>
+
+
+  </article>
+
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://jakeknigge-github-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+                           
+<script type="text/javascript" 
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+  
+<script type="text/x-mathjax-config">
+
+MathJax.Hub.Config({
+
+    showProcessingMessages: false,
+    messageStyle: "none",
+	CommonHTML: { linebreaks: { automatic: true } },
+	SVG: { linebreaks: { automatic: true } },
+    "HTML-CSS": {
+      linebreaks: { automatic: true},
+      availableFonts: ["TeX", "Neo-Euler", "STIX"],
+      preferredFont: "TeX",
+      webFont: "TeX",
+        matchFontHeight: true,
+        scale: 100,
+        styles: {
+            ".MathJax_Display": {
+                margin: "0.85em 0em"
+            }
+        }
+    },
+    MathMenu: {  
+        showFontMenu: true
+    },
+    TeX: {
+      TagIndent: "0.25em",
+      extensions: ["AMSmath.js","AMSsymbols.js","cancel.js"], //cancel.js needed only for I_29
+      equationNumbers: {
+        autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
+      },
+      MultLineWidth: "80%",
+		Macros: {  
+			mat: ["{\\overset \\leftrightarrow #1}",1],  
+			bra: ["{\\langle #1 |}",1],  
+			ket: ["{| #1 \\rangle}",1],  
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
+			tr: "\\text{tr}",  
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+			dbar: "đ",
+			d: "\\mathrm{d}",
+			i: "\\mathrm{i}",
+			eps: "\\varepsilon",
+			sla: ["\\displaystyle{\\not} #1",1],  
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			reals: "\\mathbf{R}",
+			integers: "\\mathbf{Z}",
+			naturals: "\\mathbf{N}",
+			symm: "\\mathbf{S}",
+			ones: "\\mathbf{1}",
+			prox: "\\mathbf{prox}",
+			dom: "\\mathop{\\mathbf{dom}}",
+			dist: "\\mathop{\\mathbf{dist}}",
+			argmin: "\\mathop{\\mathrm{argmin}}",
+			argmax: "\\mathop{\\mathrm{argmax}}",
+			epi: "\\mathop{\\mathbf{epi}}",
+			E: "\\mathbf{E}",
+			Var: "\\mathbf{Var}",
+			Cov: "\\mathbf{Cov}",
+			prob: "\\mathbf{P}",
+			ind: ["{\\mathbf{I}_{#1}}", 1],
+			tvec: ["{\\boldsymbol{#1}}",1],
+			relint: "\\mathop{\\mathbf{relint}}",
+		}
+    }
+});
+</script>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Eggink Blog</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            
+              Eggink Blog
+            
+            </li>
+            
+            <li><a class="u-email" href="mailto:jake@knigge.us">jake@knigge.us</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+  
+  
+  
+  <li><a href="https://github.com/jakeknigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jakeknigge</span></a></li>
+  
+  
+  
+  <li><a href="https://www.twitter.com/JakeKnigge"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">JakeKnigge</span></a></li>
+  
+  
+  
+</ul>
+
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+    
+  </body>
+
+</html>

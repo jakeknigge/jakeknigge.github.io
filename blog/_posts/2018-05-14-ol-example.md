@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Online learning theory - strong convexity"
-date:   2018-05-12 21:00:00 -0700
+date:   2018-05-14 21:00:00 -0700
 categories: jekyll update
 ---
 Today's post is a neat example of what *exploiting structure* can do. It ties back to

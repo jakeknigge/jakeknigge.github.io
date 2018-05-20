@@ -289,12 +289,12 @@ s.setAttribute('data-timestamp', +new Date());
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                           
-<script type="text/javascript" 
+
+<script type="text/javascript"
 	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-  
+
 <script type="text/x-mathjax-config">
 
 MathJax.Hub.Config({
@@ -302,21 +302,23 @@ MathJax.Hub.Config({
     showProcessingMessages: false,
     messageStyle: "none",
 	CommonHTML: { linebreaks: { automatic: true } },
-	SVG: { linebreaks: { automatic: true } },
-    "HTML-CSS": {
+	"HTML-CSS": {
       linebreaks: { automatic: true},
-      availableFonts: ["TeX", "Neo-Euler", "STIX"],
-      preferredFont: "TeX",
-      webFont: "TeX",
+      fonts: ["TeX", "STIX", "Neo-Euler"],
+      //availableFonts: ["STIX", "TeX", "Neo-Euler"],
+      //preferredFont: ["STIX", "TeX"],
+      //webFont: ["STIX", "TeX"],
         matchFontHeight: true,
         scale: 100,
+        minScaleAdjust: 50,
         styles: {
             ".MathJax_Display": {
                 margin: "0.85em 0em"
             }
         }
     },
-    MathMenu: {  
+    SVG: { linebreaks: { automatic: true } },
+    MathMenu: {
         showFontMenu: true
     },
     TeX: {
@@ -326,21 +328,21 @@ MathJax.Hub.Config({
         autoNumber: "AMS", formatNumber: function (n) { return EqnumPrefix() + n }
       },
       MultLineWidth: "80%",
-		Macros: {  
-			mat: ["{\\overset \\leftrightarrow #1}",1],  
-			bra: ["{\\langle #1 |}",1],  
-			ket: ["{| #1 \\rangle}",1],  
-			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],  
-			tr: "\\text{tr}",  
-			ev: ["{\\left\\langle #1 \\right \\rangle}",1],  
-			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],  
+		Macros: {
+			mat: ["{\\overset \\leftrightarrow #1}",1],
+			bra: ["{\\langle #1 |}",1],
+			ket: ["{| #1 \\rangle}",1],
+			sprod: ["{\\left\\langle #1 | #2 \\right\\rangle}",2],
+			tr: "\\text{tr}",
+			ev: ["{\\left\\langle #1 \\right \\rangle}",1],
+			threej: ["{\\left(\\begin{array}{ccc} #1 & #3 & #5 \\\\ #2 & #4 & #6 \\end{array} \\right)}",6],
 			dbar: "đ",
 			d: "\\mathrm{d}",
 			i: "\\mathrm{i}",
 			eps: "\\varepsilon",
-			sla: ["\\displaystyle{\\not} #1",1],  
-			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],  
-			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],  
+			sla: ["\\displaystyle{\\not} #1",1],
+			spinvec: ["\\left( \\begin{array}{c} #1 \\\\ #2 \\end{array} \\right)",2],
+			spinmat: ["\\left( \\begin{array}{cc} #1 & #2 \\\\ #3 & #4 \\end{array} \\right)",4],
 			reals: "\\mathbf{R}",
 			integers: "\\mathbf{Z}",
 			naturals: "\\mathbf{N}",
@@ -365,6 +367,7 @@ MathJax.Hub.Config({
 </script>
 
 </div>
+
       </div>
     </div>
 

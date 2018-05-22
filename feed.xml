@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-21T20:23:52-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-21T20:25:20-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
 </subtitle><entry><title type="html">Fisherian vignette - part 1</title><link href="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html" rel="alternate" type="text/html" title="Fisherian vignette - part 1" /><published>2018-05-23T21:30:00-06:00</published><updated>2018-05-23T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/23/fisher-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html">&lt;p&gt;Today’s post is our first (short) vignette of the Fisher series. These vignettes are taken
 from Brad Efron’s paper and they illustrate Fisher’s continued impact on modern
 statistics. For the first one, we’re going to connect the &lt;strong&gt;Fisher information&lt;/strong&gt; with the
@@ -68,8 +68,8 @@ come a-knocking.&lt;/p&gt;
 
 &lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
 
-&lt;p&gt;… we’ll dig into the &lt;strong&gt;plug-in&lt;/strong&gt; (which we had a flavor of today) for our second
-vignette!&lt;/p&gt;
+&lt;p&gt;… we’ll dig into the &lt;strong&gt;plug-in principle&lt;/strong&gt; (which we had a flavor of today) for our
+second vignette!&lt;/p&gt;
 
 &lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
 

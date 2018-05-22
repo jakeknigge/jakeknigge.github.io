@@ -1,5 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-20T11:16:06-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">A few flavors of Fisher’s style</title><link href="http://localhost:4000/jekyll/update/2018/05/22/fisher-0.html" rel="alternate" type="text/html" title="A few flavors of Fisher's style" /><published>2018-05-22T12:30:00-06:00</published><updated>2018-05-22T12:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/22/fisher-0</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/22/fisher-0.html">&lt;p&gt;Today’s post is the first in a sequence about Sir Ronald Aylmer Fisher and his approach to
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-21T20:23:52-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Fisherian vignette - part 1</title><link href="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html" rel="alternate" type="text/html" title="Fisherian vignette - part 1" /><published>2018-05-23T21:30:00-06:00</published><updated>2018-05-23T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/23/fisher-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html">&lt;p&gt;Today’s post is our first (short) vignette of the Fisher series. These vignettes are taken
+from Brad Efron’s paper and they illustrate Fisher’s continued impact on modern
+statistics. For the first one, we’re going to connect the &lt;strong&gt;Fisher information&lt;/strong&gt; with the
+bootstrap.&lt;/p&gt;
+
+&lt;p&gt;In what follows, we’re going to assume that we have data (&lt;em&gt;i.e.&lt;/em&gt;, realizations of
+random variables) &lt;script type=&quot;math/tex&quot;&gt;x_1,\dots,x_n&lt;/script&gt; from a fixed and unknown distribution with density
+function &lt;script type=&quot;math/tex&quot;&gt;f_\theta&lt;/script&gt;. The density is indexed by our &lt;em&gt;parameter-of-interest&lt;/em&gt; &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;fisher-information&quot;&gt;Fisher information&lt;/h3&gt;
+
+&lt;p&gt;The &lt;strong&gt;Fisher information&lt;/strong&gt; is the expected value of the second derivative of the
+log-density (which is also the derivative of the so called &lt;strong&gt;score function&lt;/strong&gt;):&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_\theta = \E_\theta \left[\frac{-\partial^2 \log f_\theta(x)}{\partial \theta^2}\right].&lt;/script&gt;
+
+&lt;p&gt;The Fisher information for the full sample is &lt;script type=&quot;math/tex&quot;&gt;n I_\theta&lt;/script&gt; because the observations are
+(assumed to be) i.i.d.&lt;/p&gt;
+
+&lt;p&gt;So, why do we care about the Fisher information? Well, Fisher showed us that the
+asymptotic standard errors of his maximum likelihood estimates (MLEs) are related to the
+information in the sample by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathsf{se}_\theta \big( \hat{\theta} \big) = \frac{1}{\sqrt{n I_\theta}}.&lt;/script&gt;
+
+&lt;p&gt;Moreover, by the asymptotic efficiency of MLEs, no other (asymptotically) unbiased
+estimator can do better (versus the Cramér–Rao lower bound).&lt;/p&gt;
+
+&lt;p&gt;Okay, that’s cool but there’s a pesky &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt; in the denominator. So let’s do what
+Fisher would do and replace it by its &lt;em&gt;plug-in&lt;/em&gt; estimate, giving&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\widehat{\mathsf{se}} = \frac{1}{\sqrt{n I_{\hat{\theta}}}}.&lt;/script&gt;
+
+&lt;p&gt;Heck yeah. Now we’ve got something actionable that we can use on MLEs as we please.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-bootstrap&quot;&gt;The bootstrap&lt;/h3&gt;
+
+&lt;p&gt;If you haven’t met the bootstrap yet, do so pronto. It’s an unbelievably useful tool
+that every statistician, machine learner, data scientist, computer scientist, and
+person-who-works-with-real-data should know, use, and love.&lt;/p&gt;
+
+&lt;p&gt;Here’s the gist of it.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;We compute our statistic of interest &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta} = T(x_1,\dots,x_n)&lt;/script&gt; using the data
+we have.&lt;/li&gt;
+  &lt;li&gt;Then we resample &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; points from our data &lt;em&gt;with replacement&lt;/em&gt;, which gives us a
+&lt;strong&gt;bootstrap sample&lt;/strong&gt;. Some data may appear multiple times and others not at all.&lt;/li&gt;
+  &lt;li&gt;From our bootstrap sample, we compute a bootstrap statistic
+&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}^\star_\textsf{boot} = T(x^\star_1,\dots,x^\star_n)&lt;/script&gt;, where
+&lt;script type=&quot;math/tex&quot;&gt;x^\star_i&lt;/script&gt; is the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;-th bootstrap sample.&lt;/li&gt;
+  &lt;li&gt;(Note that &lt;script type=&quot;math/tex&quot;&gt;x_i \neq x^\star_i&lt;/script&gt; in general.)&lt;/li&gt;
+  &lt;li&gt;Do this many times and estimate the standard error,
+&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mathsf{se}}_\textsf{boot}&lt;/script&gt; of the statistic by the sample
+standard deviation.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For a large number of bootstrap samples, the bootstrap standard error estimate is
+approximately equal to Fisher’s standard error estimate using the Fisher information.&lt;/p&gt;
+
+&lt;p&gt;The bootstrap approach exploits computer-based computation, which is nice when our
+statistic is some nasty function of the data; on the other hand, Fisher’s approach
+often exploits clever manipulations, &lt;em&gt;i.e.&lt;/em&gt;, human-based computations to produce standard
+error estimates. Both approaches are worth having in your pocket when standard errors
+come a-knocking.&lt;/p&gt;
+
+&lt;p&gt;That’s it for today.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… we’ll dig into the &lt;strong&gt;plug-in&lt;/strong&gt; (which we had a flavor of today) for our second
+vignette!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“R.A. Fisher in the 21st Century” by Bradley Efron.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Computer Age Statistical Inference: Algorithms, Evidence, and Data Science&lt;/em&gt; by
+Bradley Efron and Trevor Hastie. A digital copy lives here: &lt;a href=&quot;http://web.stanford.edu/~hastie/CASI/&quot;&gt;CASI&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Today’s post is our first (short) vignette of the Fisher series. These vignettes are taken from Brad Efron’s paper and they illustrate Fisher’s continued impact on modern statistics. For the first one, we’re going to connect the Fisher information with the bootstrap.</summary></entry><entry><title type="html">A few flavors of Fisher’s style</title><link href="http://localhost:4000/jekyll/update/2018/05/22/fisher-0.html" rel="alternate" type="text/html" title="A few flavors of Fisher's style" /><published>2018-05-22T12:30:00-06:00</published><updated>2018-05-22T12:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/22/fisher-0</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/22/fisher-0.html">&lt;p&gt;Today’s post is the first in a sequence about Sir Ronald Aylmer Fisher and his approach to
 statistics. These posts are very, very much related to the wonderful 1998 paper by Brad
 Efron, titled, “R.A. Fisher in the 21st Century”. A digital copy lives here:
 &lt;a href=&quot;https://projecteuclid.org/euclid.ss/1028905930&quot;&gt;R. A. Fisher in the 21st century&lt;/a&gt;. To quote Efron’s last paragraph:&lt;/p&gt;
@@ -1249,263 +1329,4 @@ bandits!&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…</summary></entry><entry><title type="html">Upper confidence bounds</title><link href="http://localhost:4000/jekyll/update/2018/04/18/ucb.html" rel="alternate" type="text/html" title="Upper confidence bounds" /><published>2018-04-18T21:00:00-06:00</published><updated>2018-04-18T21:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/18/ucb</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/18/ucb.html">&lt;p&gt;Today we’re going to prove the upper bound that results from the upper
-confidence bound (UCB) strategy. The UCB strategy allowed us to bound
-the pseudo-regret by a term which is logarithmic in the number of
-rounds played. Generally speaking, “good” regret bounds for bandit problems
-are sublinear in the number of rounds played.&lt;/p&gt;
-
-&lt;h3 id=&quot;stochastic-bandit-problems&quot;&gt;Stochastic bandit problems&lt;/h3&gt;
-
-&lt;p&gt;As a quick review, here’s the set-up for the stochastic multi-armed bandit
-problem.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;There are &lt;script type=&quot;math/tex&quot;&gt;\{1,\dots,K\}&lt;/script&gt; arms.&lt;/li&gt;
-  &lt;li&gt;Each arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; corresponds to an unknown probability distribution &lt;script type=&quot;math/tex&quot;&gt;p_i&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;At each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, the player selects an arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; (independently of 
-previous choices) and receives a reward &lt;script type=&quot;math/tex&quot;&gt;X_{I_t,t} \sim p_{I_t}&lt;/script&gt;.&lt;/li&gt;
-  &lt;li&gt;We assess a player’s performance by her &lt;strong&gt;regret&lt;/strong&gt;, which
-compares her performance to (something like) the best-possible performance.&lt;/li&gt;
-  &lt;li&gt;After the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds of the game, the player’s regret is&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;R_n = \max_{i=1,\dots,K} \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t},&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;where &lt;script type=&quot;math/tex&quot;&gt;K&lt;/script&gt; is the number of bandit arms, &lt;script type=&quot;math/tex&quot;&gt;X_{i,t}&lt;/script&gt; is the reward of arm 
-&lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; at time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; is the player’s (possibly randomly) chosen arm.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;We’ll denote the mean of distribution &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; with &lt;script type=&quot;math/tex&quot;&gt;\mu_i&lt;/script&gt; and define&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu^\star = \max_{i=1,\dots,K} \mu_i \quad \textsf{and} \quad
-	i^\star = \argmax_{i=1,\dots,K} \mu_i&lt;/script&gt;
-
-&lt;p&gt;as optimal parameters. Instead of using the regret to assess our player’s performance,
-we’ll use the &lt;strong&gt;pseudo-regret&lt;/strong&gt;, which is defined as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\bar{R}_n &amp;= \max_{i=1,\dots,K} \E 
-	\left[ \sum_{i=1}^n X_{i,t} - \sum_{i=1}^n X_{I_t,t} \right] \\
-	&amp;= n \mu^\star - \E \sum_{t=1}^n \mu_{I_t}.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;We know that &lt;script type=&quot;math/tex&quot;&gt;\bar{R}_n \le \E R_n&lt;/script&gt; because of Jensen’s inequality for convex 
-functions. For our purposes, a more informative form of the pseudo-regret is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n = \sum_{i=1}^K \Delta_i \E T_i(n),&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\Delta_i = \mu^\star - \mu_i&lt;/script&gt; is the suboptimality of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; and the
-random variable &lt;script type=&quot;math/tex&quot;&gt;T_i(n) = \sum_{i=1}^n \ind{}\{I_t = i\}&lt;/script&gt; is the number of times 
-arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is selected in the first &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds.&lt;/p&gt;
-
-&lt;h3 id=&quot;upper-confidence-bounds&quot;&gt;Upper confidence bounds&lt;/h3&gt;
-
-&lt;p&gt;One approach for simultaneously performing &lt;strong&gt;exploration&lt;/strong&gt; and &lt;strong&gt;exploitation&lt;/strong&gt; is 
-to use &lt;strong&gt;upper confidence bound&lt;/strong&gt; (UCB) strategies. UCB strategies produce upper
-bounds (based on a confidence level) on the current estimate for each arm’s mean 
-reward. The player selects the arm that is the best using the UCB-modified estimate.&lt;/p&gt;
-
-&lt;p&gt;In the spirit of brevity, we’re going to gloss over a few important details 
-(&lt;em&gt;e.g.&lt;/em&gt;, Legendre–Fenchel duals and Hoeffding’s lemma) but here’s the gist of 
-the UCB set-up.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Define &lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,n} = \frac{1}{n} \sum_{j=1}^n X_{i,j}&lt;/script&gt; as the sample
-mean of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; after being played &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; times.&lt;/li&gt;
-  &lt;li&gt;For a convex function &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt; with convex conjugate &lt;script type=&quot;math/tex&quot;&gt;\psi^*&lt;/script&gt; and parameter 
-&lt;script type=&quot;math/tex&quot;&gt;\lambda &gt; 0&lt;/script&gt;, the cumulant generating function of &lt;script type=&quot;math/tex&quot;&gt;X&lt;/script&gt; is bounded by &lt;script type=&quot;math/tex&quot;&gt;\psi&lt;/script&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\ln \E e^{\lambda(X - \E X)} \le \psi(\lambda) \quad \textsf{and} \quad
-\ln \E e^{\lambda(\E X - X)} \le \psi(\lambda).&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;By Markov’s inequality and the Cramér–Chernoff technique&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left( \mu_i - \widehat{\mu}_{i,n} \ge \varepsilon \right) \le
-	e^{-n \psi^*(\varepsilon)}.&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Markov’s inequality means that, with probability &lt;script type=&quot;math/tex&quot;&gt;1 - \delta&lt;/script&gt;, we have an 
-upper bound on the estimate of the &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt;th arm:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\mu_i &lt; \widehat{\mu}_{i,n} + (\psi^*)^{-1} 
-	\left(\frac{1}{n} \ln \frac{1}{\delta} \right). %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;The &lt;strong&gt;UCB strategy&lt;/strong&gt; is (very) simple; at each time &lt;script type=&quot;math/tex&quot;&gt;t&lt;/script&gt;, select the arm &lt;script type=&quot;math/tex&quot;&gt;I_t&lt;/script&gt; by&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_t \in \argmax_{i=1,\dots,K} \left\{ \widehat{\mu}_{i,T_i(t-1)} + 
-	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) \right\}.&lt;/script&gt;
-
-&lt;p&gt;&lt;strong&gt;The tradeoff.&lt;/strong&gt;
-Let’s pick apart this term and see how it encourages exploration and exploitation.
-We’re going to use &lt;script type=&quot;math/tex&quot;&gt;\psi(x) = x^2/8&lt;/script&gt; with convex conjugate 
-&lt;script type=&quot;math/tex&quot;&gt;\psi^*(z) = 2z^2&lt;/script&gt;, so that &lt;script type=&quot;math/tex&quot;&gt;(\psi^*)^{-1}(z) = (x/2)^{1/2}&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;When arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; has not been played many times before time $t$, &lt;em&gt;i.e.&lt;/em&gt;, when 
-&lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; is small numerator of &lt;script type=&quot;math/tex&quot;&gt;\frac{\alpha \ln t}{T_i(t-1)}&lt;/script&gt; dominates 
-and the UCB-adjusted estimate of arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is likely to relatively high, which
-encourages arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; to be chosen. In other words, it encourages exploration.&lt;/p&gt;
-
-&lt;p&gt;As arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is chosen more, &lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; increases and the estimate
-&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; improves. If arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; is the optimal arm, then the 
-&lt;script type=&quot;math/tex&quot;&gt;\widehat{\mu}_{i,T_i(t-1)}&lt;/script&gt; term dominates the estimates for other arms and the
-UCB-adjustment further encourages selection of this arm. This means that the 
-algorithm exploits high-yielding arms.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Upper bound on pseudo-regret.&lt;/strong&gt;
-If our player follows the UCB scheme specified above, then for &lt;script type=&quot;math/tex&quot;&gt;\alpha &gt; 2&lt;/script&gt;
-her pseudo-regret is upperbounded as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n \le \sum_{i: \Delta_i &gt; 0} \left( 
-\frac{\alpha \Delta_i}{\psi^*(\Delta_i / 2)} \ln n + \frac{\alpha}{\alpha - 2} 
-\right).&lt;/script&gt;
-
-&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
-
-&lt;p&gt;Okay, here goes. We incur regret when we don’t pick the optimal arm, &lt;em&gt;i.e.&lt;/em&gt;,
-when &lt;script type=&quot;math/tex&quot;&gt;I_t \neq i^\star&lt;/script&gt;. So, we need to analyze the conditions that lead
-us to choose a suboptimal arm.&lt;/p&gt;
-
-&lt;p&gt;Assume we’ve played arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; a total of &lt;script type=&quot;math/tex&quot;&gt;T_i(t-1)&lt;/script&gt; times and arm &lt;script type=&quot;math/tex&quot;&gt;i^\star&lt;/script&gt; 
-a total of &lt;script type=&quot;math/tex&quot;&gt;T_{i^\star}(t-1)&lt;/script&gt; times. By the set up of our bandit scenario, 
-if &lt;script type=&quot;math/tex&quot;&gt;I_t = i&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;I_t = i = \argmax_{j=1,\dots,K} \left\{ \widehat{\mu}_{j,T_j(t-1)} + 
-	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) \right\},&lt;/script&gt;
-
-&lt;p&gt;then at least one of the following holds&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\widehat{\mu}_{i^\star, T_{i^\star}(t-1)} + 
-	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_{i^\star}(t-1)} \right) &amp;\le \mu^\star 
-	&amp;&amp; \#1 \\
-\mu_i + (\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) &amp;&lt; 
-	\widehat{\mu}_{i, T_i(t-1)} &amp;&amp; \#2 \\
-\mu^\star - 2(\psi^*)^{-1} \left( \frac{\alpha \ln n}{T_i(t-1)} \right) &amp;&lt; \mu_i &amp;&amp; \#3.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The first indicates that our current UCB-adjusted estimate of the mean for the
-optimal arm is less than its true value. It occurs with probability&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left(  \widehat{\mu}_{i^\star, T_{i^\star}(t-1)} + 
-	(\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_{i^\star}(t-1)} \right) 
-	\ge \mu^\star \right) \le 
-	\exp \left ( -\alpha \ln t \right) = t^{-\alpha}.&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The second indicates that our estimate for arm &lt;script type=&quot;math/tex&quot;&gt;i&lt;/script&gt; exceeds its true value by
-an amount greater than the UCB—hence the UCB adjustment is not yet helpful. 
-It occurs with probability&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob \left(  \mu_i + (\psi^*)^{-1} \left( \frac{\alpha \ln t}{T_i(t-1)} \right) &gt; 
-	\widehat{\mu}_{i, T_i(t-1)} \right) \le 
-	\exp \left ( -\alpha \ln t \right) = t^{-\alpha}.&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The third follows from similar logic as the second, and is illuminated by 
-the rewriting:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\Delta_i  = \mu^\star - \mu_i &amp;&lt; 
-	2(\psi^*)^{-1} \left( \frac{\alpha \ln n}{T_i(t-1)} \right) \\
-\psi^*(\Delta_i / 2) &lt; \frac{\alpha \ln n}{T_i(t-1)} &amp;\iff
-T_i(t-1) &lt; \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)}.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;The probability of the third event is 0 when 
-&lt;script type=&quot;math/tex&quot;&gt;T_i(n) \ge u = 
-  \left\lceil \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} \right\rceil&lt;/script&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;If #1, #2, and #3 are false, then we pick the optimal arm, meaning we incur
-no regret.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Now, we let’s consider the implications of these events on &lt;script type=&quot;math/tex&quot;&gt;\E T_i(t-1)&lt;/script&gt;,
-because this will allow us to bound the pseudo-regret. We have that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\E T_i(n) &amp;= \E \sum_{t=1}^n \ind{}\{I_t = i\} \\
-	&amp;\le u + \E \sum_{t=u+1}^n \ind{}\{I_t = i \textsf{ and inequality #3 is false}\} \\
-	&amp;\le u + \E \sum_{t=u+1}^n \ind{}\{\textsf{inequality #1 or #2 is true}\} \\
-	&amp;= u + \sum_{t=u+1}^n \prob\left( \ind{\textsf{inequality #1}} \right) + 
-		\prob\left( \ind{\textsf{inequality #2}} \right) \\
-	&amp;\le u + 2\sum_{t=1}^n \sum_{s=1}^t \frac{1}{t^\alpha} \\
-	&amp;= u + 2\sum_{t=1}^n \frac{1}{t^{\alpha-1}} \\
-	&amp;\le \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} + 
-		2 \int_{1}^{\infty} \frac{dt}{t^{\alpha-1}} \\
-	&amp;= \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} + \frac{\alpha}{\alpha-2}.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;&lt;em&gt;(It took me a few times to follow that argument, so I would re-read it a few times.
-I also put some notes in the &lt;a href=&quot;#the-intermediate-steps&quot;&gt;intermediate steps&lt;/a&gt;
-subsection below.)&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Now, we just sum over the suboptimal arms to get the pseudo-regret bound&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\bar{R}_n \le \sum_{i: \Delta_i &gt; 0} \left( 
-\frac{\alpha \Delta_i}{\psi^*(\Delta_i / 2)} \ln n + \frac{\alpha}{\alpha - 2}
-\right).&lt;/script&gt;
-
-&lt;p&gt;This is the proof given in Bubeck and Cesa-Bianchi’s &lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;bandits survey&lt;/a&gt;, 
-which is an adaptation of the proof of Auer, Cesa-Bianchi, and Fischer’s
-&lt;a href=&quot;http://cesa-bianchi.di.unimi.it/Pubblicazioni/ml-02.pdf&quot;&gt;original analysis&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;… a proof of that cool inequality that helped us in the proof of 
-concentration inequality implied by the 
-&lt;a href=&quot;/jekyll/update/2018/04/07/lsi.html&quot;&gt;logarithmic Sobolev inequality&lt;/a&gt; a few posts back!&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is based on material from:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Regret Analysis of Stochastic and Nonstochastic Multi-armed Bandit Problems&lt;/em&gt;
-by S. Bubeck and N. Cesa-Bianchi. A digital copy can be found 
-&lt;a href=&quot;http://sbubeck.com/SurveyBCB12.pdf&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;Finite-time Analysis of the Multiarmed Bandit Problem&lt;/em&gt; by P. Auer, N. 
-Cesa-Bianchi, and P. Fischer. A digital copy can be found &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/Pubblicazioni/ml-02.pdf&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; (a.k.a. “Perdition, Burning, and Flames”) 
-by N. Cesa-Bianchi and G. Lugosi. Find a description of the book and its 
-table of contents &lt;a href=&quot;http://cesa-bianchi.di.unimi.it/predbook/&quot;&gt;here&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;the-intermediate-steps&quot;&gt;The intermediate steps&lt;/h4&gt;
-
-&lt;p&gt;We can interpret the relationship&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E T_i(n) = \E \sum_{t=1}^n \ind{}\{I_t = i\} \le 
-	u + \E \sum_{t=u+1}^n \ind{}\{I_t = i \textsf{ and inequality #3 is false}\}&lt;/script&gt;
-
-&lt;p&gt;by observing that the indicator &lt;script type=&quot;math/tex&quot;&gt;\ind{}\{I_t = i\}&lt;/script&gt; and be written as
-&lt;script type=&quot;math/tex&quot;&gt;\ind{}\{I_t = i \textsf{ and inequality #3 is false or true}\}&lt;/script&gt;. 
-Inequality #3 is true when 
-&lt;script type=&quot;math/tex&quot;&gt;T_i(k) \le u = 
-	\left\lceil \frac{\alpha \ln n}{\psi^*(\Delta_i / 2)} \right\rceil&lt;/script&gt;.
-So, the bound follows by assuming that indicator is active at &lt;script type=&quot;math/tex&quot;&gt;k=1,\dots,u&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;Because we allow either #1 or #2 to be true, the event&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\big\{I_t = i \textsf{ and inequality #3 is false}\big\} \subseteq
-	\big\{\textsf{inequality #1 or #2 is true}\big\},&lt;/script&gt;
-
-&lt;p&gt;meaning the probability of the second event is larger.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today we’re going to prove the upper bound that results from the upper confidence bound (UCB) strategy. The UCB strategy allowed us to bound the pseudo-regret by a term which is logarithmic in the number of rounds played. Generally speaking, “good” regret bounds for bandit problems are sublinear in the number of rounds played.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…</summary></entry></feed>

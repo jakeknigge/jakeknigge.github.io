@@ -1,5 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-21T20:25:20-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Fisherian vignette - part 1</title><link href="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html" rel="alternate" type="text/html" title="Fisherian vignette - part 1" /><published>2018-05-23T21:30:00-06:00</published><updated>2018-05-23T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/23/fisher-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html">&lt;p&gt;Today’s post is our first (short) vignette of the Fisher series. These vignettes are taken
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-25T22:21:19-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+</subtitle><entry><title type="html">Fisherian vignette - part 2</title><link href="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html" rel="alternate" type="text/html" title="Fisherian vignette - part 2" /><published>2018-05-26T11:30:00-06:00</published><updated>2018-05-26T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/26/fisher-2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html">&lt;p&gt;This post picks up with Fisher’s idea of the &lt;strong&gt;plug-in principle&lt;/strong&gt;. As with the last post,
+the point of emphasis is on the connection between &lt;em&gt;maximum likelihood estimates&lt;/em&gt; and
+the &lt;em&gt;bootstrap&lt;/em&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-plug-in-principle&quot;&gt;The plug-in principle&lt;/h3&gt;
+
+&lt;p&gt;Part of Fisher’s genius is his practicality, and the plug-in principle is a prime example
+of his problem solving tactics. Let’s say that we’re doing a linear regression problem&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;y_i = \beta^T x_i + \varepsilon_i
+      \stackrel{\textsf{notation}}{=} y = X\beta + \varepsilon
+      \iff \E [y | x] = X\beta
+      \stackrel{\textsf{notation}}{=} \E [y_i | x_i] = \beta^T x_i,&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;\beta \in \reals^d&lt;/script&gt; is a vector of parameters to be estimated based off of &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt;
+observations.&lt;/p&gt;
+
+&lt;h4 id=&quot;fisher-style&quot;&gt;Fisher style&lt;/h4&gt;
+
+&lt;p&gt;We’re interested in the standard error of the &lt;script type=&quot;math/tex&quot;&gt;k&lt;/script&gt;th component of the
+estimated coefficient vector &lt;script type=&quot;math/tex&quot;&gt;\hat{\beta}&lt;/script&gt;&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathsf{se} \big( \hat{\beta}_k \big) = \sigma_\varepsilon \sqrt{(X^T X)^{-1}_{kk}}.&lt;/script&gt;
+
+&lt;p&gt;Now, here’s where we go &lt;em&gt;Fisherian&lt;/em&gt; on this problem, use our plug-in estimates, and make
+sure that everybody who should be wearing a hat &lt;em&gt;is&lt;/em&gt; wearing a hat&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\widehat{\mathsf{se}} \big( \hat{\beta}_k \big)
+      = \hat{\sigma}_\varepsilon \sqrt{(X^T X)^{-1}_{kk}}.&lt;/script&gt;
+
+&lt;p&gt;All these quantities can be estimated based on the data &lt;script type=&quot;math/tex&quot;&gt;(X,y)&lt;/script&gt;, which means that we’re
+in business.&lt;/p&gt;
+
+&lt;h4 id=&quot;efron-style&quot;&gt;Efron style&lt;/h4&gt;
+
+&lt;p&gt;Now, let’s look at the bootstrap version of these estimates:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\widehat{\mathsf{se}}_\infty \big( \hat{\beta}_k \big)
+      = \hat{\sigma}_\varepsilon \sqrt{(X^T X)^{-1}_{kk}},&lt;/script&gt;
+
+&lt;p&gt;where we perform &lt;script type=&quot;math/tex&quot;&gt;B = \infty&lt;/script&gt; bootstrap samples. This results follows the fact that
+the variance of a bootstrap estimate &lt;script type=&quot;math/tex&quot;&gt;\hat{\beta}^\star&lt;/script&gt; is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var\left( \hat{\beta}^\star \right) = (X^T X)^{-1} X^T \Var(y^\star) X (X^T X)^{-1}
+      = \hat{\sigma}^2_\varepsilon (X^T X)^{-1}.&lt;/script&gt;
+
+&lt;p&gt;After we take the square root, we’re done.&lt;/p&gt;
+
+&lt;h4 id=&quot;take-aways&quot;&gt;Take-aways&lt;/h4&gt;
+
+&lt;p&gt;The bootstrap gives us the same standard error estimates as Fisher’s plug-in estimates,
+but it does so by reversing the order of operations.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;MLE world:&lt;/strong&gt; compute, then plug in.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Compute an approximate formula for the standard error as a function of the unknown
+parameters.&lt;/li&gt;
+  &lt;li&gt;Plug in the estimates.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Bootstrap world:&lt;/strong&gt; plug in, then compute.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Plug in estimates for the unknown parameters.&lt;/li&gt;
+  &lt;li&gt;Compute standard errors via bootstrap sampling (&lt;em&gt;i.e&lt;/em&gt;, simulation).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So, where Fisher was clever in his mathematics, the bootstrap is clever in exploiting
+cheap computation. Moreover, the bootstrap allows us to side step some (potentially nasty)
+mathematics via (lots of) computation.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… confidence intervals!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“R.A. Fisher in the 21st Century” by Bradley Efron.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Computer Age Statistical Inference: Algorithms, Evidence, and Data Science&lt;/em&gt; by
+Bradley Efron and Trevor Hastie. A digital copy lives here: &lt;a href=&quot;http://web.stanford.edu/~hastie/CASI/&quot;&gt;CASI&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;An Introduction to the Bootstrap&lt;/em&gt; by Bradley Efron and Robert J. Tibshirani.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">This post picks up with Fisher’s idea of the plug-in principle. As with the last post, the point of emphasis is on the connection between maximum likelihood estimates and the bootstrap.</summary></entry><entry><title type="html">Fisherian vignette - part 1</title><link href="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html" rel="alternate" type="text/html" title="Fisherian vignette - part 1" /><published>2018-05-23T21:30:00-06:00</published><updated>2018-05-23T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/23/fisher-1</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/23/fisher-1.html">&lt;p&gt;Today’s post is our first (short) vignette of the Fisher series. These vignettes are taken
 from Brad Efron’s paper and they illustrate Fisher’s continued impact on modern
 statistics. For the first one, we’re going to connect the &lt;strong&gt;Fisher information&lt;/strong&gt; with the
 bootstrap.&lt;/p&gt;
@@ -1244,89 +1327,4 @@ for (sub-)Gaussian random variables. The CLT says that for each &lt;script type=
 
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; by N. Cesa-Bianchi and G. Lugosi.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact).</summary></entry><entry><title type="html">A neat inequality</title><link href="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" rel="alternate" type="text/html" title="A neat inequality" /><published>2018-04-21T17:00:00-06:00</published><updated>2018-04-21T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/21/ineq</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/21/ineq.html">&lt;p&gt;As promised, this post will be about the useful inequality from 
-&lt;a href=&quot;/jekyll/update/2018/04/07/lsi.html&quot;&gt;logarithmic Sobolev inequality post&lt;/a&gt;. Without further ado…&lt;/p&gt;
-
-&lt;h3 id=&quot;starting-simple&quot;&gt;Starting simple&lt;/h3&gt;
-
-&lt;p&gt;We are going to prove the inequality&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\left( e^{z/2} - e^{y/2} \right)^2 \le \frac{(z-y)^2}{8}(e^{z} + e^{y})&lt;/script&gt;
-
-&lt;p&gt;for real numbers &lt;script type=&quot;math/tex&quot;&gt;z \ge y&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
-
-&lt;p&gt;We can rewrite the inequality as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\left( e^{(z-y)/2} - 1 \right)^2 \le \frac{(z-y)^2}{8}(e^{z-y} + 1).&lt;/script&gt;
-
-&lt;p&gt;Now, let’s define &lt;script type=&quot;math/tex&quot;&gt;x = z - y&lt;/script&gt;, where &lt;script type=&quot;math/tex&quot;&gt;x \ge 0&lt;/script&gt; because &lt;script type=&quot;math/tex&quot;&gt;z \ge y&lt;/script&gt;. Let’s
-move everything to the righthand side and open up the square, which gives&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le \frac{x^2}{8} (e^x + 1) - \left( e^x - 2e^{x/2} + 1 \right).&lt;/script&gt;
-
-&lt;p&gt;Now, let’s collect like terms&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;0 \le e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1 = f(x).&lt;/script&gt;
-
-&lt;p&gt;When &lt;script type=&quot;math/tex&quot;&gt;x = 0&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;f(x)&lt;/script&gt;, &lt;em&gt;i.e.&lt;/em&gt;, the righthand side, is also 0. Let’s look at the
-derivative of &lt;script type=&quot;math/tex&quot;&gt;f&lt;/script&gt; to see whether the function is increasing or decreasing:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{df(x)}{dx} = \frac{1}{8} e^x (x^2 + 2x - 8) + \frac{x}{4} + e^{x/2}.&lt;/script&gt;
-
-&lt;p&gt;Unfortunately, that pesky &lt;script type=&quot;math/tex&quot;&gt;-e^x&lt;/script&gt; means we still have some work to do. Let’s 
-keep taking derivatives and see if we can’t get rid of that negative:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\frac{d^2f(x)}{dx^2} &amp;= 
-	\frac{1}{8} \left( e^x \left( x^2 + 4x - 6 \right) + 4e^{x/2} + 2 \right) \\
-\frac{d^3f(x)}{dx^3} &amp;= 
-	\frac{1}{8} \left( e^x \left( x^2 + 6x - 2 \right) + 2e^{x/2} \right) \\
-\frac{d^4f(x)}{dx^4} &amp;= 
-	\frac{1}{8} \left( e^x \left( x^2 + 8x + 4 \right) + e^{x/2} \right).
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Cool! The righthand side of &lt;script type=&quot;math/tex&quot;&gt;\frac{d^4f(x)}{dx^4} &gt; 0&lt;/script&gt; since &lt;script type=&quot;math/tex&quot;&gt;x \ge 0&lt;/script&gt;. 
-Also, we have that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{df(0)}{dx} = \frac{d^2f(0)}{dx^2} = \frac{d^3f(0)}{dx^3} = 0,&lt;/script&gt;
-
-&lt;p&gt;which means we’re in good shape (because the fourth derivative being positive). 
-In particular, we integrate the fourth derivative four times and conclude that 
-our original function that is always greater than or equal to zero&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-0 \le
-\int \frac{d^4f(x)}{dx^4} \, d^4x &amp;= \frac{e^x (x^2 - 8)}{8} + 2 e^{(x/2)}
-	+ \frac{c_1 x^3}{6} + \frac{c_2 x^2}{2} + c_3 x + c_4 \\
-		&amp;= e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1,
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;c_4 = -1&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;c_3 = 0&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;c_2 = 1/4&lt;/script&gt;, and &lt;script type=&quot;math/tex&quot;&gt;c_1 = 0&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h4 id=&quot;remarks&quot;&gt;Remarks&lt;/h4&gt;
-
-&lt;p&gt;This inequality is neat because you can approach it a few different ways. If
-we didn’t use &lt;script type=&quot;math/tex&quot;&gt;x = z - y&lt;/script&gt;, and worked directly with the function of &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt;
-and &lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt;, we could’ve gotten away with taking two derivatives instead of 
-four. I find the “&lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt;-consolidated”, “fourth derivative” approach easier 
-as it requires less bookkeeping for &lt;script type=&quot;math/tex&quot;&gt;y&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;z&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;And the best for last: the easiest way to solve this problem is to plot it. 😏&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;… more Rademacher rad-ness, modified logarithmic Sobolev inequalities &lt;strong&gt;or&lt;/strong&gt; 
-bandits!&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is related to material from Chapter 5 of (my new favorite book):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by 
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact).</summary></entry></feed>

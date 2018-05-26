@@ -39,11 +39,9 @@ s.setAttribute('data-timestamp', +new Date());
 	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-
 <script type="text/x-mathjax-config">
 
 MathJax.Hub.Config({
-
     showProcessingMessages: false,
     messageStyle: "none",
 	CommonHTML: { linebreaks: { automatic: true } },
@@ -51,8 +49,8 @@ MathJax.Hub.Config({
       linebreaks: { automatic: true},
       fonts: ["TeX", "STIX", "Neo-Euler"],
       //availableFonts: ["STIX", "TeX", "Neo-Euler"],
-      //preferredFont: ["STIX", "TeX"],
-      //webFont: ["STIX", "TeX"],
+      preferredFont: ["TeX", "STIX"],
+      webFont: ["TeX", "STIX"],
         matchFontHeight: true,
         scale: 100,
         minScaleAdjust: 50,

@@ -2,7 +2,7 @@
 <html>
 	<head>
   	  <title>
-  	  	A neat inequality
+  	  	Fisherian vignette - part 3
   	  </title>
 	</head>
 
@@ -11,19 +11,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- Begin Jekyll SEO tag v2.4.0 -->
-<title>A neat inequality | Eggink Blog</title>
+<title>Fisherian vignette - part 3 | Eggink Blog</title>
 <meta name="generator" content="Jekyll v3.7.2" />
-<meta property="og:title" content="A neat inequality" />
+<meta property="og:title" content="Fisherian vignette - part 3" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…" />
-<meta property="og:description" content="As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…" />
-<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" />
-<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/04/21/ineq.html" />
+<meta name="description" content="Today we’re talking about confidence intervals, so put on your inference hat and let’s get down to business." />
+<meta property="og:description" content="Today we’re talking about confidence intervals, so put on your inference hat and let’s get down to business." />
+<link rel="canonical" href="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html" />
+<meta property="og:url" content="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html" />
 <meta property="og:site_name" content="Eggink Blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2018-04-21T17:00:00-06:00" />
+<meta property="article:published_time" content="2018-06-02T21:30:00-06:00" />
 <script type="application/ld+json">
-{"description":"As promised, this post will be about the useful inequality from logarithmic Sobolev inequality post. Without further ado…","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/04/21/ineq.html","headline":"A neat inequality","dateModified":"2018-04-21T17:00:00-06:00","datePublished":"2018-04-21T17:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/04/21/ineq.html"},"@context":"http://schema.org"}</script>
+{"description":"Today we’re talking about confidence intervals, so put on your inference hat and let’s get down to business.","@type":"BlogPosting","url":"http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html","headline":"Fisherian vignette - part 3","dateModified":"2018-06-02T21:30:00-06:00","datePublished":"2018-06-02T21:30:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html"},"@context":"http://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
   <link rel="stylesheet" href="/assets/main.css">
@@ -85,96 +85,76 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">A neat inequality</h1>
-    <p class="post-meta">Apr 21, 2018</p>
+    <h1 class="post-title">Fisherian vignette - part 3</h1>
+    <p class="post-meta">Jun 2, 2018</p>
   </header>
 
   <article class="post-content">
-    <p>As promised, this post will be about the useful inequality from 
-<a href="/jekyll/update/2018/04/07/lsi.html">logarithmic Sobolev inequality post</a>. Without further ado…</p>
+    <p>Today we’re talking about confidence intervals, so put on your inference hat and let’s
+get down to business.</p>
 
-<h3 id="starting-simple">Starting simple</h3>
+<h3 id="confidence-intervals">Confidence intervals</h3>
 
-<p>We are going to prove the inequality</p>
+<p>Modern computation augmented by Fisher’s ideas gives us a nice way to generate confidence
+intervals for parameter estimates. That said, even in the absence of modern computation,
+we can still accomplish a lot with Fisher’s toolbox. Fisher’s approximate confidence
+intervals for a maximum likelihood estimate <script type="math/tex">\hat{\theta}</script> are</p>
 
-<script type="math/tex; mode=display">\left( e^{z/2} - e^{y/2} \right)^2 \le \frac{(z-y)^2}{8}(e^{z} + e^{y})</script>
+<script type="math/tex; mode=display">\hat{\theta} \pm z_\alpha \, \widehat{\textsf{se}},</script>
 
-<p>for real numbers <script type="math/tex">z \ge y</script>.</p>
+<p>where <script type="math/tex">z_\alpha</script> is value at the <script type="math/tex">\alpha</script>-quantile of a standard normal distribution.
+We can use this interval because MLEs are asymptotically normal, <em>i.e.</em>,
+<script type="math/tex">\hat{\theta} \stackrel{\textsf{asymp.}}{\sim} N(\theta, \textsf{se}^2)</script>.</p>
 
-<h3 id="proof">Proof</h3>
+<p>Fisher-style confidence intervals are slick for a few reasons; they are accurate, correct,
+and automatic. Let’s unpack each of these notions. To make things concrete, assume we’re
+looking at a two-sided 95% confidence interval.</p>
 
-<p>We can rewrite the inequality as</p>
+<p><strong>Accuracy.</strong> These confidence intervals converge to their true values at a rate of
+<script type="math/tex">n^{-1/2}</script>. So, after seeing <script type="math/tex">n</script> samples, the noncoverage probability is</p>
 
-<script type="math/tex; mode=display">\left( e^{(z-y)/2} - 1 \right)^2 \le \frac{(z-y)^2}{8}(e^{z-y} + 1).</script>
+<script type="math/tex; mode=display">2.5\% \pm c/\sqrt{n}.</script>
 
-<p>Now, let’s define <script type="math/tex">x = z - y</script>, where <script type="math/tex">x \ge 0</script> because <script type="math/tex">z \ge y</script>. Let’s
-move everything to the righthand side and open up the square, which gives</p>
+<p>(The term <script type="math/tex">c</script> depends on the specific problem, but don’t worry about that little guy.)</p>
 
-<script type="math/tex; mode=display">0 \le \frac{x^2}{8} (e^x + 1) - \left( e^x - 2e^{x/2} + 1 \right).</script>
+<p><strong>Correctness.</strong> By virtue of using the Fisher information to estimate our standard
+errors, the confidence interval estimates don’t waste any information. Moreover, the
+standard error estimates are the best (<em>i.e.</em>, smallest possible) for asymptotically
+unbiased estimates of <script type="math/tex">\theta</script>.</p>
 
-<p>Now, let’s collect like terms</p>
+<p><strong>Automatic-ness.</strong> No matter how nasty or complicated the problem is, we estimate
+<script type="math/tex">\hat{\theta}</script> and <script type="math/tex">\widehat{\textsf{se}}</script> using the same algorithm—always!</p>
 
-<script type="math/tex; mode=display">0 \le e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1 = f(x).</script>
+<h3 id="a-small-sample-caveat">A small sample caveat</h3>
 
-<p>When <script type="math/tex">x = 0</script>, <script type="math/tex">f(x)</script>, <em>i.e.</em>, the righthand side, is also 0. Let’s look at the
-derivative of <script type="math/tex">f</script> to see whether the function is increasing or decreasing:</p>
+<p>Confidence intervals can be untrustworthy for small samples. To deal with this situation,
+Fisher would transform his estimates to make them become “normal” more quickly. One of
+his go-to transformations was the inverse hyperbolic tangent function, which makes quick
+work of correlation coefficients for normally distributed data.</p>
 
-<script type="math/tex; mode=display">\frac{df(x)}{dx} = \frac{1}{8} e^x (x^2 + 2x - 8) + \frac{x}{4} + e^{x/2}.</script>
+<h3 id="bootstrap-benefits">Bootstrap benefits</h3>
 
-<p>Unfortunately, that pesky <script type="math/tex">-e^x</script> means we still have some work to do. Let’s 
-keep taking derivatives and see if we can’t get rid of that negative:</p>
+<p>The bootstrap distribution allows us to correct our confidence interval estimates for
+bias, skew, and standard error changes, <strong>and</strong> we get second-order accuracy—meaning
+our convergence rate gets faster and becomes <script type="math/tex">n^{-1}</script>,</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align*}
-\frac{d^2f(x)}{dx^2} &= 
-	\frac{1}{8} \left( e^x \left( x^2 + 4x - 6 \right) + 4e^{x/2} + 2 \right) \\
-\frac{d^3f(x)}{dx^3} &= 
-	\frac{1}{8} \left( e^x \left( x^2 + 6x - 2 \right) + 2e^{x/2} \right) \\
-\frac{d^4f(x)}{dx^4} &= 
-	\frac{1}{8} \left( e^x \left( x^2 + 8x + 4 \right) + e^{x/2} \right).
-\end{align*} %]]></script>
+<script type="math/tex; mode=display">\alpha/2 \pm c/\sqrt{n}</script>
 
-<p>Cool! The righthand side of <script type="math/tex">\frac{d^4f(x)}{dx^4} > 0</script> since <script type="math/tex">x \ge 0</script>. 
-Also, we have that</p>
-
-<script type="math/tex; mode=display">\frac{df(0)}{dx} = \frac{d^2f(0)}{dx^2} = \frac{d^3f(0)}{dx^3} = 0,</script>
-
-<p>which means we’re in good shape (because the fourth derivative being positive). 
-In particular, we integrate the fourth derivative four times and conclude that 
-our original function that is always greater than or equal to zero</p>
-
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{align*}
-0 \le
-\int \frac{d^4f(x)}{dx^4} \, d^4x &= \frac{e^x (x^2 - 8)}{8} + 2 e^{(x/2)}
-	+ \frac{c_1 x^3}{6} + \frac{c_2 x^2}{2} + c_3 x + c_4 \\
-		&= e^x \left( \frac{x^2}{8} - 1 \right) + \frac{x^2}{8} + 2e^{x/2} - 1,
-\end{align*} %]]></script>
-
-<p>where <script type="math/tex">c_4 = -1</script>, <script type="math/tex">c_3 = 0</script>, <script type="math/tex">c_2 = 1/4</script>, and <script type="math/tex">c_1 = 0</script>.</p>
-
-<h4 id="remarks">Remarks</h4>
-
-<p>This inequality is neat because you can approach it a few different ways. If
-we didn’t use <script type="math/tex">x = z - y</script>, and worked directly with the function of <script type="math/tex">y</script>
-and <script type="math/tex">z</script>, we could’ve gotten away with taking two derivatives instead of 
-four. I find the “<script type="math/tex">x</script>-consolidated”, “fourth derivative” approach easier 
-as it requires less bookkeeping for <script type="math/tex">y</script> and <script type="math/tex">z</script>.</p>
-
-<p>And the best for last: the easiest way to solve this problem is to plot it. 😏</p>
+<p>for a two-side <script type="math/tex">\alpha</script> interval. Hot dang, that’s fast.</p>
 
 <h3 id="next-up">Next up</h3>
 
-<p>… more Rademacher rad-ness, modified logarithmic Sobolev inequalities <strong>or</strong> 
-bandits!</p>
+<p>… conditional inference, ancillarity, and the magic formula!</p>
 
 <h3 id="references">References</h3>
 
-<p>This post is related to material from Chapter 5 of (my new favorite book):</p>
+<p>This post is related to material from:</p>
 
 <ul>
-  <li><em>Concentration Inequalities: A Nonasymptotic Theory of Independence</em> by 
-S. Boucheron, G. Lugosi, and P. Masart.</li>
+  <li>“R.A. Fisher in the 21st Century” by Bradley Efron.</li>
+  <li><em>Computer Age Statistical Inference: Algorithms, Evidence, and Data Science</em> by
+Bradley Efron and Trevor Hastie. A digital copy lives here: <a href="http://web.stanford.edu/~hastie/CASI/">CASI</a>.</li>
+  <li><em>An Introduction to the Bootstrap</em> by Bradley Efron and Robert J. Tibshirani.</li>
 </ul>
 
 

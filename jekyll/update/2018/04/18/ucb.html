@@ -379,20 +379,18 @@ s.setAttribute('data-timestamp', +new Date());
 	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-
 <script type="text/x-mathjax-config">
 
 MathJax.Hub.Config({
-
     showProcessingMessages: false,
     messageStyle: "none",
 	CommonHTML: { linebreaks: { automatic: true } },
 	"HTML-CSS": {
       linebreaks: { automatic: true},
-      fonts: ["TeX", "STIX", "Neo-Euler"],
+      fonts: ["TeX", "Neo-Euler"],
       //availableFonts: ["STIX", "TeX", "Neo-Euler"],
-      //preferredFont: ["STIX", "TeX"],
-      //webFont: ["STIX", "TeX"],
+      preferredFont: ["TeX"],
+      webFont: ["TeX"],
         matchFontHeight: true,
         scale: 100,
         minScaleAdjust: 50,
@@ -495,7 +493,7 @@ MathJax.Hub.Config({
       </div>
 
       <div class="footer-col footer-col-3">
-        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
+        <p>Jake W. Knigge&#39;s blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
 </p>
       </div>
     </div>

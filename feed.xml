@@ -1,5 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-05-25T22:21:19-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and  whatever else comes to mind.
-</subtitle><entry><title type="html">Fisherian vignette - part 2</title><link href="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html" rel="alternate" type="text/html" title="Fisherian vignette - part 2" /><published>2018-05-26T11:30:00-06:00</published><updated>2018-05-26T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/26/fisher-2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html">&lt;p&gt;This post picks up with Fisher’s idea of the &lt;strong&gt;plug-in principle&lt;/strong&gt;. As with the last post,
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-06-02T18:19:10-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
+</subtitle><entry><title type="html">Fisherian vignette - part 3</title><link href="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html" rel="alternate" type="text/html" title="Fisherian vignette - part 3" /><published>2018-06-02T21:30:00-06:00</published><updated>2018-06-02T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/06/02/fisher-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html">&lt;p&gt;Today we’re talking about confidence intervals, so put on your inference hat and let’s
+get down to business.&lt;/p&gt;
+
+&lt;h3 id=&quot;confidence-intervals&quot;&gt;Confidence intervals&lt;/h3&gt;
+
+&lt;p&gt;Modern computation augmented by Fisher’s ideas gives us a nice way to generate confidence
+intervals for parameter estimates. That said, even in the absence of modern computation,
+we can still accomplish a lot with Fisher’s toolbox. Fisher’s approximate confidence
+intervals for a maximum likelihood estimate &lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt; are&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\theta} \pm z_\alpha \, \widehat{\textsf{se}},&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;z_\alpha&lt;/script&gt; is value at the &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt;-quantile of a standard normal distribution.
+We can use this interval because MLEs are asymptotically normal, &lt;em&gt;i.e.&lt;/em&gt;,
+&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta} \stackrel{\textsf{asymp.}}{\sim} N(\theta, \textsf{se}^2)&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;Fisher-style confidence intervals are slick for a few reasons; they are accurate, correct,
+and automatic. Let’s unpack each of these notions. To make things concrete, assume we’re
+looking at a two-sided 95% confidence interval.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Accuracy.&lt;/strong&gt; These confidence intervals converge to their true values at a rate of
+&lt;script type=&quot;math/tex&quot;&gt;n^{-1/2}&lt;/script&gt;. So, after seeing &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; samples, the noncoverage probability is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;2.5\% \pm c/\sqrt{n}.&lt;/script&gt;
+
+&lt;p&gt;(The term &lt;script type=&quot;math/tex&quot;&gt;c&lt;/script&gt; depends on the specific problem, but don’t worry about that little guy.)&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Correctness.&lt;/strong&gt; By virtue of using the Fisher information to estimate our standard
+errors, the confidence interval estimates don’t waste any information. Moreover, the
+standard error estimates are the best (&lt;em&gt;i.e.&lt;/em&gt;, smallest possible) for asymptotically
+unbiased estimates of &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Automatic-ness.&lt;/strong&gt; No matter how nasty or complicated the problem is, we estimate
+&lt;script type=&quot;math/tex&quot;&gt;\hat{\theta}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\widehat{\textsf{se}}&lt;/script&gt; using the same algorithm—always!&lt;/p&gt;
+
+&lt;h3 id=&quot;a-small-sample-caveat&quot;&gt;A small sample caveat&lt;/h3&gt;
+
+&lt;p&gt;Confidence intervals can be untrustworthy for small samples. To deal with this situation,
+Fisher would transform his estimates to make them become “normal” more quickly. One of
+his go-to transformations was the inverse hyperbolic tangent function, which makes quick
+work of correlation coefficients for normally distributed data.&lt;/p&gt;
+
+&lt;h3 id=&quot;bootstrap-benefits&quot;&gt;Bootstrap benefits&lt;/h3&gt;
+
+&lt;p&gt;The bootstrap distribution allows us to correct our confidence interval estimates for
+bias, skew, and standard error changes, &lt;strong&gt;and&lt;/strong&gt; we get second-order accuracy—meaning
+our convergence rate gets faster and becomes &lt;script type=&quot;math/tex&quot;&gt;n^{-1}&lt;/script&gt;,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha/2 \pm c/\sqrt{n}&lt;/script&gt;
+
+&lt;p&gt;for a two-side &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt; interval. Hot dang, that’s fast.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… conditional inference, ancillarity, and the magic formula!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“R.A. Fisher in the 21st Century” by Bradley Efron.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Computer Age Statistical Inference: Algorithms, Evidence, and Data Science&lt;/em&gt; by
+Bradley Efron and Trevor Hastie. A digital copy lives here: &lt;a href=&quot;http://web.stanford.edu/~hastie/CASI/&quot;&gt;CASI&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;An Introduction to the Bootstrap&lt;/em&gt; by Bradley Efron and Robert J. Tibshirani.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Today we’re talking about confidence intervals, so put on your inference hat and let’s get down to business.</summary></entry><entry><title type="html">Fisherian vignette - part 2</title><link href="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html" rel="alternate" type="text/html" title="Fisherian vignette - part 2" /><published>2018-05-26T11:30:00-06:00</published><updated>2018-05-26T11:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/05/26/fisher-2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/05/26/fisher-2.html">&lt;p&gt;This post picks up with Fisher’s idea of the &lt;strong&gt;plug-in principle&lt;/strong&gt;. As with the last post,
 the point of emphasis is on the connection between &lt;em&gt;maximum likelihood estimates&lt;/em&gt; and
 the &lt;em&gt;bootstrap&lt;/em&gt;.&lt;/p&gt;
 
@@ -1179,152 +1244,4 @@ prediction with expert advice, Markov chains, something from convex optimization
 &lt;ul&gt;
   &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by
 S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Welcome back! This post is going to start us down the path of the entropy method for obtaining concentration inequalities. The idea is pretty straightforward. We take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type argument, derive exponential concentration inequalities.</summary></entry><entry><title type="html">Rademachers are rad - part III</title><link href="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html" rel="alternate" type="text/html" title="Rademachers are rad - part III" /><published>2018-04-25T17:00:00-06:00</published><updated>2018-04-25T17:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/25/rademacher_3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/25/rademacher_3.html">&lt;p&gt;After some ambivalence, I decided that we’ll pay homage to our Rademacher friends
-once again. We’re going to prove a minimax lower bound for an expert prediction
-problem. As we’ll see, Rademacher random variables will come to our rescue 
-(twice, in fact).&lt;/p&gt;
-
-&lt;h3 id=&quot;prediction-with-experts&quot;&gt;Prediction with experts&lt;/h3&gt;
-
-&lt;p&gt;Let’s say that we disagree with statistical learning theory on philosophical grounds,
-&lt;em&gt;i.e.&lt;/em&gt;, we don’t believe that our data are generated via a stochastic model that
-assumes independence (or exchangeability). Can we predict in the absence of a
-statistical assumptions? If so, how would we do it?&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Can we predict in the absence of a statistical assumptions?&lt;/em&gt; &lt;strong&gt;Yes!&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;em&gt;If so, how could we do it?&lt;/em&gt; &lt;strong&gt;Using the advice of experts!&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The &lt;strong&gt;prediction with expert advice&lt;/strong&gt; framework has the following set up:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;a decision space &lt;script type=&quot;math/tex&quot;&gt;\mathcal{D}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;an outcome space &lt;script type=&quot;math/tex&quot;&gt;\mathcal{Y}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;a loss function &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt;; and&lt;/li&gt;
-  &lt;li&gt;a set of expert indices &lt;script type=&quot;math/tex&quot;&gt;\mathcal{E}&lt;/script&gt;;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;At each time &lt;script type=&quot;math/tex&quot;&gt;t = 1, 2, \dots&lt;/script&gt;&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;the environment chooses the next outcome &lt;script type=&quot;math/tex&quot;&gt;y_t&lt;/script&gt; and the experts choose
- &lt;script type=&quot;math/tex&quot;&gt;\left\{ f_{E,t} \in \mathcal{D} \mid E \in \mathcal{E} \right\}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;the expert advice is provided to the forecaster;&lt;/li&gt;
-  &lt;li&gt;the forecast chooses a prediction &lt;script type=&quot;math/tex&quot;&gt;\widehat{p}_t \in \mathcal{D}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;the environment reveals the next outcome &lt;script type=&quot;math/tex&quot;&gt;y_t \in \mathcal{Y}&lt;/script&gt;;&lt;/li&gt;
-  &lt;li&gt;the forecaster incurs a loss &lt;script type=&quot;math/tex&quot;&gt;l(\widehat{p}_t, y_t)&lt;/script&gt; and each expert &lt;script type=&quot;math/tex&quot;&gt;E&lt;/script&gt; incurs
- a loss &lt;script type=&quot;math/tex&quot;&gt;l(f_{E,t}, y_t)&lt;/script&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;minimax-lower-bound&quot;&gt;Minimax lower bound&lt;/h3&gt;
-
-&lt;p&gt;We want to show that if &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; is the absolute loss, then&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sup_{n,N} \frac{\mathfrak{M}(n,N,l)}{\sqrt{(n/2) \ln N}} \ge 1&lt;/script&gt;
-
-&lt;p&gt;where the minimax regret &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}&lt;/script&gt; for &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; rounds is defined as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n,N,l) = \inf_P \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
-	\sup_{y^n \in \mathcal{Y}^n} \max_{i=1,\dots,N}
-	\left\{ \sum_{i=1}^n l(\hat{p}_t, y_t) - l \left( f_{i,t}, y_t \right) \right\},&lt;/script&gt;
-
-&lt;p&gt;with &lt;script type=&quot;math/tex&quot;&gt;\mathcal{F}&lt;/script&gt; is a set of &lt;script type=&quot;math/tex&quot;&gt;N&lt;/script&gt; static experts, &lt;script type=&quot;math/tex&quot;&gt;P&lt;/script&gt; is a forecasting strategy, 
-&lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; is a &lt;script type=&quot;math/tex&quot;&gt;[0,1]&lt;/script&gt;-valued convex loss function, and &lt;script type=&quot;math/tex&quot;&gt;n&lt;/script&gt; is the number of rounds.
-(A static expert is one with constant-valued predictions, &lt;em&gt;i.e.&lt;/em&gt;, they only depend on the 
-current round.)&lt;/p&gt;
-
-&lt;h3 id=&quot;proof&quot;&gt;Proof&lt;/h3&gt;
-
-&lt;p&gt;We’re going to lower bound a lower bound on &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}(n,N,l)&lt;/script&gt;, which may seem
-odd, but is a fairly common technique. (So keep it in your back pocket the next time
-you have to bound something.) In particular, we’re going to use the fact that a fixed
-class of static experts lower bounds the minimax regret as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n,N,l) \ge 
-	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l)&lt;/script&gt;
-
-&lt;p&gt;where&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l) = \inf_P \sup_{y^n \in \{0,1\}} \sup_{f \in \mathcal{F}}
-	\left\{ \sum_{t=1}^n |\hat{p}_t - y_t| -  |f_t - y_t| \right\}.&lt;/script&gt;
-
-&lt;p&gt;Then we’ll lower bound &lt;script type=&quot;math/tex&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l)&lt;/script&gt;, which implies the minimax
-regret bound.&lt;/p&gt;
-
-&lt;p&gt;First, we use the &lt;em&gt;average-is-less-than-the-max&lt;/em&gt; trick to get&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathfrak{M}(n, \mathcal{F}, l) \ge \inf_P \E \left[ \sup_{f \in \mathcal{F}}
-	\left\{ \sum_{t=1}^n |\hat{p}_t - Y_t| -  |f_t - Y_t| \right\} \right],&lt;/script&gt;
-
-&lt;p&gt;where the expectation is over the randomness in &lt;script type=&quot;math/tex&quot;&gt;Y_t&lt;/script&gt;. By the definitions of the 
-infimum and supremum, we can rewrite this guy as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\inf_P \E \left[ \sum_{t=1}^n |\hat{p}_t - Y_t| \right] -  
- \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right].&lt;/script&gt;
-
-&lt;p&gt;Okay, cool. Now we’re going to use the fact that 
-&lt;script type=&quot;math/tex&quot;&gt;\E \sum_{t=1}^n |\hat{p}_t - Y_t| = n/2&lt;/script&gt; for all
-forecasting strategies because of the randomness of the &lt;script type=&quot;math/tex&quot;&gt;Y_t&lt;/script&gt;. (To see this, split the
-absolute value into two parts, enjoy some nice cancellations and sum it all up.)
-We’ll use this fact and then introduce some Rademacher random variables defined as 
-&lt;script type=&quot;math/tex&quot;&gt;W_t = 1 - 2Y_t&lt;/script&gt; to write&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\mathfrak{M}(n, \mathcal{F}, l) &amp;\ge 
-\frac{n}{2} - \E \left[ \inf_{f \in \mathcal{F}} \sum_{t=1}^n |f_t - Y_t| \right] \\
-	&amp;= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \frac{1}{2} - |f_t - Y_t| \right]\\
-	&amp;= \E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n 
-		\left( \frac{1}{2} - f_t \right)  W_t \right].
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Now, let’s take supremums of both sides, do another Rademacher trick, and then 
-exploit the symmetry of Rademachers:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) 
-	&amp;\ge \sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } 
-		\E \left[ \sup_{f \in \mathcal{F}} \sum_{t=1}^n \left( \frac{1}{2} - f_t \right) 
-		 W_t \right] \\
-	&amp;\ge \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} W_t \right] \\
-	&amp;= \frac{1}{2} \E \left[ \max_{i=1,...,N} \sum_{t=1}^n Z_{i,t} \right],
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;where we used that &lt;script type=&quot;math/tex&quot;&gt;(1/2)(1 - 2f_t) = (1/2)Z_{i,t}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;Z_{i,t}W_t \sim Z_{i,t}&lt;/script&gt;.&lt;/p&gt;
-
-&lt;p&gt;The final step is an appeal to &lt;em&gt;ye-old&lt;/em&gt; central limit theorem and a maximal inequality
-for (sub-)Gaussian random variables. The CLT says that for each &lt;script type=&quot;math/tex&quot;&gt;i = 1,\dots,N&lt;/script&gt;&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{1}{\sqrt{n}} \sum_{t=1}^n Z_{i,t} \sim N(0,1) \implies
-\lim_{n \to \infty} \E \left[ \frac{1}{\sqrt{n}} \max_{i=1,...,N} 
-								\sum_{t=1}^n Z_{i,t} \right] =
-	\E \left[ \max_{i=1,...,N} X_i \right].&lt;/script&gt;
-
-&lt;p&gt;for standard normals &lt;script type=&quot;math/tex&quot;&gt;X_1,\dots,X_n&lt;/script&gt;. The maximal inequality gives&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\E \left[ \max_{i=1,...,N} X_i \right] \le \sqrt{2 \ln N}.&lt;/script&gt;
-
-&lt;p&gt;Now, we stitch everything back together and conclude the proof with&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\mathfrak{M}(n,N,l) &amp;\ge 
-	\sup_{ \{ \mathcal{F}: |\mathcal{F}| = N \} } \mathfrak{M}(n, \mathcal{F}, l) \\
-	&amp;\ge \frac{\E \left[ \max_{i=1,...,N} X_i \right]}{\sqrt{2 \ln N}} \\
-	&amp;\ge 1.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;Rademacher’s to the rescue once again.&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;… modified logarithmic Sobolev inequalities &lt;strong&gt;or&lt;/strong&gt; bandits!&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is related to material from Chapters 2 and 3 of:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Prediction, Learning, and Games&lt;/em&gt; by N. Cesa-Bianchi and G. Lugosi.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">After some ambivalence, I decided that we’ll pay homage to our Rademacher friends once again. We’re going to prove a minimax lower bound for an expert prediction problem. As we’ll see, Rademacher random variables will come to our rescue (twice, in fact).</summary></entry></feed>
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">Welcome back! This post is going to start us down the path of the entropy method for obtaining concentration inequalities. The idea is pretty straightforward. We take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type argument, derive exponential concentration inequalities.</summary></entry></feed>

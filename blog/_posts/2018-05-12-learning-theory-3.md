@@ -186,10 +186,10 @@ where $$c$$ is a constant. This is the same bound obtained from the Rademacher a
 * The average loss on a sequence of models is a good proxy for the risk of the average
   model.
 * Local optimization performs well (up to constant factors), compared to empirical risk
-  minimization, *i.e.*, globabl optimization.
- 	+ So, local optimization isn't doing anything crazy---it's doing something quite
+  minimization, *i.e.*, global optimization.
+  - So, local optimization isn't doing anything crazy---it's doing something quite
 	  similar to global optimization.
-	+ In other words, doing local optimization and then averaging is a good and viable
+  - In other words, doing local optimization and then averaging is a good and viable
 	  strategy, especially when we're dealing with big problems.
 
 Now, let's revisit our questions.

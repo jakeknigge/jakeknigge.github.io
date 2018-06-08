@@ -1,5 +1,140 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-06-02T18:50:48-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
-</subtitle><entry><title type="html">Fisherian vignette - part 3</title><link href="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html" rel="alternate" type="text/html" title="Fisherian vignette - part 3" /><published>2018-06-02T21:30:00-06:00</published><updated>2018-06-02T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/06/02/fisher-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html">&lt;p&gt;Today we’re talking about confidence intervals, so put on your inference hat and let’s
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-06-07T19:43:06-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
+</subtitle><entry><title type="html">Fisherian vignette - part 4</title><link href="http://localhost:4000/jekyll/update/2018/06/07/fisher-4.html" rel="alternate" type="text/html" title="Fisherian vignette - part 4" /><published>2018-06-07T21:30:00-06:00</published><updated>2018-06-07T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/06/07/fisher-4</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/06/07/fisher-4.html">&lt;p&gt;Sorry for the delay between posts—I’m in the process of migrating this blog from jekyll
+to Hugo. In this post, we’re going to unpack a few more of Fisher’s ideas.&lt;/p&gt;
+
+&lt;h3 id=&quot;our-playground&quot;&gt;Our playground&lt;/h3&gt;
+
+&lt;p&gt;We’re using the same set up as in Efron’s paper. In particular, we have the output of
+a randomized experiment given in the following table.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;yes&lt;/th&gt;
+      &lt;th&gt;no&lt;/th&gt;
+      &lt;th&gt;row sum&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;treatment&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;15&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;control&lt;/td&gt;
+      &lt;td&gt;13&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
+      &lt;td&gt;16&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;column sum&lt;/td&gt;
+      &lt;td&gt;14&lt;/td&gt;
+      &lt;td&gt;18&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;The sample log-odds are&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\theta} = \log \left( \frac{1}{15} \bigg/ \frac{13}{3} \right) = -4.2.&lt;/script&gt;
+
+&lt;p&gt;If we view
+the table as a multinomial model—as Fisher did—we have three degrees of freedom.
+The &lt;em&gt;would-be&lt;/em&gt; fourth degree gets absorbed by the fact that we require the probabilities
+to sum to 1.&lt;/p&gt;
+
+&lt;h3 id=&quot;conditional-inference-and-approximate-ancillarity&quot;&gt;Conditional inference and approximate ancillarity&lt;/h3&gt;
+
+&lt;p&gt;Fisher wanted make inferences about &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, so he developed a clever workaround to
+deal with the nuisance parameters by conditioning on the marginals of the table. The
+marginals bring some information to the estimation problem, but not much—this is why
+Fisher dubbed them &lt;strong&gt;approximate ancillary statistics&lt;/strong&gt;.&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; In other words, Fisher
+reduced the problem to something that only depends on &lt;script type=&quot;math/tex&quot;&gt;\theta&lt;/script&gt;, not the other stuff:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\theta} | \textsf{marginals} \sim f(\theta).&lt;/script&gt;
+
+&lt;p&gt;Said another way, Fisher changed the density of the MLE to a &lt;strong&gt;conditional density&lt;/strong&gt;,
+&lt;em&gt;i.e.&lt;/em&gt;,&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f_\theta \big( \hat{\theta} \big) \to f_\theta \big( \hat{\theta} \, | \, A \big).&lt;/script&gt;
+
+&lt;p&gt;Fisher’s final trick was to move from densities to likelihoods. Likelihoods are easy
+to calculate, so writing&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f_\theta \big( \hat{\theta} \,|\, A \big) = c \frac{L(\theta)}{L\big(\hat{\theta}\big)},&lt;/script&gt;
+
+&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;c&lt;/script&gt; is a constant gives us a compact way to efficiently estimate translation
+families.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Caveat!&lt;/em&gt; The multinomial table is not a translation family. Obtaining the conditional
+distribution requires a less-than-pleasant calculation.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-magic-formula&quot;&gt;The magic formula&lt;/h3&gt;
+
+&lt;p&gt;The magic formula is a modern variant of Fisher’s ratio of likelihood that includes a
+Fisher information term:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f_\theta \big( \hat{\theta} \, | \, A \big) = c \frac{L(\theta)}{L\big(\hat{\theta}\big)}
+      \left[ - \frac{d^2}{d\theta^2} \log L(\theta) \vert_{\theta = \hat{\theta}}
+      \right]^{1 / 2}.&lt;/script&gt;
+
+&lt;p&gt;The term in square brackets has a Fisher information feel to it (perhaps unsurprisingly).
+Let’s unpack the formula with an example.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A normal example.&lt;/strong&gt;
+Assume we have data &lt;script type=&quot;math/tex&quot;&gt;x&lt;/script&gt; from a normal distribution with mean &lt;script type=&quot;math/tex&quot;&gt;\mu&lt;/script&gt; and
+standard deviation &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt;. We’re interested in estimating the distribution’s mean when
+both &lt;script type=&quot;math/tex&quot;&gt;\mu&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt; are unknown. In this case &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt; is a nuisance parameter, so
+let’s use the magic formula.&lt;/p&gt;
+
+&lt;p&gt;The density of a normal distribution is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{\frac{-(x-\mu)^2}{2\sigma^2}}&lt;/script&gt;
+
+&lt;p&gt;and the log-likelihood is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;l(\mu) = -\frac{1}{2} \log (2\pi\sigma^2) - \frac{1}{2\sigma^2}(x - \mu)^2.&lt;/script&gt;
+
+&lt;p&gt;The first and second derivatives of the log-likelihood are&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{1}{\sigma^2}(x-\mu) \quad \textsf{and} \quad -\frac{1}{\sigma^2}.&lt;/script&gt;
+
+&lt;p&gt;Now, back to the magic formula:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f-\theta \big( \hat{\theta} \, | \, \sigma \big) =
+      c \frac{e^{-(x-\mu)^2}}{e^{-(x-\hat{\mu})^2}} \frac{1}{\sigma}.&lt;/script&gt;
+
+&lt;p&gt;So, conditional on &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt;, we now have something that only depends on &lt;script type=&quot;math/tex&quot;&gt;\mu&lt;/script&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
+
+&lt;p&gt;… an introduction to empirical Bayes!&lt;/p&gt;
+
+&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
+
+&lt;p&gt;This post is related to material from:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;“R.A. Fisher in the 21st Century” by Bradley Efron.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Computer Age Statistical Inference: Algorithms, Evidence, and Data Science&lt;/em&gt; by
+Bradley Efron and Trevor Hastie. A digital copy lives here: &lt;a href=&quot;http://web.stanford.edu/~hastie/CASI/&quot;&gt;CASI&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;An Introduction to the Bootstrap&lt;/em&gt; by Bradley Efron and Robert J. Tibshirani.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h4&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;According to Efron’s, Neyman put Fisher’s ideas on firmer, frequentist-style
+  footing. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name></name></author><summary type="html">Sorry for the delay between posts—I’m in the process of migrating this blog from jekyll to Hugo. In this post, we’re going to unpack a few more of Fisher’s ideas.</summary></entry><entry><title type="html">Fisherian vignette - part 3</title><link href="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html" rel="alternate" type="text/html" title="Fisherian vignette - part 3" /><published>2018-06-02T21:30:00-06:00</published><updated>2018-06-02T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/06/02/fisher-3</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/06/02/fisher-3.html">&lt;p&gt;Today we’re talking about confidence intervals, so put on your inference hat and let’s
 get down to business.&lt;/p&gt;
 
 &lt;h3 id=&quot;confidence-intervals&quot;&gt;Confidence intervals&lt;/h3&gt;
@@ -1168,80 +1303,4 @@ perspective!&lt;/p&gt;
 &lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
 
 &lt;p&gt;This post is related to material from Nicolò Cesa-Bianchi’s lectures at the Bordeaux
-Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives.</summary></entry><entry><title type="html">The entropy method</title><link href="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html" rel="alternate" type="text/html" title="The entropy method" /><published>2018-04-29T22:00:00-06:00</published><updated>2018-04-29T22:00:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/04/29/entropy_method_intro.html">&lt;p&gt;Welcome back! This post is going to start us down the path of the &lt;strong&gt;entropy method&lt;/strong&gt;
-for obtaining concentration inequalities. The idea is pretty straightforward. We
-take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type
-argument, derive exponential concentration inequalities.&lt;/p&gt;
-
-&lt;p&gt;In a deviation from previous posts, we’re going to take as given the concentration
-behavior (&lt;em&gt;i.e.&lt;/em&gt;, we’re doing an example instead of a proof) and look at a neat
-application that puts it to work.&lt;/p&gt;
-
-&lt;h3 id=&quot;an-eigenvalue-bound&quot;&gt;An eigenvalue bound&lt;/h3&gt;
-
-&lt;p&gt;The largest eigenvalue of a random symmetric matrix is a quantity that naturally
-arises in many “modern” statistical problems—&lt;em&gt;e.g.&lt;/em&gt;, in random correlation matrices.
-We can describe the behavior of the variance of this eigenvalue using the Efron–Stein
-inequality; however, we can obtain concentration convergence rates using the entropy
-method. In particular, we’ll use bounded differences-inspired condition to evoke
-a fast concentration inequality.&lt;/p&gt;
-
-&lt;p&gt;Assume we have independent random &lt;script type=&quot;math/tex&quot;&gt;X_{ij}, 1 \le i \le j \le n&lt;/script&gt; that are bounded
-by 1 in absolute value. The symmetric matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; has entries &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt;. Our
-object of interest is&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;Z = \lambda_{\max} = \sup_{\|u\| = 1} u^T A u = v^T A v,&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt; is the eigenvector associated with &lt;script type=&quot;math/tex&quot;&gt;\lambda_{\max}&lt;/script&gt;. Assume that
-&lt;script type=&quot;math/tex&quot;&gt;\tilde{X}_{ij}&lt;/script&gt; is an independent copy of &lt;script type=&quot;math/tex&quot;&gt;X_{ij}&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;\tilde{A}_{ij}&lt;/script&gt;
-is the matrix &lt;script type=&quot;math/tex&quot;&gt;A&lt;/script&gt; with entropy &lt;script type=&quot;math/tex&quot;&gt;(i,j)&lt;/script&gt; replaced by the independent copy.
-Similarly, let &lt;script type=&quot;math/tex&quot;&gt;\tilde{Z}_{ij}&lt;/script&gt; be the maximum eigenvalue of &lt;script type=&quot;math/tex&quot;&gt;\tilde{A}_{ij}&lt;/script&gt;.
-Here’s where it starts to get good.&lt;/p&gt;
-
-&lt;p&gt;In the spirit of bounded differences, we can calculate&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align*}
-\big(Z - \tilde{Z}_{ij}\big)_+ &amp;\le
-	(v^TAv - v^T\tilde{A}_{ij}v) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
-	&amp;= \big( v^T(A-\tilde{A}_{ij})v \big) \ind{} \{Z &gt; \tilde{Z}_{ij}\} \\
-	&amp;\le 2 \left( v_i v_j \left( X_{ij} - \tilde{X}_{ij} \right) \right)_+ \\
-	&amp;\le 4 |v_i v_j|.
-\end{align*} %]]&gt;&lt;/script&gt;
-
-&lt;p&gt;The first line results from the assumption on &lt;script type=&quot;math/tex&quot;&gt;v&lt;/script&gt; and the use of the indicator variable.
-The third line follows from a rewriting of the matrix multiplication and the observation
-that all but two entries of the sum cancel each other.&lt;/p&gt;
-
-&lt;p&gt;If we throw this guy into the Efron–Stein inequality, we get that&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Var(Z) \le 16.&lt;/script&gt;
-
-&lt;p&gt;Now, we can use the logarithmic Sobolev machinery to get the exponential
-concentration inequality&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\prob(Z - \E Z &gt; t) \le e^{-t^2 / (2c)} = e^{-t^2 / (32)},&lt;/script&gt;
-
-&lt;p&gt;where &lt;script type=&quot;math/tex&quot;&gt;c&lt;/script&gt; is a constant that bounds &lt;script type=&quot;math/tex&quot;&gt;\sum_{i=1}^n (Z - \tilde{Z}_{ij})^2&lt;/script&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;linear-algebra-aside&quot;&gt;Linear algebra aside&lt;/h3&gt;
-
-&lt;p&gt;A theorem from linear algebra tells us that the maximum eigenvalue of a symmetric
-matrix is upper-bounded by the largest row sum and lower-bounded the smallest row
-sum. So, the above ideas become interesting and useful when have big matrices…
-precisely the kind arising in &lt;em&gt;modern&lt;/em&gt; applications!&lt;/p&gt;
-
-&lt;h3 id=&quot;next-up&quot;&gt;Next up&lt;/h3&gt;
-
-&lt;p&gt;… honestly, I’m not sure! I’m thinking we could start to unpack the machinery
-that supported our blind use of the entropy method. Or it could be about bandits,
-prediction with expert advice, Markov chains, something from convex optimization…&lt;/p&gt;
-
-&lt;h3 id=&quot;references&quot;&gt;References&lt;/h3&gt;
-
-&lt;p&gt;This post is related to material from Chapters 3 and 6 of:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;em&gt;Concentration Inequalities: A Nonasymptotic Theory of Independence&lt;/em&gt; by
-S. Boucheron, G. Lugosi, and P. Masart.&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Welcome back! This post is going to start us down the path of the entropy method for obtaining concentration inequalities. The idea is pretty straightforward. We take a (relevant) modified logarithmic Sobolev inequality and, via a Herbst-type argument, derive exponential concentration inequalities.</summary></entry></feed>
+Machine Learning Summer School in 2011. Watch them here: &lt;a href=&quot;http://videolectures.net/mlss2011_cesa_bianchi_learningtheory/&quot;&gt;MLSS 2011 lectures&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><summary type="html">Today’s post is the first in a set of three that will discuss two theories of learning. In particular, today’s post will cover (a very narrow aspect of) statistical learning theory. The next post will present a game-theoretic view of learning, using online learning as its primary analytical framework. The final post will connect the two perspectives.</summary></entry></feed>

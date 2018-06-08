@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-06-07T19:43:06-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2018-06-07T20:01:50-06:00</updated><id>http://localhost:4000/</id><title type="html">Eggink Blog</title><subtitle>Jake W. Knigge's blah, blah, blog... a place to discuss statistics, math, and whatever else comes to mind.
 </subtitle><entry><title type="html">Fisherian vignette - part 4</title><link href="http://localhost:4000/jekyll/update/2018/06/07/fisher-4.html" rel="alternate" type="text/html" title="Fisherian vignette - part 4" /><published>2018-06-07T21:30:00-06:00</published><updated>2018-06-07T21:30:00-06:00</updated><id>http://localhost:4000/jekyll/update/2018/06/07/fisher-4</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2018/06/07/fisher-4.html">&lt;p&gt;Sorry for the delay between posts—I’m in the process of migrating this blog from jekyll
 to Hugo. In this post, we’re going to unpack a few more of Fisher’s ideas.&lt;/p&gt;
 
@@ -105,7 +105,7 @@ let’s use the magic formula.&lt;/p&gt;
 
 &lt;p&gt;Now, back to the magic formula:&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;f-\theta \big( \hat{\theta} \, | \, \sigma \big) =
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f_\theta \big( \hat{\theta} \, | \, \sigma \big) =
       c \frac{e^{-(x-\mu)^2}}{e^{-(x-\hat{\mu})^2}} \frac{1}{\sigma}.&lt;/script&gt;
 
 &lt;p&gt;So, conditional on &lt;script type=&quot;math/tex&quot;&gt;\sigma&lt;/script&gt;, we now have something that only depends on &lt;script type=&quot;math/tex&quot;&gt;\mu&lt;/script&gt;.&lt;/p&gt;
